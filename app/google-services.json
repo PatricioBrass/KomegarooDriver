@@ -1,0 +1,113 @@
+{
+  "project_info": {
+    "project_number": "927161131516",
+    "firebase_url": "https://decoded-pilot-144921.firebaseio.com",
+    "project_id": "decoded-pilot-144921",
+    "storage_bucket": "decoded-pilot-144921.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927161131516:android:1064b6cb766df953",
+        "android_client_info": {
+          "package_name": "com.kome.hp.komegarooandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927161131516-btubd51i4vu5hemf0296vh2r49u660o8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kome.hp.komegarooandroid",
+            "certificate_hash": "ABE5FED99C43C3E8DBBC7A6B38DD0F9DAC41664B"
+          }
+        },
+        {
+          "client_id": "927161131516-go39da353alj8qahrdcec8h0aktfdfjs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQl2r06WQM3e9gEC2DCLTenbl0-Xa8PUs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927161131516-go39da353alj8qahrdcec8h0aktfdfjs.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "927161131516-gqlm6ji9al62cbedtpe04p7rl0rasuva.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.komegaroo.KomeGaroo-Riders"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927161131516:android:39f5a34760a061ab",
+        "android_client_info": {
+          "package_name": "com.driver.hp.komegaroodriver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927161131516-c7l94bdtvd9lvpvi2mmnakbej0aif7an.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.driver.hp.komegaroodriver",
+            "certificate_hash": "ABE5FED99C43C3E8DBBC7A6B38DD0F9DAC41664B"
+          }
+        },
+        {
+          "client_id": "927161131516-go39da353alj8qahrdcec8h0aktfdfjs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQl2r06WQM3e9gEC2DCLTenbl0-Xa8PUs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927161131516-go39da353alj8qahrdcec8h0aktfdfjs.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "927161131516-gqlm6ji9al62cbedtpe04p7rl0rasuva.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.komegaroo.KomeGaroo-Riders"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

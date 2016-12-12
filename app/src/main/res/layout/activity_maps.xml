@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/ruta"
+              tools:context="com.driver.hp.komegaroodriver.Fragment.MapsFragment"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              app:layout_behavior="@string/appbar_scrolling_view_behavior"
+              android:background="#07284c"
+              android:orientation="vertical">
+
+    <Button
+        android:layout_width="47dp"
+        android:layout_height="33dp"
+        android:id="@+id/button"
+        android:background="@mipmap/ic_backwhite"
+        android:layout_weight="0.19"/>
+
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/map"
+              android:name="com.google.android.gms.maps.SupportMapFragment"
+              android:layout_width="355dp"
+              android:layout_height="258dp"
+              android:layout_gravity="center_horizontal|center"
+              android:orientation="vertical"
+              tools:context="com.kome.hp.komegarooandroid.MapsActivity"
+              android:layout_weight="0.78"/>
+
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.73"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="47dp">
+
+        <TextView
+            android:text="Distancia: "
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/textView2"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:layout_weight="0.01"
+            android:textAlignment="center"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/tvDistance"
+            android:layout_weight="0.06"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textAlignment="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="47dp">
+
+        <TextView
+            android:text="Duración: "
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/textView6"
+            android:layout_weight="0.21"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:textAlignment="center"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/tvDuration"
+            android:layout_weight="1.00"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textAlignment="center"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Tarifa Estimada:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView8"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:textAlignment="center"
+            />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tvPrecio"
+                android:layout_weight="1.02"
+                android:textSize="24sp"
+                android:textColor="@android:color/white"
+                android:textAlignment="center"
+                android:gravity="center_vertical"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.02"
+                android:textSize="24sp"
+                android:textColor="@android:color/white"
+                android:textAlignment="center"
+                android:id="@+id/tvPrecio15"
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="3.54"/>
+    <Button
+        android:text="Pedir Komegaroo"
+        android:layout_width="358dp"
+        android:layout_height="wrap_content" android:id="@+id/pedirKame"
+        android:textSize="18sp" android:textStyle="normal|bold"
+        android:textAlignment="center" android:textColor="@android:color/white"
+        android:background="@color/colorPrimaryDark" android:layout_gravity="center"/>
+
+</LinearLayout>

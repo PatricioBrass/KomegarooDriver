@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+        <item
+            android:id="@+id/nav_historial"
+            android:icon="@drawable/historial"
+            android:title="Historial"
+            android:textSize="40dp"
+            android:textColor="#0e3d6f"
+            android:visible="true" />
+        <item
+            android:id="@+id/nav_ayuda"
+            android:icon="@drawable/ayuda"
+            android:textSize="40dp"
+            android:textColor="#0e3d6f"
+            android:title="Ayuda" />
+        <item
+            android:id="@+id/nav_pago"
+            android:icon="@drawable/ic_credit_card"
+            android:textSize="40dp"
+            android:textColor="#0e3d6f"
+            android:title="Opciones de Pago"/>
+        <item
+            android:id="@+id/nav_notificaciones"
+            android:icon="@drawable/notificacion"
+            android:textSize="40dp"
+            android:textColor="#0e3d6f"
+            android:title="Notificaciones" />
+        <item
+            android:id="@+id/nav_promociones"
+            android:icon="@drawable/promocion"
+            android:title="Promociones" />
+        <item
+            android:id="@+id/nav_perfil"
+            android:icon="@drawable/perfil"
+            android:textSize="40dp"
+            android:textColor="#0e3d6f"
+            android:title="Perfil" />
+        <item
+            android:id="@+id/nav_nosotros"
+            android:icon="@drawable/nosotros"
+            android:textSize="40dp"
+            android:textColor="#0e3d6f"
+            android:title="Sobre nosotros" />
+
+    </group>
+        </menu>
+
