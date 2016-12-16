@@ -1,8 +1,10 @@
 package com.driver.hp.komegaroodriver.Fragment;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -24,7 +26,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.driver.hp.komegaroodriver.R;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -45,11 +51,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.driver.hp.komegaroodriver.MapsActivity;
-import com.driver.hp.komegaroodriver.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -80,6 +85,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     private AutocompleteFilter mPlaceFilter;
     private CharSequence constraint;
     private Firebase mRef;
+    private Double lat, lng;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -100,6 +106,60 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                 mGoogleApiClient, null, null);
         etOrigin.setAdapter(mPlacesAdapter);
         etDestination.setAdapter(mPlacesAdapter);
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<Double> arrayDistancia = new ArrayList<Double>();
+                ArrayList<String> arrayStatus = new ArrayList<String>();
+                ArrayList<String> arrayDriver = new ArrayList<String>();
+                ArrayList<String> arrayClient = new ArrayList<String>();
+                String uidClient = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                for (DataSnapshot infoSnapshot: dataSnapshot.getChildren()) {
+                    String uid = infoSnapshot.getKey();
+                    String client = (String) infoSnapshot.child("Client UID").getValue();
+                    String driver = (String) infoSnapshot.child("Driver UID").getValue();
+                    Double lat = (Double) infoSnapshot.child("Latitude").getValue();
+                    Double lng = (Double) infoSnapshot.child("Longitude").getValue();
+                    String sta = (String) infoSnapshot.child("Status").getValue();
+
+                    arrayStatus.add(sta);
+                    arrayDriver.add(uid);
+                    arrayClient.add(client);
+
+
+                }
+                int v = arrayDriver.indexOf(uidClient);
+                Firebase mRefChild = mRef.child(arrayDriver.get(v));
+                Firebase mRefChild2 = mRefChild.child("Client UID");
+                final Firebase mRefChild3 = mRefChild.child("Status");
+                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                alertDialog.setTitle("Están solicitando un Kamegaroo");
+                alertDialog.setMessage("¿Aceptas el viaje?");
+                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        mRefChild3.setValue("On trip");
+                        alertDialog.closeOptionsMenu();
+                    }
+                });
+                alertDialog.setButton2("cancel",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mRefChild3.setValue("Disconected");
+                        alertDialog.closeOptionsMenu();
+                    }
+                });
+                if(arrayStatus.get(v).equals("Request")) {
+                    alertDialog.show();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
         btnFindPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,30 +254,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         mGoogleApiClient.disconnect();
         super.onStop();
     }
-    public void send() {
 
-        String origin = etOrigin.getText().toString();
-        String destination = etDestination.getText().toString();
-
-        if (origin.isEmpty()) {
-            Toast.makeText(getActivity(), "Ingrese dirección de origen!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        else if (destination.isEmpty()) {
-            Toast.makeText(getActivity(), "Ingrese dirección de destino!", Toast.LENGTH_SHORT).show();
-            return;
-        }else if(origin.equals(destination)){
-            Toast.makeText(getActivity(), "No se puede generar la ruta, direcciones de origen y destino son iguales", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Intent intent = new Intent(getActivity(), MapsActivity.class);
-        intent.putExtra(MESSAGE_KEY,origin);
-        intent.putExtra(MESSAGE_KEYS,destination);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
-
-    }
 
 
 
@@ -273,6 +310,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
     }
 
+
+
     @Override
     public void onLocationChanged(Location location) {
 
@@ -284,20 +323,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Firebase mRefChild = mRef.child(uid.toString());
-        Firebase mRefChild1 = mRefChild.child("Client UID");
-        Firebase mRefChild2 = mRefChild.child("Driver UID");
-        Firebase mRefChild3 = mRefChild.child("Latitude");
-        Firebase mRefChild4 = mRefChild.child("Longitude");
-        Firebase mRefChild5 = mRefChild.child("Status");
-        mRefChild1.setValue("XXq7kpoFlXavsUfDnlvtwahNwBM2");
-        mRefChild2.setValue(uid.toString());
-        mRefChild3.setValue(String.valueOf(location.getLatitude()));
-        mRefChild4.setValue(String.valueOf(location.getLongitude()));
-        mRefChild5.setValue("Available");
-
-
+        lat = location.getLatitude();
+        lng = location.getLongitude();
         //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
@@ -327,6 +354,43 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         {
             Log.e("tag", e.getMessage());
         }
+
+
+
+    }
+
+    public void send() {
+
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Firebase mRefChild = mRef.child(uid.toString());
+        Firebase mRefChild2 = mRefChild.child("Driver UID");
+        Firebase mRefChild3 = mRefChild.child("Latitude");
+        Firebase mRefChild4 = mRefChild.child("Longitude");
+        Firebase mRefChild5 = mRefChild.child("Status");
+        mRefChild2.setValue(uid.toString());
+        mRefChild3.setValue(lat);
+        mRefChild4.setValue(lng);
+        mRefChild5.setValue("Available");
+        /*String origin = etOrigin.getText().toString();
+        String destination = etDestination.getText().toString();
+
+        if (origin.isEmpty()) {
+            Toast.makeText(getActivity(), "Ingrese dirección de origen!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if (destination.isEmpty()) {
+            Toast.makeText(getActivity(), "Ingrese dirección de destino!", Toast.LENGTH_SHORT).show();
+            return;
+        }else if(origin.equals(destination)){
+            Toast.makeText(getActivity(), "No se puede generar la ruta, direcciones de origen y destino son iguales", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent intent = new Intent(getActivity(), MapsActivity.class);
+        intent.putExtra(MESSAGE_KEY,origin);
+        intent.putExtra(MESSAGE_KEYS,destination);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);*/
 
     }
 
