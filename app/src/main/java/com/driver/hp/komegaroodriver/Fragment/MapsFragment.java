@@ -84,17 +84,23 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     private LatLngBounds mBounds;
     private AutocompleteFilter mPlaceFilter;
     private CharSequence constraint;
-    private Firebase mRef;
+    private Firebase mRef, mRef2;
     private Double lat, lng;
+    private Integer u;
+    private ArrayList<String> arrayStatus = new ArrayList<>();
+    private ArrayList<String> arrayClient = new ArrayList<>();
+    private ArrayList<String> arrayDriver = new ArrayList<>();
+    private String dire, uidDriver, driv;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.content_main, container, false);
-        Firebase.setAndroidContext(getActivity());
-        mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/Driver Coordenates");
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(Places.GEO_DATA_API)
                 .build();
+        Firebase.setAndroidContext(getActivity());
+        mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/Driver Coordenates/ Región Metropolitana");
+        uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         btnFindPath = (Button) v.findViewById(R.id.btnFindPath);
         btnFindPath2 = (ImageButton) v.findViewById(R.id.imageButton);
         btnFindPath3 = (ImageButton) v.findViewById(R.id.imageButton2);
@@ -106,6 +112,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                 mGoogleApiClient, null, null);
         etOrigin.setAdapter(mPlacesAdapter);
         etDestination.setAdapter(mPlacesAdapter);
+
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -131,14 +138,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                 }
                 int v = arrayDriver.indexOf(uidClient);
                 Firebase mRefChild = mRef.child(arrayDriver.get(v));
-                Firebase mRefChild2 = mRefChild.child("Client UID");
+                final Firebase mRefChild2 = mRefChild.child("Client UID");
                 final Firebase mRefChild3 = mRefChild.child("Status");
                 final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
                 alertDialog.setTitle("Están solicitando un Kamegaroo");
                 alertDialog.setMessage("¿Aceptas el viaje?");
                 alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        mRefChild3.setValue("On trip");
+                        mRefChild3.setValue("On Trip");
                         alertDialog.closeOptionsMenu();
                     }
                 });
@@ -146,10 +153,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mRefChild3.setValue("Disconected");
+                        mRefChild2.setValue("");
                         alertDialog.closeOptionsMenu();
                     }
                 });
-                if(arrayStatus.get(v).equals("Request")) {
+                if(arrayStatus.get(v).equals("Requested")) {
                     alertDialog.show();
 
                 }
@@ -160,6 +168,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
             }
         });
+
         btnFindPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,6 +194,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
+
 
 
         return v;
@@ -247,6 +257,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     public void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
+
     }
 
     @Override
@@ -348,6 +359,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                 str.append(direccion);
 
                 etOrigin.setText(str);
+                 dire = returnAddress.getAddressLine(2);
 
             }
         } catch (IOException e)
@@ -364,13 +376,25 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Firebase mRefChild = mRef.child(uid.toString());
         Firebase mRefChild2 = mRefChild.child("Driver UID");
-        Firebase mRefChild3 = mRefChild.child("Latitude");
-        Firebase mRefChild4 = mRefChild.child("Longitude");
+        final Firebase mRefChild3 = mRefChild.child("Latitude");
+        final Firebase mRefChild4 = mRefChild.child("Longitude");
         Firebase mRefChild5 = mRefChild.child("Status");
         mRefChild2.setValue(uid.toString());
         mRefChild3.setValue(lat);
         mRefChild4.setValue(lng);
         mRefChild5.setValue("Available");
+        mRef.addValueEventListener(new ValueEventListener() {
+                                       @Override
+                                       public void onDataChange(DataSnapshot dataSnapshot) {
+                                           mRefChild3.setValue(lat);
+                                           mRefChild4.setValue(lng);
+                                       }
+
+                                       @Override
+                                       public void onCancelled(FirebaseError firebaseError) {
+
+                                       }
+                                   });
         /*String origin = etOrigin.getText().toString();
         String destination = etDestination.getText().toString();
 
