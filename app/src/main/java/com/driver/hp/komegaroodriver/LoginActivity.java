@@ -1,6 +1,8 @@
 package com.driver.hp.komegaroodriver;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -9,10 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -28,13 +28,11 @@ import com.google.firebase.auth.FirebaseAuth;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
+    private EditText mPasswordView, mEmailView;
     private View mProgressView;
     private View mLoginFormView;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private TextView registro;
     private SignInButton googlebtn;
     private static final int RC_SIGN_IN=1;
     private GoogleApiClient mGoogleApiClient;
@@ -48,14 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         /*getHashKey();*/
         Firebase.setAndroidContext(this);
         mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/Customers");
-        registro = (TextView)findViewById(R.id.registro);
-        registro.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegistroActivity.class);
-                startActivity(intent);
-            }
-        });
+
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener(){
             @Override
@@ -80,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         };
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = (EditText) findViewById(R.id.email);
 
         mPasswordView = (EditText) findViewById(R.id.password);
 
@@ -149,6 +140,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean checkFormFields() {
+        final AlertDialog alertDialog2 = new AlertDialog.Builder(LoginActivity.this).create();
+        alertDialog2.setTitle("Correo inválido");
+        alertDialog2.setMessage("Correo electrónico no corresponde a Komegaroo Driver.");
+        alertDialog2.setCancelable(false);
+        alertDialog2.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog2.closeOptionsMenu();
+                    }
+                });
         String email, password;
 
         email = mEmailView.getText().toString();
@@ -164,8 +165,11 @@ public class LoginActivity extends AppCompatActivity {
         }if(!email.contains("@")){
             mEmailView.setError("ingrese Email válido");
             return false;
-        }if (password.length() < 4){
+        }if (password.length() < 5){
             mPasswordView.setError("Password debe ser mayor o igual a 6 carácteres");
+            return false;
+        }if(!email.contains("@komegaroo.com")){
+            alertDialog2.show();
             return false;
         }
 
