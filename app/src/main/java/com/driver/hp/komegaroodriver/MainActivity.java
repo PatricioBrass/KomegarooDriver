@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,8 +19,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.firebase.client.Firebase;
-import com.google.firebase.auth.FirebaseAuth;
 import com.driver.hp.komegaroodriver.Fragment.MapsFragment;
 import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.AyudaActivity;
 import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.HistorialActivity;
@@ -29,6 +26,8 @@ import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.NosotrosActivity;
 import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PagoActivity;
 import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PerfilActivity;
 import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PromoActivity;
+import com.firebase.client.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,14 +60,15 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 metodo();
                 finish();
             }
-        });
+        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -128,6 +128,10 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, NosotrosActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
+
+                }else if (id == R.id.nav_salir) {
+                    metodo();
+                    finish();
 
                 }
 
@@ -208,10 +212,10 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.action_openRight) {
+        /*if (id == R.id.action_openRight) {
             drawer.openDrawer(GravityCompat.END); /*Opens the Right Drawer*/
-            return true;
-        }else if (id == R.id.nav_historial) {
+            /*return true;
+        }*/if (id == R.id.nav_historial) {
             Intent intent = new Intent(MainActivity.this, HistorialActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -240,6 +244,10 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, NosotrosActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+
+        }else if (id == R.id.nav_salir) {
+            metodo();
+            finish();
 
         }
 

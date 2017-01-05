@@ -19,9 +19,13 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:background="@android:color/black"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer"
-    />
+        app:itemIconTint="@android:color/white"
+        app:itemTextColor="@android:color/white"
+        app:itemBackground="@android:color/black"
+        app:theme="@style/NavigationViewStyle"/>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view2"

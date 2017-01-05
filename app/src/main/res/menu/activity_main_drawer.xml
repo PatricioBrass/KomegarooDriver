@@ -1,50 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark">
-        <item
-            android:id="@+id/nav_historial"
-            android:icon="@drawable/historial"
-            android:title="Historial"
-            android:textSize="40dp"
-            android:textColor="#0e3d6f"
-            android:visible="true" />
-        <item
-            android:id="@+id/nav_ayuda"
-            android:icon="@drawable/ayuda"
-            android:textSize="40dp"
-            android:textColor="#0e3d6f"
-            android:title="Ayuda" />
-        <item
-            android:id="@+id/nav_pago"
-            android:icon="@drawable/ic_credit_card"
-            android:textSize="40dp"
-            android:textColor="#0e3d6f"
-            android:title="Opciones de Pago"/>
-        <item
-            android:id="@+id/nav_notificaciones"
-            android:icon="@drawable/notificacion"
-            android:textSize="40dp"
-            android:textColor="#0e3d6f"
-            android:title="Notificaciones" />
-        <item
-            android:id="@+id/nav_promociones"
-            android:icon="@drawable/promocion"
-            android:title="Promociones" />
-        <item
-            android:id="@+id/nav_perfil"
-            android:icon="@drawable/perfil"
-            android:textSize="40dp"
-            android:textColor="#0e3d6f"
-            android:title="Perfil" />
-        <item
-            android:id="@+id/nav_nosotros"
-            android:icon="@drawable/nosotros"
-            android:textSize="40dp"
-            android:textColor="#0e3d6f"
-            android:title="Sobre nosotros" />
-
-    </group>
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_perfil"
+                android:icon="@mipmap/person"
+                android:textSize="40dp"
+                android:textColor="#421381"
+                android:title="PERFIL" />
         </menu>
+    </item>
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_pago"
+                android:icon="@mipmap/pago"
+                android:textSize="40dp"
+                android:textColor="#421381"
+                android:title="PAGOS"/>
+        </menu>
+    </item>
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_historial"
+                android:icon="@mipmap/historial"
+                android:title="HISTORIAL"
+                android:textSize="40dp"
+                android:textColor="#421381"/>
+        </menu>
+    </item>
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_promociones"
+                android:icon="@mipmap/promo"
+                android:textSize="40dp"
+                android:textColor="#421381"
+                android:title="PROMOCIONES" />
+        </menu>
+    </item>
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_nosotros"
+                android:icon="@mipmap/nosotros"
+                android:textSize="40dp"
+                android:textColor="#421381"
+                android:title="SOBRE NOSOTROS" />
+        </menu>
+    </item>
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_ayuda"
+                android:icon="@mipmap/ayuda"
+                android:textSize="40dp"
+                android:textColor="#421381"
+                android:title="AYUDA" />
+        </menu>
+    </item>
+    <item android:title="">
+        <menu>
+            <item android:title="SALIR"
+                  android:id="@+id/nav_salir"
+                  android:icon="@mipmap/exit"
+                  android:textSize="40dp"
+                  android:textColor="#421381"/>
+        </menu>
+    </item>
 
+
+</menu>

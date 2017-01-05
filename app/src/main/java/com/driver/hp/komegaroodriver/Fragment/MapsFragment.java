@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.driver.hp.komegaroodriver.R;
@@ -57,6 +58,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -77,7 +80,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
     private GoogleMap mMap;
-    private Button btnFindPath;
+    private Button btnFindPath, fab;
     private ImageButton btnFindPath2, btnFindPath3;
     private AutoCompleteTextView etOrigin;
     private AutoCompleteTextView etDestination;
@@ -91,6 +94,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     private ArrayList<String> arrayClient = new ArrayList<>();
     private ArrayList<String> arrayDriver = new ArrayList<>();
     private String dire, uidDriver, driv;
+    private AlertDialog alertDialog;
+    View mMapView;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -137,14 +142,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
                         }
                             final int v = arrayDriver.indexOf(uidDriver);
-                            Firebase sRefChild = sRef.child(uidDriver);
+                            final Firebase sRefChild = sRef.child(uidDriver);
                             Firebase mRefChild = pRef.child("On Way Drivers");
                             final Firebase mRefChild2 = mRefChild.child("Santiago");
                             final Firebase mRefChild3 = mRefChild2.child(uidDriver);
                             final Firebase mRefChild4 = mRefChild3.child("Customer Uid");
                             final Firebase mRefChild5 = mRefChild3.child("Latitude");
                             final Firebase mRefChild6 = mRefChild3.child("Longitude");
-                            final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                            alertDialog = new AlertDialog.Builder(getActivity()).create();
                             alertDialog.setTitle("Están solicitando un Kamegaroo");
                             alertDialog.setMessage("¿Aceptas el viaje?");
                             alertDialog.setCancelable(false);
@@ -170,6 +175,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                                 if (dataSnapshot.hasChild("Customer Uid")){
                                     alertDialog.show();
                                 }
+                                sRefChild.removeEventListener(this);
+                                sRef.removeEventListener(this);
                             }
 
                             @Override
@@ -188,6 +195,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
             }
         });
+        fab = (Button) v.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        fab.setVisibility(View.GONE);
+
         btnFindPath2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -209,6 +225,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
 
 
+
+
         return v;
     }
 
@@ -216,6 +234,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         MapFragment fragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mMapView = fragment.getView();
         fragment.getMapAsync(this);
 
 
@@ -269,27 +288,35 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     public void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
-
-        final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Firebase mRefChild = pRef.child("Available Drivers");
-        Firebase mRefChild2 = mRefChild.child("Santiago");
-        Firebase mRefChild3 = mRefChild2.child(uid);
+        final Firebase mRefChild2 = mRefChild.child("Santiago");
+        Firebase mRefChild3 = mRefChild2.child(uidDriver);
         final Firebase mRefChild4 = mRefChild3.child("Latitude");
         final Firebase mRefChild5 = mRefChild3.child("Longitude");
-        mRefChild3.addValueEventListener(new ValueEventListener() {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild("Latitude")){
-                    mRefChild4.setValue(mMap.getMyLocation().getLatitude());
-                    mRefChild5.setValue(mMap.getMyLocation().getLongitude());
-                }
+            public void run() {
+                mRefChild2.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.hasChild(uidDriver)){
+                            mRef.child(uidDriver).removeValue();
+                            mRefChild4.setValue(lat);
+                            mRefChild5.setValue(lng);
+                        }
+                        mRefChild2.removeEventListener(this);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
             }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+        }, 5000, 10000);
 
-            }
-        });
     }
 
     @Override
@@ -319,6 +346,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
+        View locationButton = ((View) mMapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+// position on right bottom
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+        rlp.setMargins(0, 0, 30, 30);
 
     }
 
@@ -411,8 +444,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         Firebase mRefChild3 = mRefChild2.child(uid);
         final Firebase mRefChild4 = mRefChild3.child("Latitude");
         final Firebase mRefChild5 = mRefChild3.child("Longitude");
-        mRefChild4.setValue(mMap.getMyLocation().getLatitude());
-        mRefChild5.setValue(mMap.getMyLocation().getLongitude());
+        mRefChild4.setValue(lat);
+        mRefChild5.setValue(lng);
+
         /*String origin = etOrigin.getText().toString();
         String destination = etDestination.getText().toString();
 
