@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        finish();
+        moveTaskToBack(true);
     }
     private void metodo(){
         FirebaseAuth.getInstance().signOut();
@@ -175,6 +175,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Handle countdown stop here
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Handle countdown start here
     }
 
 

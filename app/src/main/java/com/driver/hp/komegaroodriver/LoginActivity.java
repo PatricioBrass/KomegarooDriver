@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -52,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
                 if(firebaseAuth.getCurrentUser() != null){
-                    String error = "No disponible";
+                    /*String error = "No disponible";
                     String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     Uri photo = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl();
                     String name = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
@@ -62,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
                     Firebase mRefChild3 = mRefChild2.child("Name");
                     Firebase mRefChild1 = mRefChild2.child("Photo Url");
                         mRefChild.setValue(email.toString());
-                        mRefChild1.setValue(error.toString());
+                        mRefChild1.setValue(error.toString());*/
 
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     /*intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);*/
