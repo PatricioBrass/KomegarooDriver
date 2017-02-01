@@ -59,6 +59,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -227,10 +228,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         }
     };
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
+    public void load(){
         Firebase mRefChild = pRef.child("Available Drivers");
         final Firebase mRefChild2 = mRefChild.child("Santiago");
         Firebase mRefChild3 = mRefChild2.child(uidDriver);
@@ -243,20 +241,20 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         final Firebase sRefChild5 = sRefChild3.child("Driver Latitude");
         final Firebase sRefChild6 = sRefChild3.child("Driver Longitude");
 
-                mRefChild2.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.hasChild(uidDriver)){
-                            mRefChild4.setValue(lat);
-                            mRefChild5.setValue(lng);}
-                        mRefChild2.removeEventListener(this);
-                    }
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(uidDriver)){
+                    mRefChild4.setValue(lat);
+                    mRefChild5.setValue(lng);
+                }
+            }
 
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
 
-                    }
-                });
+            }
+        });
 
         /*pRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -280,9 +278,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                     sRefChild5.setValue(lat);
                     sRefChild6.setValue(lng);
                 }
-
-
-                nRef.removeEventListener(this);
             }
 
             @Override
@@ -290,7 +285,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
             }
         });
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
 
     }
 
@@ -300,6 +300,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         super.onStop();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mGoogleApiClient.connect();
+
+    }
 
 
 
@@ -358,7 +364,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                                 alertDialog.setTitle("Están solicitando un Kamegaroo");
                                 alertDialog.setMessage("¿Aceptas el viaje?");
                                 alertDialog.setCancelable(false);
-                                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                                alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         mRefChild4.setValue(arrayClient.get(v));
                                         mRefChild5.setValue(lat);
@@ -370,7 +376,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
                                     }
                                 });
-                                alertDialog.setButton2("cancel", new DialogInterface.OnClickListener() {
+                                alertDialog.setButton2("Cancelar", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         send();
@@ -380,7 +386,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                                     }
                                 });
                                     alertDialog.show();
+                                    Timer timer = new Timer();
+                                    timer.schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            alertDialog.dismiss();
 
+                                        }
+                                    }, 10000);
 
 
 
@@ -394,6 +407,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
                         }
                     });
+
+
 
 
     }
@@ -445,13 +460,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         lat = location.getLatitude();
         lng = location.getLongitude();
         //move map camera
+        mMap.clear();
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-
-        //stop location updates
-        if (mGoogleApiClient != null) {
+        load();
+        //stop location updates/
+        /*if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }
+        }*/
 //autocompletado edittext origen con localización actual
         try
         {
