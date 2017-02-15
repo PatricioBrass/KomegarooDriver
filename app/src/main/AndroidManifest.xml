@@ -23,6 +23,18 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity
+            android:name="com.driver.hp.komegaroodriver.LoginActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize"
@@ -47,18 +59,7 @@
             android:label="Ruta"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity
-            android:name="com.driver.hp.komegaroodriver.LoginActivity"
-            android:excludeFromRecents="true"
-            android:label="@string/app_name"
-            android:noHistory="true"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
         <activity android:name="com.driver.hp.komegaroodriver.RegistroActivity"
                   android:theme="@style/AppTheme.NoActionBar">
         </activity>
