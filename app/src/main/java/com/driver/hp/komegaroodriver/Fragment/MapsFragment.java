@@ -158,9 +158,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
             @Override
             public void onClick(View v) {
                 cRef.child(uidDriver).removeValue();
-                Intent intent = getActivity().getIntent();
-                getActivity().finish();
-                startActivity(intent);
+                Intent i = getActivity().getBaseContext().getPackageManager()
+                        .getLaunchIntentForPackage( getActivity().getBaseContext().getPackageName() );
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
             }
         });
         btnfinish.setVisibility(View.GONE);
