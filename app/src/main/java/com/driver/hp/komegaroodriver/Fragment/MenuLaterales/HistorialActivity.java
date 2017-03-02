@@ -184,7 +184,7 @@ public class HistorialActivity extends AppCompatActivity implements OnMapReadyCa
                                 .title(route.startAddress)
                                 .position(route.startLocation)));
                         destinationMarkers.add(mMap.addMarker(new MarkerOptions()
-                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_final))
+                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.finaly))
                                 .title(route.endAddress)
                                 .position(route.endLocation)));
 
