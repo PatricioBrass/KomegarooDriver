@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
@@ -144,11 +143,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             public void onClick(View view) {
                 mRef.child(uidDriver).removeValue();
                 nRef.child(uidDriver).removeValue();
-                Intent i = getActivity().getBaseContext().getPackageManager()
-                        .getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName());
-                getActivity().finish();
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
+                fab.setVisibility(View.GONE);
+                btnFindPath.setVisibility(View.VISIBLE);
             }
         });
         fab.setVisibility(View.GONE);
@@ -167,11 +163,9 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 cRef.child(uidDriver).removeValue();
-                Intent i = getActivity().getBaseContext().getPackageManager()
-                        .getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName());
-                getActivity().finish();
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
+                btnfinish.setVisibility(View.GONE);
+                btnFindPath.setVisibility(View.VISIBLE);
+                mMap.clear();
                 setFinish();
             }
         });
@@ -183,6 +177,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         timer1 = new Timer();
         timer2 = new Timer();
         uidClient = "";
+        tDirec="";
+        fDirec="";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
@@ -322,6 +318,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         });
     }
 
+
     public void load() {
 
         Firebase mRefChild = pRef.child("Available Drivers");
@@ -339,17 +336,16 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         final Firebase latF = cRef.child(uidDriver).child("Driver Latitude");
         final Firebase lngF = cRef.child(uidDriver).child("Driver Longitude");
 
-
         timer.schedule(new TimerTask() {
 
             @Override
             public void run() {
 
-                mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                mRef.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(final DataSnapshot dataSnapshot) {
 
-                        if (dataSnapshot.hasChild(uidDriver) && dataSnapshot.child(uidDriver).hasChild("Latitude") && dataSnapshot.child(uidDriver).hasChild("Longitude")) {
+                        if (dataSnapshot.hasChild("Latitude") && dataSnapshot.hasChild("Longitude")) {
                             mRefChild4.setValue(lat);
                             mRefChild5.setValue(lng);
                         }
@@ -362,16 +358,16 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     }
                 });
             }
-        }, 3000, 5000);
+        }, 2000, 5000);
 
 
         timer1.schedule(new TimerTask() {
             @Override
             public void run() {
-                nRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                nRef.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.hasChild(uidDriver) && dataSnapshot.child(uidDriver).hasChild("Driver Latitude") && dataSnapshot.child(uidDriver).hasChild("Driver Longitude")) {
+                        if (dataSnapshot.hasChild("Driver Latitude") && dataSnapshot.hasChild("Driver Longitude")) {
                             sRefChild5.setValue(lat);
                             sRefChild6.setValue(lng);
                         }
@@ -383,16 +379,16 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     }
                 });
             }
-        }, 3000, 5000);
+        }, 2000, 5000);
 
 
         timer2.schedule(new TimerTask() {
             @Override
             public void run() {
-                cRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                cRef.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.hasChild(uidDriver) && dataSnapshot.child(uidDriver).hasChild("Driver Latitude") && dataSnapshot.child(uidDriver).hasChild("Driver Longitude")) {
+                        if (dataSnapshot.hasChild("Driver Latitude") && dataSnapshot.hasChild("Driver Longitude")) {
                             latF.setValue(lat);
                             lngF.setValue(lng);
                         }
@@ -404,7 +400,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     }
                 });
             }
-        }, 3000, 5000);
+        }, 2000, 5000);
 
     }
 
@@ -412,14 +408,15 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         tRef.child(uidClient).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+
                     Map<String, String> mapS = dataSnapshot.getValue(Map.class);
                     fDirec = mapS.get("From Direction");
                     tDirec = mapS.get("To Direction");
                     price = mapS.get("Price");
                     Log.v("DIRECCION", uidClient);
-                    Log.v("DIRECCION", fDirec);
-
+                    Log.v("DIRECCION", String.valueOf(fDirec));
+                    Log.v("DIRECCION", String.valueOf(tDirec));
+            if(fDirec!=null||tDirec!=null){
                     try {
                         List<Address> addresses = geocoder.getFromLocation(latLngDriver.latitude, latLngDriver.longitude, 1);
                         str2 = new StringBuilder();
@@ -437,7 +434,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
                     try {
 
-                        new DirectionFinder(MapsFragment.this, str2.toString(), fDirec.toString()).execute();
+                        new DirectionFinder(MapsFragment.this, str2.toString(), fDirec).execute();
 
                     } catch (UnsupportedEncodingException e) {
 
@@ -446,8 +443,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
                     btnTrip.setVisibility(View.VISIBLE);
                     fab.setVisibility(View.GONE);
-
-                }
+            }
             }
 
             @Override
@@ -460,13 +456,25 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
 
     public void onWay() {
-
-        nRef.child(uidDriver).addValueEventListener(new ValueEventListener() {
+        nRef.child(uidDriver).addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
-                    getData();
-                }
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                getData();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
@@ -496,37 +504,38 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         cRef.child(uidDriver).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
+                    if (fDirec != null || tDirec != null) {
+                    try {
 
-                            try {
+                        List<Address> addresses = geocoder2.getFromLocation(latLngDriver.latitude, latLngDriver.longitude, 1);
+                        str = new StringBuilder();
+                        if (geocoder2.isPresent()) {
+                            Address returnAddress = addresses.get(0);
 
-                                List<Address> addresses = geocoder2.getFromLocation(latLngDriver.latitude, latLngDriver.longitude, 1);
-                                str = new StringBuilder();
-                                if (geocoder2.isPresent()) {
-                                    Address returnAddress = addresses.get(0);
+                            String direccion = returnAddress.getAddressLine(0) + ", " + returnAddress.getAddressLine(1) + ", " + returnAddress.getAddressLine(3);
 
-                                    String direccion = returnAddress.getAddressLine(0) + ", " + returnAddress.getAddressLine(1) + ", " + returnAddress.getAddressLine(3);
-
-                                    str.append(direccion);
-
-                                }
-                            } catch (IOException e) {
-                                Log.e("tag", e.getMessage());
-                            }
-
-                            try {
-                                new DirectionFinder(MapsFragment.this, str.toString(), tDirec.toString()).execute();
-
-                            } catch (UnsupportedEncodingException e) {
-
-                                e.printStackTrace();
-                            }
-                            btnfinish.setVisibility(View.VISIBLE);
-                            btnTrip.setVisibility(View.GONE);
-                            fab.setVisibility(View.GONE);
-                            tRef.child(uidClient).removeValue();
+                            str.append(direccion);
 
                         }
+                    } catch (IOException e) {
+                        Log.e("tag", e.getMessage());
+                    }
+
+                    try {
+                        new DirectionFinder(MapsFragment.this, str.toString(), tDirec.toString()).execute();
+
+                    } catch (UnsupportedEncodingException e) {
+
+                        e.printStackTrace();
+                    }
+                    btnfinish.setVisibility(View.VISIBLE);
+                    btnTrip.setVisibility(View.GONE);
+                    fab.setVisibility(View.GONE);
+                    tRef.child(uidClient).removeValue();
+
+                }
+            }
 
 
             }
@@ -804,7 +813,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }*/
 //autocompletado edittext origen con localización actual
-        try
+        /*try
         {
             Geocoder geocoder = new Geocoder(getActivity(), Locale.ENGLISH);
             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
@@ -824,7 +833,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         } catch (IOException e)
         {
             Log.e("tag", e.getMessage());
-        }
+        }*/
 
 
 
