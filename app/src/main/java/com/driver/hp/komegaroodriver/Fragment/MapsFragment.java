@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.driver.hp.komegaroodriver.Fragment.Modules.DirectionFinder;
@@ -103,8 +104,9 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     private Timer timer2, timer, timer1;
     private LatLng latLngDriver;
     private Calendar calander;
-    private AlertDialog alertDialog;
+    private AlertDialog alertDialog, alertDialogOnWay, alertDialogOnTrip;
     private Geocoder geocoder, geocoder2;
+    private SeekBar sb, sb2, sb3, sb4;
 
     @Nullable
     @Override
@@ -125,6 +127,13 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         dTravels = new Firebase("https://decoded-pilot-144921.firebaseio.com/Drivers Travels");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         btnFindPath = (Button) v.findViewById(R.id.btnFindPath);
+        sb = (SeekBar)v.findViewById(R.id.myseek);
+        sb2 = (SeekBar)v.findViewById(R.id.myseek2);
+        sb3 = (SeekBar)v.findViewById(R.id.myseek3);
+        sb4 = (SeekBar)v.findViewById(R.id.myseek4);
+        sb2.setVisibility(View.GONE);
+        sb3.setVisibility(View.GONE);
+        sb4.setVisibility(View.GONE);
         btnFindPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,6 +154,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 nRef.child(uidDriver).removeValue();
                 fab.setVisibility(View.GONE);
                 btnFindPath.setVisibility(View.VISIBLE);
+                buildGoogleApiClient();
             }
         });
         fab.setVisibility(View.GONE);
@@ -166,11 +176,14 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 btnfinish.setVisibility(View.GONE);
                 btnFindPath.setVisibility(View.VISIBLE);
                 mMap.clear();
+                buildGoogleApiClient();
                 setFinish();
             }
         });
         btnfinish.setVisibility(View.GONE);
         alertDialog = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
+        alertDialogOnTrip = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
+        alertDialogOnWay = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
         geocoder = new Geocoder(getActivity(), Locale.ENGLISH);
         geocoder2 = new Geocoder(getActivity(), Locale.ENGLISH);
         timer = new Timer();
@@ -187,12 +200,134 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         piden();
         load();
         onWay();
-        onTrip();
+        driverOnTrip();
+        slideButtons();
         mRef.child(uidDriver).removeValue();
         nRef.child(uidDriver).removeValue();
         cRef.child(uidDriver).removeValue();
 
+
+
         return v;
+    }
+
+    public void slideButtons(){
+
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+                int CurrentLevel = seekBar.getProgress();
+                if(CurrentLevel < 90) {
+                    seekBar.setProgress(1);
+                }else{
+                    sb2.setVisibility(View.VISIBLE);
+                    sb.setVisibility(View.GONE);
+                    seekBar.setProgress(1);
+                    send();
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                                          boolean fromUser) {
+
+            }
+        });
+        sb2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int CurrentLevel = seekBar.getProgress();
+                if(CurrentLevel < 90) {
+                    seekBar.setProgress(1);
+                }else{
+                    sb.setVisibility(View.VISIBLE);
+                    sb2.setVisibility(View.GONE);
+                    seekBar.setProgress(1);
+                    mRef.child(uidDriver).removeValue();
+                    nRef.child(uidDriver).removeValue();
+                    buildGoogleApiClient();}
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                                          boolean fromUser) {
+
+
+            }
+        });
+        sb3.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int CurrentLevel = seekBar.getProgress();
+                if(CurrentLevel < 90){
+                    seekBar.setProgress(1);
+                }else{
+
+                    sb4.setVisibility(View.VISIBLE);
+                    sb2.setVisibility(View.GONE);
+                    sb3.setVisibility(View.GONE);
+                    seekBar.setProgress(1);
+                    setOnTrip();
+                    setCustomerTravel();
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                                          boolean fromUser) {
+
+
+            }
+        });
+        sb4.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int CurrentLevel = seekBar.getProgress();
+                if(CurrentLevel < 90) {
+                    seekBar.setProgress(1);
+                }else{
+                    sb.setVisibility(View.VISIBLE);
+                    sb4.setVisibility(View.GONE);
+                    seekBar.setProgress(1);
+                    cRef.child(uidDriver).removeValue();
+                    mMap.clear();
+                    setFinish();
+                    buildGoogleApiClient();}
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                                          boolean fromUser) {
+
+
+            }
+        });
+
     }
 
     @Override
@@ -246,63 +381,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-
-        nRef.child(uidDriver).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                mRef.child(uidDriver).removeValue();
-                sRef.child(uidDriver).removeValue();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                nRef.child(uidDriver).removeValue();
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-
-        cRef.child(uidDriver).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                nRef.child(uidDriver).removeValue();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                cRef.child(uidDriver).removeValue();
 
             }
 
@@ -441,7 +519,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         e.printStackTrace();
                     }
 
-                    btnTrip.setVisibility(View.VISIBLE);
+                    sb3.setVisibility(View.VISIBLE);
+                    sb2.setVisibility(View.GONE);
                     fab.setVisibility(View.GONE);
             }
             }
@@ -456,20 +535,50 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
 
     public void onWay() {
+        alertDialogOnWay.setTitle("Viaje cancelado");
+        alertDialogOnWay.setMessage("El cliente ha cancelado el viaje.");
+        alertDialogOnWay.setCancelable(false);
+        alertDialogOnWay.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        sb4.setVisibility(View.GONE);
+                        sb.setVisibility(View.VISIBLE);
+                        sb3.setVisibility(View.GONE);
+                        mMap.clear();
+                        buildGoogleApiClient();
+                        alertDialogOnWay.dismiss();
+                    }
+                });
+
         nRef.child(uidDriver).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                mRef.child(uidDriver).removeValue();
+                sRef.child(uidDriver).removeValue();
                 getData();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                getData();
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                nRef.child(uidDriver).removeValue();
+                cRef.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(!dataSnapshot.exists()){
+                            alertDialogOnWay.show();
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
             }
 
             @Override
@@ -499,12 +608,38 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
     }
 
+    public void driverOnTrip(){
+        cRef.child(uidDriver).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                nRef.child(uidDriver).removeValue();
+                onTrip();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                onTrip();
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                cRef.child(uidDriver).removeValue();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
     public void onTrip(){
 
-        cRef.child(uidDriver).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
                     if (fDirec != null || tDirec != null) {
                     try {
 
@@ -529,22 +664,13 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
                         e.printStackTrace();
                     }
-                    btnfinish.setVisibility(View.VISIBLE);
-                    btnTrip.setVisibility(View.GONE);
+                    sb4.setVisibility(View.VISIBLE);
+                    sb3.setVisibility(View.GONE);
                     fab.setVisibility(View.GONE);
                     tRef.child(uidClient).removeValue();
 
                 }
-            }
 
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
     }
 
     public void setCustomerTravel(){
@@ -723,8 +849,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             send();
-                            fab.setVisibility(View.VISIBLE);
-                            btnFindPath.setVisibility(View.GONE);
+                            alertDialog.closeOptionsMenu();
 
                         }
                     });
@@ -805,8 +930,34 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         lat = location.getLatitude();
         lng = location.getLongitude();
         //move map camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngDriver));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        nRef.child(uidDriver).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+
+                    cRef.child(uidDriver).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(!dataSnapshot.exists()){
+
+                                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngDriver));
+                                mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
 
         //stop location updates/
         /*if (mGoogleApiClient != null) {
