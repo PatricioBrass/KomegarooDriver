@@ -20,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -28,6 +27,7 @@ import android.widget.Toast;
 import com.driver.hp.komegaroodriver.Fragment.Modules.DirectionFinder;
 import com.driver.hp.komegaroodriver.Fragment.Modules.DirectionFinderListener;
 import com.driver.hp.komegaroodriver.Fragment.Modules.Route;
+import com.driver.hp.komegaroodriver.MainActivity;
 import com.driver.hp.komegaroodriver.R;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -76,15 +76,14 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     private List<Polyline> polylinePaths = new ArrayList<>();
     private ProgressDialog progressDialog;
     private static final int PLACE_PICKER_FLAG = 1;
-    public static final String MESSAGE_KEY = "com.kome.hp.komegarooandroid.message_key";
-    public static final String MESSAGE_KEYS = "com.kome.hp.komegarooandroid.message_keys";
+    public static final String MESSAGE_KEY="com.driver.hp.komegaroodriver.message_key";
+    public static final String MESSAGE_KEYS = "com.driver.hp.komegaroodriver.message_keys";
     private PlacesAutoCompleteAdapter mPlacesAdapter;
     Marker mCurrLocationMarker;
     Location mLastLocation;
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
     private GoogleMap mMap;
-    private Button btnFindPath, fab, btnTrip, btnfinish;
     private AutoCompleteTextView etOrigin;
     private AutoCompleteTextView etDestination;
     private LatLngBounds mBounds;
@@ -98,15 +97,17 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     private ArrayList<String> arrayClient = new ArrayList<>();
     private ArrayList<String> arrayClient2 = new ArrayList<>();
     private ArrayList<String> arrayDriver = new ArrayList<>();
-    private String dire, uidDriver, uidClient, fDirec, tDirec, price;
+    private String dire, uidDriver, fDirec, tDirec, price, key;
+    public String uidClient;
     private StringBuilder str, str2, str3;
-    View mMapView;
+    View mMapView, fValorizar;
     private Timer timer2, timer, timer1;
     private LatLng latLngDriver;
-    private Calendar calander;
+    private Calendar calander, calander2, calendar, calendar2;
     private AlertDialog alertDialog, alertDialogOnWay, alertDialogOnTrip;
     private Geocoder geocoder, geocoder2;
     private SeekBar sb, sb2, sb3, sb4;
+    private int index;
 
     @Nullable
     @Override
@@ -116,7 +117,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 .addApi(Places.GEO_DATA_API)
                 .build();
         Firebase.setAndroidContext(getActivity());
-        calander = Calendar.getInstance();
         mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/Drivers Status/Available Drivers/Santiago");
         nRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/Drivers Status/On Way Drivers/Santiago");
         sRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/Drivers Status/Requested Drivers/Santiago");
@@ -126,7 +126,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         cTravels = new Firebase("https://decoded-pilot-144921.firebaseio.com/Customers Travels");
         dTravels = new Firebase("https://decoded-pilot-144921.firebaseio.com/Drivers Travels");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        btnFindPath = (Button) v.findViewById(R.id.btnFindPath);
         sb = (SeekBar)v.findViewById(R.id.myseek);
         sb2 = (SeekBar)v.findViewById(R.id.myseek2);
         sb3 = (SeekBar)v.findViewById(R.id.myseek3);
@@ -134,53 +133,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         sb2.setVisibility(View.GONE);
         sb3.setVisibility(View.GONE);
         sb4.setVisibility(View.GONE);
-        btnFindPath.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                send();
-
-                fab.setVisibility(View.VISIBLE);
-                btnFindPath.setVisibility(View.GONE);
-
-            }
-        });
-
-        fab = (Button) v.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mRef.child(uidDriver).removeValue();
-                nRef.child(uidDriver).removeValue();
-                fab.setVisibility(View.GONE);
-                btnFindPath.setVisibility(View.VISIBLE);
-                buildGoogleApiClient();
-            }
-        });
-        fab.setVisibility(View.GONE);
-
-        btnTrip = (Button) v.findViewById(R.id.trip);
-        btnTrip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setOnTrip();
-                setCustomerTravel();
-            }
-        });
-        btnTrip.setVisibility(View.GONE);
-        btnfinish = (Button) v.findViewById(R.id.finish);
-        btnfinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cRef.child(uidDriver).removeValue();
-                btnfinish.setVisibility(View.GONE);
-                btnFindPath.setVisibility(View.VISIBLE);
-                mMap.clear();
-                buildGoogleApiClient();
-                setFinish();
-            }
-        });
-        btnfinish.setVisibility(View.GONE);
         alertDialog = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
         alertDialogOnTrip = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
         alertDialogOnWay = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
@@ -189,9 +141,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         timer = new Timer();
         timer1 = new Timer();
         timer2 = new Timer();
-        uidClient = "";
-        tDirec="";
-        fDirec="";
+        fValorizar = v.findViewById(R.id.valorizar);
+        fValorizar.setVisibility(View.GONE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
@@ -221,22 +172,26 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 int CurrentLevel = seekBar.getProgress();
                 if(CurrentLevel < 90) {
                     seekBar.setProgress(1);
+                    ((MainActivity)getActivity()).unlockedDrawer();
                 }else{
+                    ((MainActivity)getActivity()).unlockedDrawer();
                     sb2.setVisibility(View.VISIBLE);
                     sb.setVisibility(View.GONE);
                     seekBar.setProgress(1);
+                    timer = new Timer();
                     send();
                 }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                    ((MainActivity)getActivity()).lockedDrawer();
             }
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress,
                                           boolean fromUser) {
+
 
             }
         });
@@ -253,7 +208,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     seekBar.setProgress(1);
                     mRef.child(uidDriver).removeValue();
                     nRef.child(uidDriver).removeValue();
-                    buildGoogleApiClient();}
+                    buildGoogleApiClient();
+                    timer.cancel();}
             }
 
             @Override
@@ -283,6 +239,9 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     seekBar.setProgress(1);
                     setOnTrip();
                     setCustomerTravel();
+                    setDriversTravels();
+                    timer1.cancel();
+                    timer2 = new Timer();
                 }
             }
 
@@ -312,7 +271,10 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     cRef.child(uidDriver).removeValue();
                     mMap.clear();
                     setFinish();
-                    buildGoogleApiClient();}
+                    setFinishTravel();
+                    valorizar();
+                    buildGoogleApiClient();
+                    timer2.cancel();}
             }
 
             @Override
@@ -339,6 +301,50 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
     }
 
+    public void valorizar() {
+
+            cTravels.child(uidClient).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        final ArrayList<String> arrayKeys = new ArrayList<String>();
+                        final ArrayList<String> arrayCalif = new ArrayList<String>();
+                        ArrayList<String> arrayClients = new ArrayList<String>();
+                        final ArrayList<String> arrayDrivers = new ArrayList<String>();
+                        for (DataSnapshot infoSnapshot : dataSnapshot.getChildren()) {
+                            String keys = infoSnapshot.getKey();
+                            String uidClients = (String) infoSnapshot.child("customerUid").getValue();
+                            String uidDrivers = (String) infoSnapshot.child("driverUid").getValue();
+                            String calification = (String) infoSnapshot.child("calification").getValue();
+                            arrayKeys.add(keys);
+                            arrayClients.add(uidClients);
+                            arrayDrivers.add(uidDrivers);
+                            arrayCalif.add(calification);
+                        }
+                                    if (arrayCalif.contains("")) {
+                                        index = arrayCalif.indexOf("");
+                                        String driver = arrayDrivers.get(index);
+                                        if(uidDriver.equals(driver)){
+                                            Log.v("DRIVER!", driver);
+                                            fValorizar.setVisibility(View.VISIBLE);
+                                        }
+                                    }
+
+                        Log.v("Calificaciones", arrayCalif.toString());
+                        Log.v("Calificaciones", arrayDrivers.toString());
+                        Log.v("Calificaciones", arrayClients.toString());
+
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+    }
+
     public void delete() {
 
         mRef.child(uidDriver).addChildEventListener(new ChildEventListener() {
@@ -355,7 +361,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 mRef.child(uidDriver).removeValue();
-            }
+        }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
@@ -438,7 +444,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             }
         }, 2000, 5000);
 
-
+        timer1 = new Timer();
         timer1.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -459,7 +465,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             }
         }, 2000, 5000);
 
-
+        timer2 = new Timer();
         timer2.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -521,7 +527,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
                     sb3.setVisibility(View.VISIBLE);
                     sb2.setVisibility(View.GONE);
-                    fab.setVisibility(View.GONE);
             }
             }
 
@@ -547,6 +552,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         mMap.clear();
                         buildGoogleApiClient();
                         alertDialogOnWay.dismiss();
+                        timer1.cancel();
                     }
                 });
 
@@ -666,7 +672,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     }
                     sb4.setVisibility(View.VISIBLE);
                     sb3.setVisibility(View.GONE);
-                    fab.setVisibility(View.GONE);
                     tRef.child(uidClient).removeValue();
 
                 }
@@ -676,7 +681,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     public void setCustomerTravel(){
         Log.v("From", fDirec);
         Log.v("To", tDirec);
-
+        calander = Calendar.getInstance();
         int cDay = calander.get(Calendar.DAY_OF_MONTH);
         int cMonth = calander.get(Calendar.MONTH) + 1;
         int cYear = calander.get(Calendar.YEAR);
@@ -721,18 +726,19 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
     }
     public void setFinish(){
-        final int cHour = calander.get(Calendar.HOUR_OF_DAY);
-        final int cMinute = calander.get(Calendar.MINUTE);
-        final String horaE = cHour+":"+cMinute;
-        final String horaE2 = "0"+cHour+":"+"0"+cMinute;
-        final String horaE3 = cHour+":"+"0"+cMinute;
-        final String horaE4 = "0"+cHour+":"+cMinute;
         cTravels.child(uidClient).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     ArrayList<String> arrayKeys = new ArrayList<String>();
                     ArrayList<String> arrayEnd = new ArrayList<String>();
+                    calander2 = Calendar.getInstance();
+                    int cHour = calander2.get(Calendar.HOUR_OF_DAY);
+                    int cMinute = calander2.get(Calendar.MINUTE);
+                    String horaE = cHour+":"+cMinute;
+                    String horaE2 = "0"+cHour+":"+"0"+cMinute;
+                    String horaE3 = cHour+":"+"0"+cMinute;
+                    String horaE4 = "0"+cHour+":"+cMinute;
                     for (DataSnapshot infoSnapshot : dataSnapshot.getChildren()) {
                         String keys = infoSnapshot.getKey();
                         String endH = (String) infoSnapshot.child("endHour").getValue();
@@ -762,6 +768,98 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         });
     }
 
+    public void setDriversTravels(){
+
+        Log.v("From", fDirec);
+        Log.v("To", tDirec);
+        calendar = Calendar.getInstance();
+        int cDay = calendar.get(Calendar.DAY_OF_MONTH);
+        int cMonth = calendar.get(Calendar.MONTH) + 1;
+        int cYear = calendar.get(Calendar.YEAR);
+        int cHour = calendar.get(Calendar.HOUR_OF_DAY);
+        int cMinute = calendar.get(Calendar.MINUTE);
+        String fecha = cDay+"/"+cMonth+"/"+cYear;
+        String fecha2 = "0"+cDay+"/"+"0"+cMonth+"/"+cYear;
+        String fecha3 = cDay+"/"+"0"+cMonth+"/"+cYear;
+        String fecha4 = "0"+cDay+"/"+cMonth+"/"+cYear;
+        String hora = cHour+":"+cMinute;
+        String hora2 = "0"+cHour+":"+"0"+cMinute;
+        String hora3 = cHour+":"+"0"+cMinute;
+        String hora4 = "0"+cHour+":"+cMinute;
+        Firebase set = dTravels.child(uidDriver).push();
+        set.child("customerUid").setValue(uidClient);
+        set.child("from").setValue(fDirec);
+        set.child("to").setValue(tDirec);
+        set.child("calification").setValue("");
+        set.child("comments").setValue("");
+        set.child("tripPrice").setValue(price);
+        if(String.valueOf(cDay).length()<2&&String.valueOf(cMonth).length()<2){
+            set.child("date").setValue(fecha2);
+        }else if(String.valueOf(cMonth).length()<2){
+            set.child("date").setValue(fecha3);
+        }else if(String.valueOf(cDay).length()<2){
+            set.child("date").setValue(fecha4);
+        }else{
+            set.child("date").setValue(fecha);
+        }
+        if(String.valueOf(cHour).length()<2&&String.valueOf(cMinute).length()<2){
+            set.child("startHour").setValue(hora2);
+        }else if(String.valueOf(cHour).length()<2){
+            set.child("startHour").setValue(hora4);
+        }else if(String.valueOf(cMinute).length()<2){
+            set.child("startHour").setValue(hora3);
+        }else{
+            set.child("startHour").setValue(hora);
+        }
+        set.child("endHour").setValue("");
+        set.child("code").setValue("");
+    }
+
+    public void setFinishTravel(){
+
+        dTravels.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    ArrayList<String> arrayKeys = new ArrayList<String>();
+                    ArrayList<String> arrayEnd = new ArrayList<String>();
+                    calendar2 = Calendar.getInstance();
+                    int cHour = calendar2.get(Calendar.HOUR_OF_DAY);
+                    int cMinute = calendar2.get(Calendar.MINUTE);
+                    String horaE = cHour+":"+cMinute;
+                    String horaE2 = "0"+cHour+":"+"0"+cMinute;
+                    String horaE3 = cHour+":"+"0"+cMinute;
+                    String horaE4 = "0"+cHour+":"+cMinute;
+                    for (DataSnapshot infoSnapshot : dataSnapshot.getChildren()) {
+                        String keys = infoSnapshot.getKey();
+                        String endH = (String) infoSnapshot.child("endHour").getValue();
+                        arrayKeys.add(keys);
+                        arrayEnd.add(endH);
+                    }if(arrayEnd.contains("")){
+                        int indeX = arrayEnd.indexOf("");
+                        String keyS = arrayKeys.get(indeX);
+                        if(String.valueOf(cHour).length()<2&&String.valueOf(cMinute).length()<2){
+                            dTravels.child(uidDriver).child(keyS).child("endHour").setValue(horaE2);
+                        }else if(String.valueOf(cHour).length()<2){
+                            dTravels.child(uidDriver).child(keyS).child("endHour").setValue(horaE4);
+                        }else if(String.valueOf(cMinute).length()<2){
+                            dTravels.child(uidDriver).child(keyS).child("endHour").setValue(horaE3);
+                        }else{
+                            dTravels.child(uidDriver).child(keyS).child("endHour").setValue(horaE);
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -772,7 +870,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     public void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
-        load();
     }
 
 
@@ -839,9 +936,9 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                             mRefChild5.setValue(lat);
                             mRefChild6.setValue(lng);
                             sRef.child(uidDriver).removeValue();
-                            fab.setVisibility(View.VISIBLE);
-                            btnFindPath.setVisibility(View.GONE);
                             alertDialog.closeOptionsMenu();
+                            timer.cancel();
+                            timer1 = new Timer();
 
                         }
                     });

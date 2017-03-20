@@ -1,0 +1,82 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             tools:context="com.driver.hp.komegaroodriver.Fragment.ValorizarFragment"
+             android:id="@+id/valorizar" android:background="@drawable/trans">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:gravity="center"
+        android:background="@drawable/border5" android:layout_margin="20dp">
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/progressBarValorizar" style="@style/Widget.AppCompat.ProgressBar"
+            android:visibility="gone" android:layout_margin="120dp"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:layout_margin="10dp" android:weightSum="1"
+            android:id="@+id/valorLayout">
+            <TextView
+                android:text="Tu viaje ha finalizado con éxito"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/textView27"
+                android:textAlignment="center" android:textColor="@color/black"
+                android:textSize="17sp"/>
+            <TextView
+                android:text="Califica a tú canguro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/textView28"
+                android:textAlignment="center" android:textColor="@color/black"
+                android:textSize="18sp" android:layout_margin="5dp"/>
+            <ImageView
+                android:layout_width="match_parent"
+                app:srcCompat="@mipmap/ic_perfil"
+                android:id="@+id/imageViewDriver" android:layout_weight="0.35"
+                android:layout_margin="10dp" android:layout_gravity="center"
+                android:layout_height="60dp"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" app:srcCompat="@drawable/linea"
+                android:id="@+id/imageView16" android:layout_margin="5dp"/>
+            <RatingBar
+                android:id="@+id/ratingBarDriver"
+                android:layout_width="wrap_content"
+                android:numStars="5"
+                android:stepSize="1.0"
+                android:theme="@style/RatingBar"
+                style="@style/Widget.AppCompat.RatingBar.Indicator"
+                android:layout_height="35dp"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:isIndicator="false" android:rating="1.0"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/textView26"
+                android:text="¿Algún comentario?"
+                android:textAlignment="center" android:textSize="18sp"
+                android:layout_margin="10dp" android:textColor="@color/black"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:id="@+id/editTextComent"
+                android:hint="C O M E N T A R I O" android:textAlignment="center"
+                android:layout_margin="10dp" android:background="@drawable/editor"
+                android:padding="10dp" android:layout_height="70dp"/>
+            <Button
+                android:text="eSTOY LISTO"
+                android:layout_width="match_parent"
+                android:id="@+id/btnValor"
+                android:layout_height="wrap_content" android:layout_weight="0.08"
+                android:background="@color/colorAccent" android:textColor="@color/white"
+                android:layout_margin="10dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

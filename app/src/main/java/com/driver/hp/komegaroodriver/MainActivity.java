@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView emailTextView;
     private ImageView photoUrl;
     private Firebase mRef;
+    private DrawerLayout drawer;
+    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,14 +71,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        /*drawer.openDrawer(GravityCompat.START);*/
+
         NavigationView leftNavigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = leftNavigationView.getHeaderView(0);
+
 
         nameTextView = (TextView) header.findViewById(R.id.nameTextView);
         emailTextView = (TextView) header.findViewById(R.id.emailTextView);
@@ -135,13 +139,11 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
         });
 
-        NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_view2);
+        /*NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_view2);
         rightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -154,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                 drawer.closeDrawer(GravityCompat.END);
                 return true;
             }
-        });
+        });*/
 
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_main, new MapsFragment()).commit();
@@ -188,7 +190,15 @@ public class MainActivity extends AppCompatActivity {
         // Handle countdown start here
     }
 
+    public void lockedDrawer(){
+        toggle.setDrawerIndicatorEnabled(false);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
 
+    public void unlockedDrawer(){
+        toggle.setDrawerIndicatorEnabled(true);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -219,14 +229,10 @@ public class MainActivity extends AppCompatActivity {
     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         // Handle action bar item clicks here.
         int id = item.getItemId();
 
-        /*if (id == R.id.action_openRight) {
-            drawer.openDrawer(GravityCompat.END); /*Opens the Right Drawer*/
-            /*return true;
-        }*/if (id == R.id.nav_historial) {
+        if (id == R.id.nav_historial) {
             Intent intent = new Intent(MainActivity.this, HistorialActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

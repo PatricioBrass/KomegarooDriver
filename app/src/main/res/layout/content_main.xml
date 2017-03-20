@@ -12,117 +12,73 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" android:weightSum="1">
-        <fragment android:id="@+id/map"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  class="com.google.android.gms.maps.MapFragment" android:layout_weight="0.99"></fragment>
-        <Button
+        android:layout_height="match_parent">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:text="Comenzar"
-            android:id="@+id/btnFindPath"
-            tools:layout_constraintRight_creator="1"
-            tools:layout_constraintBottom_creator="1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:layout_constraintLeft_creator="1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:textColorLink="@android:color/holo_blue_bright"
-            android:textColor="@color/common_google_signin_btn_text_dark_default"
-            android:background="@color/colorAccent"
-            android:layout_centerHorizontal="false"
-            android:gravity="center" android:layout_alignParentBottom="true"
-            android:visibility="gone"/>
-        <Button
-            android:id="@+id/fab"
-            android:text="Terminar"
-            android:layout_width="match_parent"
-            tools:layout_constraintRight_creator="1"
-            tools:layout_constraintBottom_creator="1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:layout_constraintLeft_creator="1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:textColorLink="@android:color/holo_blue_bright"
-            android:textColor="@color/common_google_signin_btn_text_dark_default"
-            android:background="@color/colorAccent"
-            android:layout_centerHorizontal="false"
-            android:gravity="center" android:layout_alignParentBottom="true"
-            android:layout_height="80dp" android:visibility="gone"/>
-        <Button
-            android:id="@+id/trip"
-            android:text="Iniciar viaje"
-            android:layout_width="match_parent"
-            tools:layout_constraintRight_creator="1"
-            tools:layout_constraintBottom_creator="1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:layout_constraintLeft_creator="1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:textColorLink="@android:color/holo_blue_bright"
-            android:textColor="@color/common_google_signin_btn_text_dark_default"
-            android:background="@color/colorAccent"
-            android:layout_centerHorizontal="false"
-            android:gravity="center" android:layout_alignParentBottom="true"
-            android:layout_height="80dp" android:visibility="gone"/>
-        <Button
-            android:id="@+id/finish"
-            android:text="Finalizar Viaje"
-            android:layout_width="match_parent"
-            tools:layout_constraintRight_creator="1"
-            tools:layout_constraintBottom_creator="1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:layout_constraintLeft_creator="1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:textColorLink="@android:color/holo_blue_bright"
-            android:textColor="@color/common_google_signin_btn_text_dark_default"
-            android:background="@color/colorAccent"
-            android:layout_centerHorizontal="false"
-            android:gravity="center" android:layout_alignParentBottom="true"
-            android:layout_height="80dp" android:visibility="gone"/>
-        <SeekBar
-            android:id="@+id/myseek"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:clickable="false"
-            android:max="100"
-            android:progressDrawable="@android:color/transparent"
-            android:thumb="@mipmap/seekbar" style="@style/Widget.AppCompat.SeekBar"
-            android:background="@drawable/iniciard" android:textAlignment="gravity"
-            android:paddingTop="12dp"/>
-        <SeekBar
-            android:id="@+id/myseek2"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:clickable="false"
-            android:max="100"
-            android:progressDrawable="@android:color/transparent"
-            android:thumb="@mipmap/seekbar" style="@style/Widget.AppCompat.SeekBar"
-            android:background="@drawable/finalizard" android:visibility="gone"
-            android:paddingTop="12dp"/>
-        <SeekBar
-            android:id="@+id/myseek3"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:clickable="false"
-            android:max="100"
-            android:progressDrawable="@android:color/transparent"
-            android:thumb="@mipmap/seekbar" style="@style/Widget.AppCompat.SeekBar"
-            android:background="@drawable/iniciard" android:visibility="gone"
-            android:paddingTop="12dp"/>
-        <SeekBar
-            android:id="@+id/myseek4"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:clickable="false"
-            android:max="100"
-            android:progressDrawable="@android:color/transparent"
-            android:thumb="@mipmap/seekbar" style="@style/Widget.AppCompat.SeekBar"
-            android:background="@drawable/finalizard" android:visibility="gone"
-            android:paddingTop="12dp"/>
+            android:layout_height="match_parent">
 
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:layout_weight="0.99">
+
+                    <fragment android:id="@+id/map"
+                              android:layout_width="match_parent"
+                              android:layout_height="match_parent"
+                              class="com.google.android.gms.maps.MapFragment" android:layout_weight="0.99"></fragment>
+                </RelativeLayout>
+                <SeekBar
+                    android:id="@+id/myseek"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:clickable="false"
+                    android:max="100"
+                    android:progressDrawable="@android:color/transparent"
+                    android:thumb="@mipmap/seekbar" style="@style/Widget.AppCompat.SeekBar"
+                    android:background="@drawable/iniciard" android:textAlignment="gravity"
+                    android:paddingTop="12dp"/>
+                <SeekBar
+                    android:id="@+id/myseek2"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:clickable="false"
+                    android:max="100"
+                    android:progressDrawable="@android:color/transparent"
+                    android:thumb="@mipmap/seekbar" style="@style/Widget.AppCompat.SeekBar"
+                    android:background="@drawable/finalizard" android:visibility="gone"
+                    android:paddingTop="12dp"/>
+                <SeekBar
+                    android:id="@+id/myseek3"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:clickable="false"
+                    android:max="100"
+                    android:progressDrawable="@android:color/transparent"
+                    android:thumb="@mipmap/seekbar" style="@style/Widget.AppCompat.SeekBar"
+                    android:background="@drawable/iniciard" android:visibility="gone"
+                    android:paddingTop="12dp"/>
+                <SeekBar
+                    android:id="@+id/myseek4"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:clickable="false"
+                    android:max="100"
+                    android:progressDrawable="@android:color/transparent"
+                    android:thumb="@mipmap/seekbar" style="@style/Widget.AppCompat.SeekBar"
+                    android:background="@drawable/finalizard" android:visibility="gone"
+                    android:paddingTop="12dp"/>
+
+            </LinearLayout>
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                class="com.driver.hp.komegaroodriver.Fragment.ValorizarFragment"
+                android:id="@+id/valorizar"
+                tools:layout="@layout/fragment_valorizar"/>
+        </RelativeLayout>
     </LinearLayout>
 
-    </RelativeLayout>
+</RelativeLayout>
