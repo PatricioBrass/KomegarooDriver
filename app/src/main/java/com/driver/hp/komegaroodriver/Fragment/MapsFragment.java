@@ -191,8 +191,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress,
                                           boolean fromUser) {
-
-
             }
         });
         sb2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -311,7 +309,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         final ArrayList<String> arrayCalif = new ArrayList<String>();
                         ArrayList<String> arrayClients = new ArrayList<String>();
                         final ArrayList<String> arrayDrivers = new ArrayList<String>();
-                        for (DataSnapshot infoSnapshot : dataSnapshot.getChildren()) {
+                        for (DataSnapshot infoSnapshot : dataSnapshot.getChildren())
+                        {
                             String keys = infoSnapshot.getKey();
                             String uidClients = (String) infoSnapshot.child("customerUid").getValue();
                             String uidDrivers = (String) infoSnapshot.child("driverUid").getValue();

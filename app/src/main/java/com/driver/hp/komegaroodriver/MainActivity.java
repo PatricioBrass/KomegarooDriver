@@ -3,10 +3,10 @@ package com.driver.hp.komegaroodriver;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +27,6 @@ import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PerfilActivity;
 import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PromoActivity;
 import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
-import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -83,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         View header = leftNavigationView.getHeaderView(0);
 
 
-        nameTextView = (TextView) header.findViewById(R.id.nameTextView);
+        /*nameTextView = (TextView) header.findViewById(R.id.nameTextView);
         emailTextView = (TextView) header.findViewById(R.id.emailTextView);
         photoUrl = (ImageView) header.findViewById(R.id.myProfilePic);
 
@@ -92,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         nameTextView.setText(name);
         emailTextView.setText(email);
-        Picasso.with(this).load(photo).transform(new CircleTransform()).into(photoUrl);
+        Picasso.with(this).load(photo).transform(new CircleTransform()).into(photoUrl);*/
 
         leftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
@@ -103,16 +102,16 @@ public class MainActivity extends AppCompatActivity {
 
                 if (id == R.id.nav_historial) {
                     Intent intent = new Intent(MainActivity.this, HistorialActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                 }
                 else if (id == R.id.nav_ayuda) {
                     Intent intent = new Intent(MainActivity.this, AyudaActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                 } else if (id == R.id.nav_pago) {
                     Intent intent = new Intent(MainActivity.this, PagoActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
 
                 } else if (id == R.id.nav_notificaciones) {
@@ -120,24 +119,22 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if (id == R.id.nav_promociones) {
                     Intent intent = new Intent(MainActivity.this, PromoActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
 
                 } else if (id == R.id.nav_perfil) {
                     Intent intent = new Intent(MainActivity.this, PerfilActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
 
                 } else if (id == R.id.nav_nosotros) {
                     Intent intent = new Intent(MainActivity.this, NosotrosActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
-
-                }else if (id == R.id.nav_salir) {
-                    metodo();
-                    finish();
-
                 }
+
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
 
                 return true;
             }
@@ -168,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
     private void metodo(){
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
 
     }
@@ -234,47 +231,38 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.nav_historial) {
             Intent intent = new Intent(MainActivity.this, HistorialActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
         }else if (id == R.id.nav_ayuda) {
             Intent intent = new Intent(MainActivity.this, AyudaActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
         } else if (id == R.id.nav_pago) {
             Intent intent = new Intent(MainActivity.this, PagoActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
 
         } else if (id == R.id.nav_notificaciones) {
 
         } else if (id == R.id.nav_promociones) {
             Intent intent = new Intent(MainActivity.this, PromoActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
 
         } else if (id == R.id.nav_perfil) {
             Intent intent = new Intent(MainActivity.this, PerfilActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
 
         } else if (id == R.id.nav_nosotros) {
             Intent intent = new Intent(MainActivity.this, NosotrosActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
-
-        }else if (id == R.id.nav_salir) {
-            metodo();
-            finish();
 
         }
 
         return super.onOptionsItemSelected(item);
 
     }
-
-
-
-
-
 
 }

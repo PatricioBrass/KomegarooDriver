@@ -77,7 +77,7 @@
                 android:layout_height="match_parent"
                 class="com.driver.hp.komegaroodriver.Fragment.ValorizarFragment"
                 android:id="@+id/valorizar"
-                tools:layout="@layout/fragment_valorizar"/>
+                tools:layout="@layout/fragment_valorizar" android:visibility="gone"/>
         </RelativeLayout>
     </LinearLayout>
 

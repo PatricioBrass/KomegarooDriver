@@ -99,7 +99,8 @@ public class ValorizarFragment extends Fragment {
                     ArrayList<String> arrayCalif = new ArrayList<String>();
                     ArrayList<String> arrayClients = new ArrayList<String>();
 
-                    for (DataSnapshot infoSnapshot : dataSnapshot.getChildren()) {
+                    for (DataSnapshot infoSnapshot : dataSnapshot.getChildren())
+                    {
                         String keys = infoSnapshot.getKey();
                         String uidClients = (String) infoSnapshot.child("customerUid").getValue();
                         String calification = (String) infoSnapshot.child("calification").getValue();
@@ -108,7 +109,8 @@ public class ValorizarFragment extends Fragment {
                         arrayClients.add(uidClients);
                         arrayCalif.add(calification);
                     }
-                    if (arrayCalif.contains("")) {
+                    if (arrayCalif.contains(""))
+                    {
                         int index = arrayCalif.indexOf("");
                         uidClient = arrayClients.get(index);
                         Calificar();
