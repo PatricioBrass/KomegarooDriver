@@ -172,9 +172,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 int CurrentLevel = seekBar.getProgress();
                 if(CurrentLevel < 90) {
                     seekBar.setProgress(1);
-                    ((MainActivity)getActivity()).unlockedDrawer();
                 }else{
-                    ((MainActivity)getActivity()).unlockedDrawer();
+                    ((MainActivity)getActivity()).lockedDrawer();
                     sb2.setVisibility(View.VISIBLE);
                     sb.setVisibility(View.GONE);
                     seekBar.setProgress(1);
@@ -185,7 +184,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                    ((MainActivity)getActivity()).lockedDrawer();
             }
 
             @Override
@@ -201,6 +199,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 if(CurrentLevel < 90) {
                     seekBar.setProgress(1);
                 }else{
+                    ((MainActivity)getActivity()).unlockedDrawer();
                     sb.setVisibility(View.VISIBLE);
                     sb2.setVisibility(View.GONE);
                     seekBar.setProgress(1);
@@ -930,6 +929,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     alertDialog.setCancelable(false);
                     alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            ((MainActivity)getActivity()).lockedDrawer();
                             uidClient = arrayClient.get(v);
                             mRefChild4.setValue(uidClient);
                             mRefChild5.setValue(lat);

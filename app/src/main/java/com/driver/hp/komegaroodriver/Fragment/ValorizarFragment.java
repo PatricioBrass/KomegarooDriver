@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 
 import com.driver.hp.komegaroodriver.CircleTransform;
+import com.driver.hp.komegaroodriver.MainActivity;
 import com.driver.hp.komegaroodriver.R;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -74,6 +75,7 @@ public class ValorizarFragment extends Fragment {
                 travel.child(uidClient).child(key).child("calification").setValue(calificacion);
                 travel.child(uidClient).child(key).child("comments").setValue(coment.getText().toString());
                 ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).buildGoogleApiClient();
+                ((MainActivity)getActivity()).unlockedDrawer();
                 coment.setText("");
                 rating.setRating(1);
                 layout.setVisibility(View.GONE);

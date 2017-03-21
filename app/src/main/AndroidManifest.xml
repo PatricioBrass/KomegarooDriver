@@ -105,6 +105,10 @@
         <activity android:name="com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PreguntasAyuda.Pregunta4Activity"
                   android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".Objects.TravelsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

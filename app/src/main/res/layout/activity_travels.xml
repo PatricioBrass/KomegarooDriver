@@ -1,0 +1,194 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.driver.hp.komegaroodriver.Objects.TravelsActivity"
+             android:id="@+id/fragment_travels">
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/progressBarTravel" style="@style/Widget.AppCompat.ProgressBar"
+        android:visibility="gone" android:padding="140dp"/>
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:weightSum="1" android:id="@+id/histotyT">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapTravel"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"/>
+            <Button
+                android:id="@+id/btnCloseT"
+                android:background="@mipmap/ic_back"
+                android:layout_height="wrap_content" android:layout_width="40dp"/>
+        </RelativeLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_margin="10dp">
+            <ImageView
+                app:srcCompat="@mipmap/ic_perfil"
+                android:id="@+id/imageViewDriverT" android:layout_gravity="center"
+                android:layout_weight="0.52" android:layout_width="110dp"
+                android:layout_height="70dp"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_weight="1">
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/nameTravels"
+                    android:textSize="16sp" android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:ellipsize="end"
+                    android:maxLines="1"/>
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/apellidoTravel"
+                    android:textSize="16sp" android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:ellipsize="end"
+                    android:maxLines="1"/>
+                <RatingBar
+                    android:id="@+id/rBarT"
+                    android:layout_width="wrap_content"
+                    android:numStars="5"
+                    android:rating="2.0"
+                    android:theme="@style/RatingBar"
+                    style="@style/Widget.AppCompat.RatingBar.Indicator"
+                    android:isIndicator="true" android:layout_gravity="center"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" app:srcCompat="@drawable/linea2"
+            android:id="@+id/imageView15" android:layout_margin="5dp"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_margin="10dp">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/textView23"
+                    android:layout_weight="1" android:text="O R I G E N"
+                    android:textColor="@color/colorAccent" android:textSize="16sp"
+                    android:layout_marginBottom="10dp"/>
+                <TextView
+                    android:text="D E S T I N O"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/textView30"
+                    android:layout_weight="1" android:textSize="16sp"
+                    android:textColor="@color/colorAccent"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/textViewOrigen"
+                    android:layout_weight="1" android:textColor="@color/black"
+                    android:textSize="16sp" android:layout_marginBottom="10dp"
+                    android:textAlignment="textEnd"
+                    android:ellipsize="end"
+                    android:maxLines="1"/>
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/textViewDestino"
+                    android:layout_weight="1" android:textSize="16sp"
+                    android:textColor="@color/black" android:textAlignment="textEnd"
+                    android:ellipsize="end"
+                    android:maxLines="1"/>
+            </LinearLayout>
+        </LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" app:srcCompat="@drawable/linea2"
+            android:id="@+id/imageView16" android:layout_margin="5dp"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_margin="10dp">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <TextView
+                    android:text="T A R I F A  B A S E"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/textView33"
+                    android:textSize="16sp" android:textColor="@color/colorAccent"/>
+                <TextView
+                    android:text="D I S T A N C I A"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/textView32"
+                    android:textSize="16sp" android:textColor="@color/colorAccent"/>
+                <TextView
+                    android:text="T I E M P O"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/textView31"
+                    android:textSize="16sp" android:textColor="@color/colorAccent"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:text=" $ 500"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/textView36"
+                    android:textAlignment="textEnd" android:textColor="@color/black"
+                    android:textSize="16sp"/>
+                <TextView
+                    android:text="-"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/textView35"
+                    android:textAlignment="textEnd" android:textColor="@color/black"
+                    android:textSize="16sp"/>
+                <TextView
+                    android:text="-"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/textView34"
+                    android:textColor="@color/black" android:textAlignment="textEnd"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" app:srcCompat="@drawable/linea"
+            android:id="@+id/imageView17" android:layout_margin="5dp"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_margin="10dp">
+            <TextView
+                android:text="T O T A L"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" android:id="@+id/textView38"
+                android:textSize="16sp" android:textColor="@color/black"/>
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:id="@+id/textViewPrice"
+                android:layout_weight="1" android:textSize="16sp" android:textAlignment="textEnd"
+                android:textColor="@color/colorAccent"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
