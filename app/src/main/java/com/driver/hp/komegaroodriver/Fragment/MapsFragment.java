@@ -548,6 +548,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         sb.setVisibility(View.VISIBLE);
                         sb3.setVisibility(View.GONE);
                         mMap.clear();
+                        ((MainActivity)getActivity()).unlockedDrawer();
                         buildGoogleApiClient();
                         alertDialogOnWay.dismiss();
                         timer1.cancel();
