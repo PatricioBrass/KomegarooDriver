@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -39,7 +38,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -75,31 +73,18 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
     private ProgressDialog progressDialog;
-    private static final int PLACE_PICKER_FLAG = 1;
     public static final String MESSAGE_KEY="com.driver.hp.komegaroodriver.message_key";
     public static final String MESSAGE_KEYS = "com.driver.hp.komegaroodriver.message_keys";
-    private PlacesAutoCompleteAdapter mPlacesAdapter;
     Marker mCurrLocationMarker;
     Location mLastLocation;
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
     private GoogleMap mMap;
-    private AutoCompleteTextView etOrigin;
-    private AutoCompleteTextView etDestination;
-    private LatLngBounds mBounds;
-    private AutocompleteFilter mPlaceFilter;
-    private CharSequence constraint;
-    private Firebase mRef, mRef2, nRef, pRef, sRef, cRef, tRef, cTravels, dTravels;
+    private Firebase mRef, nRef, pRef, sRef, cRef, tRef, cTravels, dTravels;
     private Double lat, lng;
-    private Integer u;
-    private ArrayList<String> arrayfDirec = new ArrayList<>();
-    private ArrayList<String> arraytDirec = new ArrayList<>();
-    private ArrayList<String> arrayClient = new ArrayList<>();
-    private ArrayList<String> arrayClient2 = new ArrayList<>();
-    private ArrayList<String> arrayDriver = new ArrayList<>();
     private String dire, uidDriver, fDirec, tDirec, price, key;
     public String uidClient;
-    private StringBuilder str, str2, str3;
+    private StringBuilder str, str2;
     View mMapView, fValorizar;
     private Timer timer2, timer, timer1;
     private LatLng latLngDriver;
@@ -163,7 +148,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     public void slideButtons(){
-
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
@@ -286,7 +270,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
             }
         });
-
     }
 
     @Override
