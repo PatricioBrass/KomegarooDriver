@@ -42,10 +42,6 @@
         android:layout_height="match_parent"
         android:id="@+id/progressBarPerfil" style="@style/Widget.AppCompat.ProgressBar"
         android:visibility="gone" android:padding="140dp"/>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
 
         <LinearLayout
 
@@ -197,6 +193,5 @@
                 android:layout_weight="0.04" android:background="@color/colorAccent"
                 android:textColor="@android:color/white" android:layout_margin="5dp"/>
         </LinearLayout>
-    </RelativeLayout>
 
 </LinearLayout>

@@ -166,8 +166,8 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     Map<String, String> mapS = dataSnapshot.getValue(Map.class);
-                    String photo = mapS.get("Photo Url");
-                    String name = mapS.get("Name");
+                    String photo = mapS.get("photoUrl");
+                    String name = mapS.get("name");
                     String nombree = name.substring(0,name.indexOf(" "));
                     String apellidoo = name.replace(nombree ,"");
                     Picasso.with(TravelsActivity.this).load(photo).transform(new CircleTransform()).into(photoDriver);

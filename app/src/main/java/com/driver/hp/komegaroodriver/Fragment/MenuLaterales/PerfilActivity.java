@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.driver.hp.komegaroodriver.CircleTransform;
 import com.driver.hp.komegaroodriver.LoginActivity;
 import com.driver.hp.komegaroodriver.R;
-import com.facebook.login.LoginManager;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -106,12 +105,12 @@ public class PerfilActivity extends AppCompatActivity {
                     Map<Integer, Integer> map = dataSnapshot.getValue(Map.class);
                     Map<Double, Double> mapD = dataSnapshot.getValue(Map.class);
                     Map<String, String>mapS =dataSnapshot.getValue(Map.class);
-                    Integer califi = map.get("Calification");
-                    String email = mapS.get("Email");
-                    String name = mapS.get("Name");
-                    String phones = mapS.get("Phone Number");
-                    String photos = mapS.get("Photo Url");
-                    Integer trips = map.get("Trips");
+                    Integer califi = map.get("calification");
+                    String email = mapS.get("email");
+                    String name = mapS.get("name");
+                    String phones = mapS.get("phoneNumber");
+                    String photos = mapS.get("photoUrl");
+                    Integer trips = map.get("trips");
                     String nombre = name.substring(0,name.indexOf(" "));
                     String apellido = name.replace(nombre ,"");
                     nom.setText(nombre);
@@ -134,7 +133,6 @@ public class PerfilActivity extends AppCompatActivity {
 
     private void metodo(){
         FirebaseAuth.getInstance().signOut();
-        LoginManager.getInstance().logOut();
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
@@ -189,10 +187,10 @@ public class PerfilActivity extends AppCompatActivity {
                     for (int i = 0; i < arrayCalif.size(); i++)
                         sum += Double.parseDouble(arrayCalif.get(i));
                     Double d = new Double(sum / arrayCalif.size());
-                    mRef.child(uidDriver).child("Calification").setValue(d.intValue());
+                    mRef.child(uidDriver).child("calification").setValue(d.intValue());
                     Log.v("Calificaciones", String.valueOf(sum));
                     Log.v("arraysize", String.valueOf(arrayCalif.size()));
-                    mRef.child(uidDriver).child("Trips").setValue(arrayCalif.size());
+                    mRef.child(uidDriver).child("trips").setValue(arrayCalif.size());
                 }
             }
 

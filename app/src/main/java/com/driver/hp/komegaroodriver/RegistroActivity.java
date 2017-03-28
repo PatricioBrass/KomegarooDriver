@@ -72,8 +72,8 @@ public class RegistroActivity extends AppCompatActivity {
                             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                             String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
                             Firebase mRefChild2 = mRef.child(uid.toString());
-                            Firebase mRefChild1 = mRefChild2.child("Email");
-                            Firebase mRefChild = mRefChild2.child("Name");
+                            Firebase mRefChild1 = mRefChild2.child("email");
+                            Firebase mRefChild = mRefChild2.child("name");
                             mRefChild1.setValue(email.toString());
                             mRefChild.setValue(nombre.getText().toString());
                             FirebaseAuth.getInstance().signOut();

@@ -172,7 +172,7 @@ public class ValorizarFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     Map<String, String> mapS = dataSnapshot.getValue(Map.class);
-                    String photo = mapS.get("Photo Url");
+                    String photo = mapS.get("photoUrl");
                     Picasso.with(getActivity()).load(photo).transform(new CircleTransform()).into(imageDriver);
                 }
             }
