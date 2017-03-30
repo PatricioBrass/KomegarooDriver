@@ -18,7 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,11 +36,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
@@ -99,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
         /*drawer.openDrawer(GravityCompat.START);*/
 
         NavigationView leftNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        View header = leftNavigationView.getHeaderView(0);
 
 
         /*nameTextView = (TextView) header.findViewById(R.id.nameTextView);
@@ -185,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 if(intent.getAction().equals(GCMRegistrationIntentService.REGISTRATION_SUCCESS)){
                     //Registration success
                     String token = intent.getStringExtra("token");
-                    Toast.makeText(getApplicationContext(), "GCM token:" + token, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "GCM token:" + token, Toast.LENGTH_LONG).show();
                 } else if(intent.getAction().equals(GCMRegistrationIntentService.REGISTRATION_ERROR)){
                     //Registration error
                     Toast.makeText(getApplicationContext(), "GCM registration error!!!", Toast.LENGTH_LONG).show();
@@ -224,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void conectionHttp(){
+    /*public void conectionHttp(){
         try {
             url = new URL("");
             connection = (HttpURLConnection)url.openConnection();
@@ -252,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 
     @Override
     protected void onStart(){
