@@ -14,22 +14,22 @@ public class Travels {
     String from;
     String startHour;
     String to;
-    String tripPrice;
+    Integer tripPrice;
 
     public Travels() {
     }
 
-    public Travels(String calification, String code, String comments, String customerUid, String date, String endHour, String from, String startHour, String to, String tripPrice) {
+    public Travels(String calification, String code, String comments, String customerUid, String date, String endHour, String startHour, String to, Integer tripPrice, String from) {
         this.calification = calification;
         this.code = code;
         this.comments = comments;
         this.customerUid = customerUid;
         this.date = date;
         this.endHour = endHour;
-        this.from = from;
         this.startHour = startHour;
         this.to = to;
         this.tripPrice = tripPrice;
+        this.from = from;
     }
 
     public String getCalification() {
@@ -48,20 +48,20 @@ public class Travels {
         this.code = code;
     }
 
-    public String getCustomerUid() {
-        return customerUid;
-    }
-
-    public void setCustomerUid(String customerUid) {
-        this.customerUid = customerUid;
-    }
-
     public String getComments() {
         return comments;
     }
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public String getCustomerUid() {
+        return customerUid;
+    }
+
+    public void setCustomerUid(String customerUid) {
+        this.customerUid = customerUid;
     }
 
     public String getDate() {
@@ -80,20 +80,20 @@ public class Travels {
         this.endHour = endHour;
     }
 
-    public String getStartHour() {
-        return startHour;
-    }
-
-    public void setStartHour(String startHour) {
-        this.startHour = startHour;
-    }
-
     public String getFrom() {
         return from;
     }
 
     public void setFrom(String from) {
         this.from = from;
+    }
+
+    public String getStartHour() {
+        return startHour;
+    }
+
+    public void setStartHour(String startHour) {
+        this.startHour = startHour;
     }
 
     public String getTo() {
@@ -104,11 +104,11 @@ public class Travels {
         this.to = to;
     }
 
-    public String getTripPrice() {
+    public Integer getTripPrice() {
         return tripPrice;
     }
 
-    public void setTripPrice(String tripPrice) {
+    public void setTripPrice(Integer tripPrice) {
         this.tripPrice = tripPrice;
     }
 }

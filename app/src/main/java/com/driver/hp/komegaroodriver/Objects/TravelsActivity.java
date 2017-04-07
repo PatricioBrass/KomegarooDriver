@@ -37,6 +37,8 @@ import com.driver.hp.komegaroodriver.Fragment.Modules.Route;
 import com.driver.hp.komegaroodriver.R;
 import com.squareup.picasso.Picasso;
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -47,18 +49,18 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
 
     private Button close;
     private Firebase customers, travels;
-    private String uidDriver, uidClient, trFrom, trTo, trPrice, tKey;
+    private String uidDriver, uidClient, trFrom, trTo, tKey;
     private Float trCalif;
     private TextView nombre, from, to, price, apellido;
     private ImageView photoDriver;
-    private Integer position;
+    private Integer position, trPrice;
     private RatingBar stars;
     public static final String MESSAGE_KEY="com.driver.hp.komegaroodriver.message_key";
     private ArrayList<String> arrayClient = new ArrayList<>();
     private ArrayList<String> arrayCalif = new ArrayList<>();
     private ArrayList<String> arrayFrom = new ArrayList<>();
     private ArrayList<String> arrayTo = new ArrayList<>();
-    private ArrayList<String> arrayPrice = new ArrayList<>();
+    private ArrayList<Integer> arrayPrice = new ArrayList<>();
     private ArrayList<String> arrayKey = new ArrayList<>();
     GoogleMap mMap;
     MapView mapView;
@@ -120,14 +122,13 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
                         String califi = (String) infoSnapshot.child("calification").getValue();
                         String from = (String) infoSnapshot.child("from").getValue();
                         String to = (String) infoSnapshot.child("to").getValue();
-                        String price = (String) infoSnapshot.child("tripPrice").getValue();
+                        Integer price = infoSnapshot.child("tripPrice").getValue().hashCode();
                         arrayKey.add(uid);
                         arrayClient.add(driver);
                         arrayCalif.add(califi);
                         arrayFrom.add(from);
                         arrayTo.add(to);
                         arrayPrice.add(price);
-
                     }
                     h1.addAll(arrayKey);
                     arrayKey.clear();
@@ -138,7 +139,7 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
                     trCalif = Float.valueOf(arrayCalif.get(posi));
                     trFrom = arrayFrom.get(posi);
                     trTo = arrayTo.get(posi);
-                    trPrice = arrayPrice.get(posi);
+                    trPrice = arrayPrice.get(posi).intValue();
                     showDriver();
                     setData();
                     try {
@@ -184,10 +185,14 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
     }
 
     public void setData(){
+        DecimalFormatSymbols simb = new DecimalFormatSymbols();
+        simb.setGroupingSeparator('.');
+        DecimalFormat form = new DecimalFormat("###,###", simb);
+        String precio = "CLP $"+form.format(trPrice);
         stars.setRating(trCalif);
         from.setText(trFrom);
         to.setText(trTo);
-        price.setText("CLP "+trPrice);
+        price.setText(precio);
     }
 
     @Override

@@ -73,7 +73,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     private GoogleMap mMap;
     private Firebase mRef, nRef, sRef, cRef, tRef, cTravels, dTravels;
     private Double lat, lng;
-    private String  uidDriver, fDirec, tDirec, price, key;
+    private String  uidDriver, fDirec, tDirec, key;
     public String uidClient;
     private StringBuilder str, str2;
     View mMapView, fValorizar;
@@ -84,6 +84,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     private Geocoder geocoder, geocoder2;
     private SeekBar sb, sb2, sb3, sb4;
     private int index;
+    private Integer price;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -215,10 +216,10 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        final ArrayList<String> arrayKeys = new ArrayList<String>();
-                        final ArrayList<String> arrayCalif = new ArrayList<String>();
-                        ArrayList<String> arrayClients = new ArrayList<String>();
-                        final ArrayList<String> arrayDrivers = new ArrayList<String>();
+                        final ArrayList<String> arrayKeys = new ArrayList<>();
+                        final ArrayList<String> arrayCalif = new ArrayList<>();
+                        ArrayList<String> arrayClients = new ArrayList<>();
+                        final ArrayList<String> arrayDrivers = new ArrayList<>();
                         for (DataSnapshot infoSnapshot : dataSnapshot.getChildren()){
                             String keys = infoSnapshot.getKey();
                             String uidClients = (String) infoSnapshot.child("customerUid").getValue();
@@ -271,9 +272,9 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 mRef.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(final DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.hasChild("Latitude") && dataSnapshot.hasChild("Longitude")) {
-                            mRef.child(uidDriver).child("Latitude").setValue(lat);
-                            mRef.child(uidDriver).child("Longitude").setValue(lng);}}
+                        if (dataSnapshot.hasChild("latitude") && dataSnapshot.hasChild("longitude")) {
+                            mRef.child(uidDriver).child("latitude").setValue(lat);
+                            mRef.child(uidDriver).child("longitude").setValue(lng);}}
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {}});}}, 1000, 3000);
         timer1 = new Timer();
@@ -283,9 +284,9 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 nRef.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.hasChild("Driver Latitude") && dataSnapshot.hasChild("Driver Longitude")) {
-                            nRef.child(uidDriver).child("Driver Latitude").setValue(lat);
-                            nRef.child(uidDriver).child("Driver Longitude").setValue(lng);}}
+                        if (dataSnapshot.hasChild("driverLatitude") && dataSnapshot.hasChild("driverLongitude")) {
+                            nRef.child(uidDriver).child("driverLatitude").setValue(lat);
+                            nRef.child(uidDriver).child("driverLongitude").setValue(lng);}}
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {}});}}, 1000, 3000);
         timer2 = new Timer();
@@ -295,9 +296,9 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 cRef.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.hasChild("Driver Latitude") && dataSnapshot.hasChild("Driver Longitude")) {
-                            cRef.child(uidDriver).child("Driver Latitude").setValue(lat);
-                            cRef.child(uidDriver).child("Driver Longitude").setValue(lng);}}
+                        if (dataSnapshot.hasChild("driverLatitude") && dataSnapshot.hasChild("driverLongitude")) {
+                            cRef.child(uidDriver).child("driverLatitude").setValue(lat);
+                            cRef.child(uidDriver).child("driverLongitude").setValue(lng);}}
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {}});    }
         }, 1000, 3000);
@@ -308,9 +309,10 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                     Map<String, String> mapS = dataSnapshot.getValue(Map.class);
-                    fDirec = mapS.get("From Direction");
-                    tDirec = mapS.get("To Direction");
-                    price = mapS.get("Price");
+                    Map<Integer, Integer> map = dataSnapshot.getValue(Map.class);
+                    fDirec = mapS.get("from");
+                    tDirec = mapS.get("to");
+                    price = map.get("price");
                 if(fDirec!=null||tDirec!=null){
                 try {
                     List<Address> addresses = geocoder.getFromLocation(latLngDriver.latitude, latLngDriver.longitude, 1);
@@ -369,9 +371,9 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         }
 
     public void setOnTrip() {
-        cRef.child(uidDriver).child("Customer Uid").setValue(uidClient);
-        cRef.child(uidDriver).child("Driver Latitude").setValue(lat);
-        cRef.child(uidDriver).child("Driver Longitude").setValue(lng);
+        cRef.child(uidDriver).child("customerUid").setValue(uidClient);
+        cRef.child(uidDriver).child("driverLatitude").setValue(lat);
+        cRef.child(uidDriver).child("driverLongitude").setValue(lng);
         nRef.child(uidDriver).removeValue();
     }
 
@@ -594,12 +596,12 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         sRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()&&dataSnapshot.child(uidDriver).hasChild("Customer Uid")) {
+                if (dataSnapshot.exists()&&dataSnapshot.child(uidDriver).hasChild("customerUid")) {
                     final ArrayList<String> arrayDriver = new ArrayList<>();
                     final ArrayList<String> arrayClient = new ArrayList<>();
                     for (DataSnapshot infoSnapshot : dataSnapshot.getChildren()) {
                         String uid = infoSnapshot.getKey();
-                        String client = (String) infoSnapshot.child("Customer Uid").getValue();
+                        String client = (String) infoSnapshot.child("customerUid").getValue();
                         arrayClient.add(client);
                         arrayDriver.add(uid);
                     }
@@ -607,19 +609,19 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         alertDialog.setTitle("Están solicitando un Kamegaroo");
                         alertDialog.setMessage("¿Aceptas el viaje?");
                         alertDialog.setCancelable(false);
-                        alertDialog.setButton(0,"Ok", new DialogInterface.OnClickListener() {
+                        alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                             ((MainActivity)getActivity()).lockedDrawer();
                             uidClient = arrayClient.get(v);
-                            nRef.child(uidDriver).child("Customer Uid").setValue(uidClient);
-                            nRef.child(uidDriver).child("Driver Latitude").setValue(lat);
-                            nRef.child(uidDriver).child("Driver Longitude").setValue(lng);
+                            nRef.child(uidDriver).child("customerUid").setValue(uidClient);
+                            nRef.child(uidDriver).child("driverLatitude").setValue(lat);
+                            nRef.child(uidDriver).child("driverLongitude").setValue(lng);
                             sRef.child(uidDriver).removeValue();
                             alertDialog.closeOptionsMenu();
                             timer.cancel();
                             timer1 = new Timer();}});
-                    alertDialog.setButton(1,"Cancelar", new DialogInterface.OnClickListener() {
+                    alertDialog.setButton2("Cancelar", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             send();
@@ -678,7 +680,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if(!dataSnapshot.exists()){
                                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngDriver));
-                                mMap.animateCamera(CameraUpdateFactory.zoomTo(18));}}
+                                mMap.animateCamera(CameraUpdateFactory.zoomTo(15));}}
                         @Override
                         public void onCancelled(FirebaseError firebaseError) {}});}}
             @Override
@@ -686,8 +688,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     public void send() {
-        mRef.child(uidDriver).child("Latitude").setValue(lat);
-        mRef.child(uidDriver).child("Longitude").setValue(lat);
+        mRef.child(uidDriver).child("latitude").setValue(lat);
+        mRef.child(uidDriver).child("longitude").setValue(lat);
         sRef.child(uidDriver).removeValue();
         nRef.child(uidDriver).removeValue();
     }

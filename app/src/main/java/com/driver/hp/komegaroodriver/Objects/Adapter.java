@@ -28,6 +28,8 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +55,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.TravelsViewHolder>{
         Travels travels = travelses.get(position);
         holder.fecha.setText(travels.getDate());
         holder.hora.setText(travels.getStartHour());
-        holder.precio.setText("CLP "+travels.getTripPrice());
+        DecimalFormatSymbols simb = new DecimalFormatSymbols();
+        simb.setGroupingSeparator('.');
+        DecimalFormat form = new DecimalFormat("###,###", simb);
+        String precio = "CLP $"+form.format(travels.getTripPrice());
+        holder.precio.setText(precio);
 
         try {
 
