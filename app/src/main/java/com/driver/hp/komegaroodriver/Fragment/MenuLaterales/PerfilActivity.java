@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,9 +15,9 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.driver.hp.komegaroodriver.CircleTransform;
 import com.driver.hp.komegaroodriver.LoginActivity;
 import com.driver.hp.komegaroodriver.R;
+import com.driver.hp.komegaroodriver.RoundedTransformation;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -29,17 +30,16 @@ import java.util.Map;
 
 public class PerfilActivity extends AppCompatActivity {
 
-    private Button close, sClose, edit;
+    private Button close, sClose;
     private Firebase mRef, travel;
-    private TextView ema, nom, ape, num, trip;
+    private TextView ema, nom, ape, num, trip, nomApe, dat, nomT, telT, corrT, envT, calT;
     private ImageView pho;
     private RatingBar stars;
     private String uidDriver;
     private View mProgressView;
     private View mPerfilFormView;
-    private View editPopup;
-    private ArrayList<String> arrayKey = new ArrayList<String>();
-    private ArrayList<String> arrayCalif = new ArrayList<String>();
+    private ArrayList<String> arrayKey = new ArrayList<>();
+    private ArrayList<String> arrayCalif = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,24 +56,27 @@ public class PerfilActivity extends AppCompatActivity {
             }
         });
         Firebase.setAndroidContext(this);
+        Typeface face= Typeface.createFromAsset(getAssets(), "monserrat/Montserrat-Medium.ttf");
+        Typeface face1= Typeface.createFromAsset(getAssets(), "monserrat/Montserrat-SemiBold.ttf");
+        Typeface face2= Typeface.createFromAsset(getAssets(), "monserrat/Montserrat-Light.ttf");
+        Typeface face3= Typeface.createFromAsset(getAssets(), "monserrat/Montserrat-Regular.ttf");
+        Typeface face4= Typeface.createFromAsset(getAssets(), "monserrat/Montserrat-Bold.ttf");
+        nomApe = (TextView)findViewById(R.id.txtNombreApellido);
+        nomApe.setTypeface(face1);
         ema = (TextView)findViewById(R.id.txtCorreo);
+        ema.setTypeface(face2);
         nom = (TextView)findViewById(R.id.txtNombre);
+        nom.setTypeface(face);
         ape = (TextView)findViewById(R.id.txtApellido);
+        ape.setTypeface(face);
         pho = (ImageView)findViewById(R.id.imgPhoto);
         num = (TextView)findViewById(R.id.txtNumero);
+        num.setTypeface(face2);
         trip = (TextView)findViewById(R.id.txtTrips);
+        trip.setTypeface(face2);
         stars = (RatingBar) findViewById(R.id.ratingBar);
         mPerfilFormView = findViewById(R.id.perfil_form);
         mProgressView = findViewById(R.id.progressBarPerfil);
-        /*editPopup = findViewById(R.id.editpopup);
-        editPopup.setVisibility(View.GONE);*/
-        edit = (Button)findViewById(R.id.btnEdit);
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*editPopup.setVisibility(View.VISIBLE);*/
-            }
-        });
         sClose = (Button)findViewById(R.id.btnSesionClose);
         sClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,8 +87,18 @@ public class PerfilActivity extends AppCompatActivity {
         showProgress(true);
         getRating();
         perfil();
-
-
+        dat = (TextView)findViewById(R.id.txtDatos);
+        dat.setTypeface(face1);
+        nomT = (TextView)findViewById(R.id.nombreT);
+        nomT.setTypeface(face4);
+        telT = (TextView)findViewById(R.id.telefonoT);
+        telT.setTypeface(face1);
+        corrT = (TextView)findViewById(R.id.correoT);
+        corrT.setTypeface(face1);
+        envT = (TextView)findViewById(R.id.enviosT);
+        envT.setTypeface(face1);
+        calT = (TextView)findViewById(R.id.califT);
+        calT.setTypeface(face1);
     }
 
     @Override
@@ -93,7 +106,6 @@ public class PerfilActivity extends AppCompatActivity {
         super.onBackPressed();
         finish();
     }
-
 
     public void perfil(){
 
@@ -103,7 +115,6 @@ public class PerfilActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     Map<Integer, Integer> map = dataSnapshot.getValue(Map.class);
-                    Map<Double, Double> mapD = dataSnapshot.getValue(Map.class);
                     Map<String, String>mapS =dataSnapshot.getValue(Map.class);
                     Integer califi = map.get("calification");
                     String email = mapS.get("email");
@@ -112,14 +123,15 @@ public class PerfilActivity extends AppCompatActivity {
                     String photos = mapS.get("photoUrl");
                     Integer trips = map.get("trips");
                     String nombre = name.substring(0,name.indexOf(" "));
-                    String apellido = name.replace(nombre ,"");
+                    String apellido = name.replace(nombre+" " ,"");
+                    //nomApe.setText(name);
                     nom.setText(nombre);
                     ape.setText(apellido);
                     ema.setText(email);
                     num.setText(phones);
                     trip.setText(trips.toString());
                     stars.setRating(califi.floatValue());
-                    Picasso.with(PerfilActivity.this).load(photos).transform(new CircleTransform()).into(pho);
+                    Picasso.with(PerfilActivity.this).load(photos).transform(new RoundedTransformation(9,1)).into(pho);
                     showProgress(false);
                 }
             }

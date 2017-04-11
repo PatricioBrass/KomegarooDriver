@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="NavigationViewStyle">
+        <item name="android:textSize">21sp</item> <!-- menu item text size-->
+        <item name="android:listPreferredItemHeightSmall">30dp</item><!-- menu item height-->
+        <item name="android:listDivider">@color/colorAccent</item>
+        <item name="android:textColorSecondary">@color/colorAccent</item>
+    </style>
+</resources>

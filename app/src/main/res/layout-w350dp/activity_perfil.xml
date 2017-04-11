@@ -233,7 +233,8 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:layout_marginLeft="40dp"
-                android:layout_marginTop="5dp" android:layout_marginRight="10dp">
+                android:layout_marginTop="15dp" android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp">
                 <TextView
                     android:text="Saldo"
                     android:id="@+id/nombreT"
@@ -250,14 +251,20 @@
                     android:maxLines="1" android:textSize="17sp" android:layout_height="match_parent"
                     android:layout_weight="1" android:gravity="center"/>
             </LinearLayout>
-            <Button
-                android:text="c e r r a r  s e s i ó n"
-                android:layout_height="wrap_content" android:id="@+id/btnSesionClose"
-                android:background="@color/colorAccent"
-                android:textColor="@android:color/white"
-                android:layout_width="200dp"
-                android:layout_marginTop="15dp" android:layout_gravity="center"
-            />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:gravity="bottom"
+            >
+                <Button
+                    android:text="c e r r a r  s e s i ó n"
+                    android:layout_height="wrap_content" android:id="@+id/btnSesionClose"
+                    android:background="@color/colorAccent"
+                    android:textColor="@android:color/white"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="10dp"/>
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 
