@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content" android:id="@+id/txtDatos"
                 android:text="DATOS GENERALES" android:layout_marginLeft="20dp"
                 android:textSize="18sp" android:textColor="#262626"
-                android:layout_marginBottom="2dp" android:layout_marginTop="10dp"/>
+                android:layout_marginBottom="5dp" android:layout_marginTop="10dp"/>
             <View
                 android:layout_width="fill_parent"
                 android:background="@color/morado" android:layout_marginRight="80dp"
@@ -117,8 +117,9 @@
                 android:layout_height="wrap_content" android:layout_margin="10dp">
                 <LinearLayout
                     android:orientation="horizontal"
-                    android:layout_height="30dp" android:layout_width="match_parent"
-                    android:layout_marginLeft="30dp">
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="30dp" android:layout_marginTop="5dp"
+                    android:layout_height="40dp">
                     <TextView
                         android:text="Teléfono"
                         android:id="@+id/telefonoT"
@@ -142,7 +143,7 @@
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp" android:layout_marginLeft="30dp">
+                    android:layout_marginLeft="30dp" android:layout_height="40dp">
                     <TextView
                         android:text="E-mail"
                         android:id="@+id/correoT"
@@ -167,8 +168,7 @@
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="30dp">
+                    android:layout_marginLeft="30dp" android:layout_height="40dp">
                     <TextView
                         android:text="Calificación"
                         android:layout_height="match_parent" android:id="@+id/califT"
@@ -251,20 +251,15 @@
                     android:maxLines="1" android:textSize="17sp" android:layout_height="match_parent"
                     android:layout_weight="1" android:gravity="center"/>
             </LinearLayout>
-            <LinearLayout
-                android:orientation="vertical"
+            <Button
+                android:text="c e r r a r  s e s i ó n"
+                android:layout_height="wrap_content" android:id="@+id/btnSesionClose"
+                android:background="@color/colorAccent"
+                android:textColor="@android:color/white"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" android:gravity="bottom"
-            >
-                <Button
-                    android:text="c e r r a r  s e s i ó n"
-                    android:layout_height="wrap_content" android:id="@+id/btnSesionClose"
-                    android:background="@color/colorAccent"
-                    android:textColor="@android:color/white"
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="10dp"/>
-            </LinearLayout>
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" android:layout_marginLeft="80dp"
+                android:layout_marginRight="80dp"/>
         </LinearLayout>
     </RelativeLayout>
 

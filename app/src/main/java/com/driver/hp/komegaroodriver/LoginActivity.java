@@ -4,10 +4,14 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ScaleDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -21,6 +25,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import static android.R.attr.scaleHeight;
+import static android.R.attr.scaleWidth;
 
 /**
  * A login screen that offers login via email/password.
@@ -37,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleApiClient;
     private static final String TAG = "LoginActivity";
     private Firebase mRef;
+    private Button mEmailSignInButton, plomo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +81,18 @@ public class LoginActivity extends AppCompatActivity {
         mEmailView = (EditText) findViewById(R.id.email);
 
         mPasswordView = (EditText) findViewById(R.id.password);
-
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        Drawable drawables = getResources().getDrawable(R.mipmap.ic_user);
+        drawables.setBounds(0, -8, (int) (drawables.getIntrinsicWidth() * 0.5),
+                (int) (drawables.getIntrinsicHeight() * 0.4));
+        ScaleDrawable sds = new ScaleDrawable(drawables, 0, scaleWidth, scaleHeight);
+        Drawable drawables1 = getResources().getDrawable(R.mipmap.password);
+        drawables1.setBounds(0, -8, (int) (drawables1.getIntrinsicWidth() * 0.5),
+                (int) (drawables1.getIntrinsicHeight() * 0.4));
+        ScaleDrawable sds1 = new ScaleDrawable(drawables1, 0, scaleWidth, scaleHeight);
+        mEmailView.setCompoundDrawables(sds.getDrawable(), null, null, null);
+        mPasswordView.setCompoundDrawables(sds1.getDrawable(), null, null, null);
+        plomo = (Button)findViewById(R.id.buttonPlomo);
+        mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.email_login_form);
         mProgressView = findViewById(R.id.login_progress);
+        showButton();
 
     }
 
@@ -121,6 +140,37 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void showButton(){
+        TextWatcher clear = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!mEmailView.getEditableText().toString().isEmpty()&&!mPasswordView.getEditableText().toString().isEmpty())
+                {
+                    plomo.setVisibility(View.GONE);
+                    mEmailSignInButton.setVisibility(View.VISIBLE);
+                }else{
+                    mEmailSignInButton.setVisibility(View.GONE);
+                    plomo.setVisibility(View.VISIBLE);
+                }
+            }
+        };
+
+        mEmailView.addTextChangedListener(clear);
+        mPasswordView.addTextChangedListener(clear);
     }
 
 

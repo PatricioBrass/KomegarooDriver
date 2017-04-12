@@ -226,8 +226,8 @@
             <View
                 android:layout_width="match_parent"
                 android:background="@color/morado"
-                android:layout_height="1dp" android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp" android:layout_marginLeft="35dp"
+                android:layout_height="1dp" android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp" android:layout_marginLeft="35dp"
                 android:layout_marginRight="35dp"/>
             <LinearLayout
                 android:orientation="horizontal"
@@ -255,9 +255,9 @@
                 android:layout_height="wrap_content" android:id="@+id/btnSesionClose"
                 android:background="@color/colorAccent"
                 android:textColor="@android:color/white"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_marginTop="15dp" android:layout_gravity="center"
-            />
+                android:layout_marginLeft="50dp" android:layout_marginRight="50dp"/>
         </LinearLayout>
     </RelativeLayout>
 
