@@ -40,7 +40,7 @@ public class HistorialActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
-        mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/Drivers Travels");
+        mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverTravels");
         setContentView(R.layout.activity_historial);
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         close = (Button)findViewById(R.id.btnHistorial);

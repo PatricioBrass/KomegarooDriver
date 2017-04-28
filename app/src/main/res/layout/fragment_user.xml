@@ -1,0 +1,147 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:clickable="true"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                tools:context="com.driver.hp.komegaroodriver.Fragment.UserFragment"
+                android:orientation="vertical" android:id="@+id/userData"
+                android:background="@color/white">
+<LinearLayout android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:background="@color/white">
+
+    <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp" app:srcCompat="@drawable/fondoperfil"
+                    android:id="@+id/imageView14" android:scaleType="fitXY"
+                    android:layout_alignParentBottom="true" android:layout_alignParentStart="true"/>
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:background="@drawable/border5"
+                    android:layout_marginLeft="30dp">
+
+                    <ImageView
+                        android:adjustViewBounds="true"
+                        app:srcCompat="@mipmap/ic_persona"
+                        android:id="@+id/imgPhotoData"
+                        android:layout_gravity="center"
+                        android:layout_alignParentTop="true" android:layout_alignParentStart="true"
+                        android:layout_margin="1dp"
+                        android:layout_height="80dp" android:layout_width="80dp"/>
+                </FrameLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_height="match_parent"
+                    android:layout_width="130dp"
+                    android:layout_alignTop="@+id/imageView14" android:layout_marginLeft="140dp">
+                    <TextView
+                        android:text="Juan"
+                        android:layout_width="match_parent"
+                        android:id="@+id/txtNombreData"
+                        android:textSize="18sp"
+                        android:textColor="@color/white"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:layout_height="35dp" android:gravity="left|center"/>
+                    <TextView
+                        android:text="Pérez"
+                        android:layout_width="match_parent"
+                        android:id="@+id/txtApellidoData"
+                        android:textSize="18sp"
+                        android:gravity="left|center"
+                        android:textColor="@color/white"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:layout_height="35dp"/>
+                </LinearLayout>
+            </RelativeLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/textView2"
+            android:text="Dirección" android:layout_marginLeft="20dp"
+            android:textSize="20sp" android:textColor="#262626"
+            android:layout_marginBottom="5dp" android:layout_marginTop="10dp"
+            android:textStyle="normal|bold"/>
+        <View
+            android:layout_width="fill_parent"
+            android:background="@color/morado" android:layout_marginRight="150dp"
+            android:layout_height="2dp"/>
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp" android:id="@+id/txtDirecData"
+            android:ellipsize="end"
+            android:maxLines="1" android:gravity="center" android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" android:layout_marginTop="20dp"
+            android:layout_marginBottom="5dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/textView4"
+            android:text="Block, depto, etc" android:layout_marginLeft="20dp"
+            android:textSize="20sp" android:textColor="#262626"
+            android:layout_marginBottom="5dp" android:layout_marginTop="10dp"
+            android:textStyle="normal|bold"/>
+        <View
+            android:layout_width="fill_parent"
+            android:background="@color/morado" android:layout_marginRight="150dp"
+            android:layout_height="2dp"/>
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/txtNumberData"
+            android:textSize="16sp"
+            android:ellipsize="end"
+            android:maxLines="1" android:gravity="center" android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" android:layout_marginBottom="5dp"
+            android:layout_marginTop="20dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/textView3"
+            android:text="Comentarios" android:layout_marginLeft="20dp"
+            android:textSize="20sp" android:textColor="#262626"
+            android:layout_marginBottom="5dp" android:layout_marginTop="10dp"
+            android:textStyle="normal|bold"/>
+        <View
+            android:layout_width="fill_parent"
+            android:background="@color/morado" android:layout_marginRight="150dp"
+            android:layout_height="2dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:id="@+id/txtComentData"
+            android:textSize="16sp" android:layout_height="100dp"
+            android:ellipsize="end"
+            android:maxLines="5" android:text="Sin comentarios" android:gravity="center"
+            android:layout_marginLeft="20dp" android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp" android:layout_marginTop="20dp"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/button3"
+                android:layout_weight="1" android:background="@drawable/cancelar_viaje"
+                android:layout_margin="5dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/button2"
+                android:layout_weight="1" android:background="@drawable/contactar"
+                android:layout_margin="5dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+</RelativeLayout>

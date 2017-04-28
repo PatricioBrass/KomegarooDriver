@@ -37,9 +37,9 @@
                     android:clickable="false"
                     android:max="100"
                     android:progressDrawable="@android:color/transparent"
-                    android:thumb="@mipmap/seekbar" style="@style/Widget.AppCompat.SeekBar"
-                    android:background="@drawable/iniciard" android:textAlignment="gravity"
-                    android:paddingTop="12dp"/>
+                    android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
+                    android:background="@drawable/conectarse0" android:textAlignment="gravity"
+                    android:paddingTop="15dp" android:visibility="visible"/>
                 <SeekBar
                     android:id="@+id/myseek2"
                     android:layout_width="match_parent"
@@ -48,8 +48,8 @@
                     android:max="100"
                     android:progressDrawable="@android:color/transparent"
                     android:thumb="@mipmap/seekbar" style="@style/Widget.AppCompat.SeekBar"
-                    android:background="@drawable/finalizard" android:visibility="gone"
-                    android:paddingTop="12dp"/>
+                    android:background="@drawable/desconectarse0" android:visibility="gone"
+                    android:paddingTop="15dp"/>
                 <SeekBar
                     android:id="@+id/myseek3"
                     android:layout_width="match_parent"
@@ -58,8 +58,8 @@
                     android:max="100"
                     android:progressDrawable="@android:color/transparent"
                     android:thumb="@mipmap/seekbar" style="@style/Widget.AppCompat.SeekBar"
-                    android:background="@drawable/iniciard" android:visibility="gone"
-                    android:paddingTop="12dp"/>
+                    android:background="@drawable/iniciar_entrega0" android:visibility="gone"
+                    android:paddingTop="15dp"/>
                 <SeekBar
                     android:id="@+id/myseek4"
                     android:layout_width="match_parent"
@@ -68,8 +68,51 @@
                     android:max="100"
                     android:progressDrawable="@android:color/transparent"
                     android:thumb="@mipmap/seekbar" style="@style/Widget.AppCompat.SeekBar"
-                    android:background="@drawable/finalizard" android:visibility="gone"
-                    android:paddingTop="12dp"/>
+                    android:background="@drawable/finalizar_entrega0" android:visibility="gone"
+                    android:paddingTop="15dp"/>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:background="@color/colorAccent" android:layout_height="90dp"
+                    android:id="@+id/dataTravel" android:visibility="gone">
+                    <ImageView
+                        android:layout_height="match_parent" app:srcCompat="@drawable/default_img"
+                        android:id="@+id/userImage" android:layout_width="100dp"
+                        android:layout_margin="5dp"/>
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" android:gravity="center">
+                        <TextView
+                            android:text="Juan Pérez"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" android:id="@+id/txtNameData"
+                            android:textSize="18sp" android:textColor="@color/white"
+                            android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"/>
+                        <View
+                            android:layout_width="fill_parent"
+                            android:background="@color/white"
+                            android:layout_height="2dp" android:layout_marginLeft="10dp"
+                            android:layout_marginRight="20dp" android:layout_marginBottom="5dp"/>
+                        <TextView
+                            android:text="Destino:"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp" android:layout_marginLeft="10dp"
+                            android:textSize="16sp" android:textColor="@color/white"
+                            android:textStyle="normal|bold"/>
+                        <TextView
+                            android:text="Santa Mónica 2121, Santiago, Chile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" android:id="@+id/txtDestinoData"
+                            android:layout_marginRight="10dp" android:layout_marginLeft="10dp"
+                            android:textSize="16sp" android:textColor="@color/white"
+                            android:ellipsize="end"
+                            android:maxLines="1"/>
+                    </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
             <fragment
@@ -78,6 +121,12 @@
                 class="com.driver.hp.komegaroodriver.Fragment.ValorizarFragment"
                 android:id="@+id/valorizar"
                 tools:layout="@layout/fragment_valorizar" android:visibility="gone"/>
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/userData"
+                class="com.driver.hp.komegaroodriver.Fragment.UserFragment"
+                tools:layout="@layout/fragment_user" android:visibility="gone"/>
         </RelativeLayout>
     </LinearLayout>
 

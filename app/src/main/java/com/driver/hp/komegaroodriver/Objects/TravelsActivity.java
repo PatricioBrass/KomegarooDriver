@@ -74,8 +74,8 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_travels);
-        customers = new Firebase("https://decoded-pilot-144921.firebaseio.com/Customers");
-        travels = new Firebase("https://decoded-pilot-144921.firebaseio.com/Drivers Travels");
+        customers = new Firebase("https://decoded-pilot-144921.firebaseio.com/customers");
+        travels = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverTravels");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         nombre = (TextView)findViewById(R.id.nameTravels);
         apellido = (TextView)findViewById(R.id.apellidoTravel);
@@ -111,7 +111,7 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
     }
 
     public void getDataForm(){
-        travels.child(uidDriver).addValueEventListener(new ValueEventListener() {
+        travels.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){

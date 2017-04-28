@@ -4,10 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +30,9 @@ import java.util.Map;
 public class ValorizarFragment extends Fragment {
 
     private RatingBar rating;
-    public static final String MESSAGE_KEY="com.driver.hp.komegaroodriver.message_key";
     private Button btnV;
-    private Firebase travel, customers, dTravels;
-    private String uidClient, calificacion, key, uidDriver;
+    private Firebase travel, customers, dTravels, stateDriver;
+    private String uidClients, calificacion, keys, uidDriver;
     private int index;
     private View layout;
     private ImageView imageDriver;
@@ -53,12 +50,11 @@ public class ValorizarFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_valorizar, container, false);
         Firebase.setAndroidContext(getActivity());
-        travel = new Firebase("https://decoded-pilot-144921.firebaseio.com/Customers Travels");
-        customers = new Firebase("https://decoded-pilot-144921.firebaseio.com/Customers");
-        dTravels = new Firebase("https://decoded-pilot-144921.firebaseio.com/Drivers Travels");
+        travel = new Firebase("https://decoded-pilot-144921.firebaseio.com/customerTravels");
+        customers = new Firebase("https://decoded-pilot-144921.firebaseio.com/customers");
+        dTravels = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverTravels");
+        stateDriver = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverState");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Intent intent = getActivity().getIntent();
-        uidClient = intent.getStringExtra(MESSAGE_KEY);
         mPerfilFormView = v.findViewById(R.id.valorLayout);
         mProgressView = v.findViewById(R.id.progressBarValorizar);
         rating = (RatingBar)v.findViewById(R.id.ratingBarDriver);
@@ -72,9 +68,10 @@ public class ValorizarFragment extends Fragment {
             public void onClick(View v) {
 
                 calificacion = String.valueOf(Math.round(rating.getRating()));
-                travel.child(uidClient).child(key).child("calification").setValue(calificacion);
-                travel.child(uidClient).child(key).child("comments").setValue(coment.getText().toString());
+                travel.child(uidClients).child(keys).child("calification").setValue(calificacion);
+                travel.child(uidClients).child(keys).child("comments").setValue(coment.getText().toString());
                 ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).buildGoogleApiClient();
+                stateDriver.child(uidDriver).child("state").setValue("nil");
                 ((MainActivity)getActivity()).unlockedDrawer();
                 coment.setText("");
                 rating.setRating(1);
@@ -92,30 +89,16 @@ public class ValorizarFragment extends Fragment {
 
 
     public void getCliente(){
-        dTravels.child(uidDriver).addValueEventListener(new ValueEventListener() {
+        stateDriver.child(uidDriver).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-
-                    ArrayList<String> arrayKeys = new ArrayList<String>();
-                    ArrayList<String> arrayCalif = new ArrayList<String>();
-                    ArrayList<String> arrayClients = new ArrayList<String>();
-
-                    for (DataSnapshot infoSnapshot : dataSnapshot.getChildren())
-                    {
-                        String keys = infoSnapshot.getKey();
-                        String uidClients = (String) infoSnapshot.child("customerUid").getValue();
-                        String calification = (String) infoSnapshot.child("calification").getValue();
-
-                        arrayKeys.add(keys);
-                        arrayClients.add(uidClients);
-                        arrayCalif.add(calification);
-                    }
-                    if (arrayCalif.contains(""))
-                    {
-                        int index = arrayCalif.indexOf("");
-                        uidClient = arrayClients.get(index);
-                        Calificar();
+                if(dataSnapshot.exists()){
+                    Map<String, String> mapS = dataSnapshot.getValue(Map.class);
+                    String estado = mapS.get("state");
+                    if(estado.equals("endTrip")){
+                        uidClients = ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).uidClient;
+                        keys = ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).key;
+                        showDriver();
                     }
                 }
             }
@@ -126,54 +109,16 @@ public class ValorizarFragment extends Fragment {
             }
         });
     }
-    public void Calificar() {
-        Log.v("Cliente!", uidClient);
-            travel.child(uidClient).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        ArrayList<String> arrayKeys = new ArrayList<String>();
-                        ArrayList<String> arrayCalif = new ArrayList<String>();
-                        ArrayList<String> arrayClients = new ArrayList<String>();
-
-                        for (DataSnapshot infoSnapshot : dataSnapshot.getChildren()) {
-                            String keys = infoSnapshot.getKey();
-                            String uidClients = (String) infoSnapshot.child("customerUid").getValue();
-                            String uidDrivers = (String) infoSnapshot.child("driverUid").getValue();
-                            String calification = (String) infoSnapshot.child("calification").getValue();
-                            arrayKeys.add(keys);
-                            arrayClients.add(uidClients);
-                            arrayClient.add(uidDrivers);
-                            arrayCalif.add(calification);
-                        }
-                        if (arrayCalif.contains("")) {
-                            index = arrayCalif.indexOf("");
-                            key = arrayKeys.get(index);
-
-                            showDriver();
-
-                        }
-                        showProgress(false);
-
-                    }
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
-
-    }
 
     public void showDriver(){
-        customers.child(uidClient).addValueEventListener(new ValueEventListener() {
+        customers.child(uidClients).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     Map<String, String> mapS = dataSnapshot.getValue(Map.class);
                     String photo = mapS.get("photoUrl");
                     Picasso.with(getActivity()).load(photo).transform(new CircleTransform()).into(imageDriver);
+                    showProgress(false);
                 }
             }
 

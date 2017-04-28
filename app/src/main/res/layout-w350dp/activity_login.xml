@@ -67,14 +67,14 @@
 
         <Button
             android:id="@+id/email_sign_in_button"
-            android:layout_gravity="center" android:background="@drawable/iniciar_sesion"
+            android:layout_gravity="center" android:background="@drawable/inicio_sesion"
             android:layout_width="match_parent"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp" android:layout_marginTop="10dp"
             android:visibility="gone" android:layout_height="38dp"/>
         <Button
             android:id="@+id/buttonPlomo"
-            android:layout_gravity="center" android:background="@drawable/iniciar_sesion_plomo"
+            android:layout_gravity="center" android:background="@drawable/inicio_sesion_plomo"
             android:layout_width="match_parent"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp" android:layout_marginTop="10dp"

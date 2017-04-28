@@ -1,8 +1,10 @@
 package com.driver.hp.komegaroodriver;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
@@ -15,9 +17,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +35,10 @@ import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PagoActivity;
 import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PerfilActivity;
 import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PromoActivity;
 import com.driver.hp.komegaroodriver.Notification.GCMRegistrationIntentService;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,15 +61,15 @@ public class MainActivity extends AppCompatActivity {
     private HttpURLConnection connection;
     private URL url;
     private BufferedReader reader;
+    private String uidDriver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/Customers");
+        mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/drivers");
+        uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mAuth = FirebaseAuth.getInstance();
-
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -248,10 +256,62 @@ public class MainActivity extends AppCompatActivity {
         }
     }*/
 
+    public void loadData(){
+        mRef.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.hasChild("name")&&dataSnapshot.exists()){
+                    final AlertDialog alertDialog3 = new AlertDialog.Builder(MainActivity.this).create();
+                    alertDialog3.setTitle("Ingrese nombre completo");
+                    alertDialog3.setCancelable(false);
+                    final EditText input2 = new EditText(MainActivity.this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                    input2.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);//se puede agregar otro con el signo |
+                    input2.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_user, 0, 0, 0);
+                    alertDialog3.setView(input2);
+                    alertDialog3.setButton(AlertDialog.BUTTON_NEUTRAL, "Ingresar",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mRef.child(uidDriver).child("name").setValue(input2.getText().toString());
+                                }
+                            });
+                    alertDialog3.show();
+
+                }
+                if (!dataSnapshot.hasChild("phoneNumber")&&dataSnapshot.exists()) {
+                    final AlertDialog alertDialog2 = new AlertDialog.Builder(MainActivity.this).create();
+                    alertDialog2.setTitle("Ingrese número de celular o contacto");
+                    alertDialog2.setCancelable(false);
+                    final EditText input = new EditText(MainActivity.this);
+                    InputFilter[] FilterArray = new InputFilter[1];
+                    FilterArray[0] = new InputFilter.LengthFilter(8);
+                    input.setFilters(FilterArray);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                    input.setInputType(InputType.TYPE_CLASS_NUMBER);//se puede agregar otro con el signo |
+                    input.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.num, 0, 0, 0);
+                    alertDialog2.setView(input);
+                    alertDialog2.setButton(AlertDialog.BUTTON_NEUTRAL, "Ingresar",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mRef.child(uidDriver).child("phoneNumber").setValue("+569" + input.getText().toString());
+                                }
+                            });
+                    alertDialog2.show();
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
     @Override
     protected void onStart(){
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+        loadData();
     }
 
     @Override

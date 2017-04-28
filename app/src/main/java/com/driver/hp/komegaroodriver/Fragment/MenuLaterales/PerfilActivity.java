@@ -40,13 +40,14 @@ public class PerfilActivity extends AppCompatActivity {
     private View mPerfilFormView;
     private ArrayList<String> arrayKey = new ArrayList<>();
     private ArrayList<String> arrayCalif = new ArrayList<>();
+    private Integer califi, trips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
-        mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/Drivers");
-        travel = new Firebase("https://decoded-pilot-144921.firebaseio.com/Drivers Travels");
+        mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/drivers");
+        travel = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverTravels");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         close = (Button) findViewById(R.id.btnPerfil);
         close.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +86,6 @@ public class PerfilActivity extends AppCompatActivity {
             }
         });
         showProgress(true);
-        getRating();
         perfil();
         dat = (TextView)findViewById(R.id.txtDatos);
         dat.setTypeface(face1);
@@ -110,28 +110,26 @@ public class PerfilActivity extends AppCompatActivity {
     public void perfil(){
 
         Firebase mRefChild = mRef.child(uidDriver);
-        mRefChild.addValueEventListener(new ValueEventListener() {
+        mRefChild.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     Map<Integer, Integer> map = dataSnapshot.getValue(Map.class);
                     Map<String, String>mapS =dataSnapshot.getValue(Map.class);
-                    Integer califi = map.get("calification");
-                    String email = mapS.get("email");
+                    califi = map.get("calification");
+                    String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
                     String name = mapS.get("name");
                     String phones = mapS.get("phoneNumber");
                     String photos = mapS.get("photoUrl");
-                    Integer trips = map.get("trips");
+                    trips = map.get("trips");
                     String nombre = name.substring(0,name.indexOf(" "));
                     String apellido = name.replace(nombre+" " ,"");
-                    //nomApe.setText(name);
                     nom.setText(nombre);
                     ape.setText(apellido);
                     ema.setText(email);
                     num.setText(phones);
-                    trip.setText(trips.toString());
-                    stars.setRating(califi.floatValue());
                     Picasso.with(PerfilActivity.this).load(photos).transform(new RoundedTransformation(9,1)).into(pho);
+                    getRating();
                     showProgress(false);
                 }
             }
@@ -187,22 +185,30 @@ public class PerfilActivity extends AppCompatActivity {
         travel.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
+                if (dataSnapshot.exists()) {
+                    arrayCalif.clear();
                     for (DataSnapshot infoSnapshot : dataSnapshot.getChildren()) {
-                        String key = infoSnapshot.getKey();
                         String calif = (String) infoSnapshot.child("calification").getValue();
-                        arrayKey.add(key);
                         arrayCalif.add(calif);
                     }
-
-                    int sum = 0;
-                    for (int i = 0; i < arrayCalif.size(); i++)
-                        sum += Double.parseDouble(arrayCalif.get(i));
-                    Double d = new Double(sum / arrayCalif.size());
-                    mRef.child(uidDriver).child("calification").setValue(d.intValue());
-                    Log.v("Calificaciones", String.valueOf(sum));
-                    Log.v("arraysize", String.valueOf(arrayCalif.size()));
-                    mRef.child(uidDriver).child("trips").setValue(arrayCalif.size());
+                    Integer t = arrayCalif.size();
+                    int last = t-1;
+                    String califica = arrayCalif.get(last);
+                    Log.v("Valoracion",String.valueOf(califica));
+                    if (!califica.equals("")&&arrayCalif.size()>trips) {
+                        Double d = new Double(((califi * last) + Integer.parseInt(califica)) / t);
+                        Integer f = d.intValue();
+                        mRef.child(uidDriver).child("calification").setValue(f);
+                        mRef.child(uidDriver).child("trips").setValue(t);
+                        trip.setText(t.toString());
+                        stars.setRating(f.floatValue());
+                    }else{
+                        trip.setText(trips.toString());
+                        stars.setRating(califi.floatValue());
+                    }
+                }else{
+                    trip.setText(trips.toString());
+                    stars.setRating(califi.floatValue());
                 }
             }
 
