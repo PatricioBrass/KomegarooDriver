@@ -32,7 +32,7 @@ public class PerfilActivity extends AppCompatActivity {
 
     private Button close, sClose;
     private Firebase mRef, travel;
-    private TextView ema, nom, ape, num, trip, nomApe, dat, nomT, telT, corrT, envT, calT;
+    private TextView nom, ape, num, trip, nomApe, dat, nomT, telT, envT, calT;
     private ImageView pho;
     private RatingBar stars;
     private String uidDriver;
@@ -64,8 +64,6 @@ public class PerfilActivity extends AppCompatActivity {
         Typeface face4= Typeface.createFromAsset(getAssets(), "monserrat/Montserrat-Bold.ttf");
         nomApe = (TextView)findViewById(R.id.txtNombreApellido);
         nomApe.setTypeface(face1);
-        ema = (TextView)findViewById(R.id.txtCorreo);
-        ema.setTypeface(face2);
         nom = (TextView)findViewById(R.id.txtNombre);
         nom.setTypeface(face);
         ape = (TextView)findViewById(R.id.txtApellido);
@@ -93,8 +91,6 @@ public class PerfilActivity extends AppCompatActivity {
         nomT.setTypeface(face4);
         telT = (TextView)findViewById(R.id.telefonoT);
         telT.setTypeface(face1);
-        corrT = (TextView)findViewById(R.id.correoT);
-        corrT.setTypeface(face1);
         envT = (TextView)findViewById(R.id.enviosT);
         envT.setTypeface(face1);
         calT = (TextView)findViewById(R.id.califT);
@@ -126,7 +122,6 @@ public class PerfilActivity extends AppCompatActivity {
                     String apellido = name.replace(nombre+" " ,"");
                     nom.setText(nombre);
                     ape.setText(apellido);
-                    ema.setText(email);
                     num.setText(phones);
                     Picasso.with(PerfilActivity.this).load(photos).transform(new RoundedTransformation(9,1)).into(pho);
                     getRating();

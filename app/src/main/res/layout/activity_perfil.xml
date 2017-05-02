@@ -118,7 +118,7 @@
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_height="30dp" android:layout_width="match_parent"
-                    android:layout_marginLeft="30dp">
+                    android:layout_marginLeft="30dp" android:layout_marginTop="10dp">
                     <TextView
                         android:text="Teléfono"
                         android:id="@+id/telefonoT"
@@ -138,37 +138,12 @@
                     android:layout_width="match_parent"
                     android:background="@color/morado" android:layout_marginRight="5dp"
                     android:layout_marginLeft="130dp"
-                    android:layout_marginBottom="10dp" android:layout_height="0.5dp"/>
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp" android:layout_marginLeft="30dp">
-                    <TextView
-                        android:text="E-mail"
-                        android:id="@+id/correoT"
-                        android:textColor="#262626"
-                        android:textSize="16sp" android:layout_height="match_parent"
-                        android:layout_width="100dp"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:id="@+id/txtCorreo"
-                        android:textSize="16sp" android:text="correo@correo.cl"
-                        android:textColor="#262626"
-                        android:ellipsize="end"
-                        android:maxLines="1" android:textAlignment="center"
-                        android:layout_height="match_parent" android:layout_weight="1"/>
-                </LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:background="@color/morado"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginLeft="130dp" android:layout_weight="1"
-                    android:layout_marginBottom="10dp" android:layout_height="0.5dp"/>
+                    android:layout_marginBottom="15dp" android:layout_height="0.5dp"/>
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="30dp">
+                    android:layout_marginLeft="30dp" android:layout_marginTop="10dp">
                     <TextView
                         android:text="Calificación"
                         android:layout_height="match_parent" android:id="@+id/califT"
@@ -195,12 +170,12 @@
                     android:background="@color/morado"
                     android:layout_marginRight="5dp"
                     android:layout_marginLeft="130dp" android:layout_weight="1"
-                    android:layout_marginBottom="10dp" android:layout_height="0.5dp"/>
+                    android:layout_marginBottom="15dp" android:layout_height="0.5dp"/>
                 <LinearLayout
                     android:orientation="horizontal"
                     android:weightSum="1"
                     android:layout_width="match_parent" android:layout_marginLeft="30dp"
-                    android:layout_height="40dp">
+                    android:layout_height="40dp" android:layout_marginTop="10dp">
                     <TextView
                         android:layout_height="match_parent" android:id="@+id/enviosT"
                         android:textColor="#262626"
@@ -221,13 +196,13 @@
                     android:background="@color/morado"
                     android:layout_marginRight="5dp"
                     android:layout_marginLeft="130dp" android:layout_weight="1"
-                    android:layout_marginBottom="10dp" android:layout_height="0.5dp"/>
+                    android:layout_marginBottom="15dp" android:layout_height="0.5dp"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
                 android:background="@color/morado"
-                android:layout_height="1dp" android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp" android:layout_marginLeft="35dp"
+                android:layout_height="1dp" android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp" android:layout_marginLeft="35dp"
                 android:layout_marginRight="35dp"/>
             <LinearLayout
                 android:orientation="horizontal"
@@ -251,13 +226,11 @@
                     android:layout_weight="1" android:gravity="center"/>
             </LinearLayout>
             <Button
-                android:text="c e r r a r  s e s i ó n"
-                android:layout_height="wrap_content" android:id="@+id/btnSesionClose"
-                android:background="@color/colorAccent"
-                android:textColor="@android:color/white"
+                android:id="@+id/btnSesionClose"
                 android:layout_width="match_parent"
                 android:layout_marginTop="15dp" android:layout_gravity="center"
-                android:layout_marginLeft="50dp" android:layout_marginRight="50dp"/>
+                android:layout_marginLeft="60dp" android:layout_marginRight="60dp"
+                android:background="@drawable/cerrar_sesion" android:layout_height="40dp"/>
         </LinearLayout>
     </RelativeLayout>
 
