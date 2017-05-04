@@ -38,7 +38,7 @@
 
         <EditText
             android:id="@+id/email"
-            android:hint="E-mail"
+            android:hint="Usuario"
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:textColorHint="#838484"
@@ -48,7 +48,7 @@
             android:backgroundTint="@color/colorAccent"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="40dp" android:layout_marginRight="40dp"
-            android:layout_marginTop="40dp" android:textSize="16sp"
+            android:layout_marginTop="40dp" android:textSize="17sp"
             android:padding="5dp" android:layout_height="45dp"/>
         <EditText
             android:id="@+id/password"

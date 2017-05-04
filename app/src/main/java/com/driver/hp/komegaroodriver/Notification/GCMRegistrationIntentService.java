@@ -6,8 +6,10 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.driver.hp.komegaroodriver.R;
+import com.firebase.client.Firebase;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * Created by NgocTri on 4/8/2016.
@@ -15,6 +17,8 @@ import com.google.android.gms.iid.InstanceID;
 public class GCMRegistrationIntentService extends IntentService {
     public static final String REGISTRATION_SUCCESS = "RegistrationSuccess";
     public static final String REGISTRATION_ERROR = "RegistrationError";
+    private Firebase driver;
+    private String uidDriver;
 
     public GCMRegistrationIntentService() {
         super("");
@@ -28,9 +32,13 @@ public class GCMRegistrationIntentService extends IntentService {
     private void registerGCM() {
         Intent registrationComplete = null;
         String token = null;
+        driver = new Firebase("https://decoded-pilot-144921.firebaseio.com/drivers");
+        uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         try {
             InstanceID instanceID = InstanceID.getInstance(getApplicationContext());
             token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+            driver.child(uidDriver).child("deviceToken").setValue(token);
+            driver.child(uidDriver).child("device").setValue("android");
             Log.w("GCMRegIntentService", "token:" + token);
             //notify to UI that registration complete success
             registrationComplete = new Intent(REGISTRATION_SUCCESS);

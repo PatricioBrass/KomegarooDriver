@@ -128,9 +128,9 @@ public class UserFragment extends Fragment {
                     String nume = mapS.get("blockInfo");
                     String fro = mapS.get("from");
                     String com = mapS.get("comments");
-                    num.setText(nume);
+                    if(!nume.isEmpty()){num.setText(nume);}
+                    if(!com.isEmpty()){comentarios.setText(com);}
                     direccion.setText(fro);
-                    comentarios.setText(com);
                 }
             }
             @Override
@@ -148,9 +148,9 @@ public class UserFragment extends Fragment {
                     String nume = mapS.get("blockInfo");
                     String dTo = mapS.get("to");
                     String com = mapS.get("comments");
-                    num.setText(nume);
+                    if(!nume.isEmpty()){num.setText(nume);}
+                    if(!com.isEmpty()){comentarios.setText(com);}
                     direccion.setText(dTo);
-                    comentarios.setText(com);
                 }
             }
             @Override

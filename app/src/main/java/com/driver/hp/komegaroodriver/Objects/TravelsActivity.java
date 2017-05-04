@@ -1,11 +1,7 @@
 package com.driver.hp.komegaroodriver.Objects;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,6 +11,11 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.driver.hp.komegaroodriver.CircleTransform;
+import com.driver.hp.komegaroodriver.Fragment.Modules.DirectionFinder;
+import com.driver.hp.komegaroodriver.Fragment.Modules.DirectionFinderListener;
+import com.driver.hp.komegaroodriver.Fragment.Modules.Route;
+import com.driver.hp.komegaroodriver.R;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -30,12 +31,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.driver.hp.komegaroodriver.CircleTransform;
-import com.driver.hp.komegaroodriver.Fragment.Modules.DirectionFinder;
-import com.driver.hp.komegaroodriver.Fragment.Modules.DirectionFinderListener;
-import com.driver.hp.komegaroodriver.Fragment.Modules.Route;
-import com.driver.hp.komegaroodriver.R;
 import com.squareup.picasso.Picasso;
+
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -136,10 +133,12 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
                     tKey = arrayKey.get(position);
                     int posi = arrayKey.indexOf(tKey);
                     uidClient = arrayClient.get(posi);
-                    trCalif = Float.valueOf(arrayCalif.get(posi));
+                    if(!arrayCalif.get(posi).isEmpty()) {
+                        trCalif = Float.valueOf(arrayCalif.get(posi));
+                    }
                     trFrom = arrayFrom.get(posi);
                     trTo = arrayTo.get(posi);
-                    trPrice = arrayPrice.get(posi).intValue();
+                    trPrice = arrayPrice.get(posi);
                     showDriver();
                     setData();
                     try {
@@ -176,10 +175,8 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
                     apellido.setText(apellidoo);
                 }
             }
-
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
             }
         });
     }
@@ -189,7 +186,9 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
         simb.setGroupingSeparator('.');
         DecimalFormat form = new DecimalFormat("###,###", simb);
         String precio = "CLP $"+form.format(trPrice);
-        stars.setRating(trCalif);
+        if (trCalif != null) {
+            stars.setRating(trCalif);
+        }
         from.setText(trFrom);
         to.setText(trTo);
         price.setText(precio);
@@ -202,19 +201,16 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
                 marker.remove();
             }
         }
-
         if (destinationMarkers != null) {
             for (Marker marker : destinationMarkers) {
                 marker.remove();
             }
         }
-
         if (polylinePaths != null) {
             for (Polyline polyline : polylinePaths) {
                 polyline.remove();
             }
         }
-
     }
 
     @Override
@@ -229,10 +225,9 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
                 mMap = googleMap;
                 mMap.getUiSettings().setScrollGesturesEnabled(false);
                 mMap.getUiSettings().setZoomControlsEnabled(false);
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 for (Route route : routes) {
                     mMap.clear();
-                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
                     originMarkers.add(mMap.addMarker(new MarkerOptions()
                             .icon(BitmapDescriptorFactory.fromResource(R.mipmap.inicio))
                             .title(route.startAddress)
@@ -241,61 +236,21 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
                             .icon(BitmapDescriptorFactory.fromResource(R.mipmap.finaly))
                             .title(route.endAddress)
                             .position(route.endLocation)));
-
                     builder.include(route.startLocation);
                     builder.include(route.endLocation);
-
                     PolylineOptions polylineOptions = new PolylineOptions().
                             geodesic(true).
                             color(Color.rgb(119, 21, 204)).
                             width(8);
-
                     for (int i = 0; i < route.points.size(); i++) {
                         polylineOptions.add(route.points.get(i));
                         builder.include(route.points.get(i));
                     }
-
                     polylinePaths.add(mMap.addPolyline(polylineOptions));
-
                     LatLngBounds bounds = builder.build();
                     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 90));
-
                 }
-
             }
         });
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    public void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            recyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
-            recyclerView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    recyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            recyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
     }
 }

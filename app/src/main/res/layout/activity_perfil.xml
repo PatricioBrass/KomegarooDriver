@@ -230,7 +230,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="15dp" android:layout_gravity="center"
                 android:layout_marginLeft="60dp" android:layout_marginRight="60dp"
-                android:background="@drawable/cerrar_sesion" android:layout_height="40dp"/>
+                android:background="@drawable/cerrar_sesion" android:layout_height="38dp"/>
         </LinearLayout>
     </RelativeLayout>
 

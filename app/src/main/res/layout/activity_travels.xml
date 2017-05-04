@@ -80,7 +80,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" android:layout_marginRight="5dp">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/textView23"
@@ -97,7 +97,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent" android:layout_marginLeft="10dp">
                 <TextView
                     android:text="TextView"
                     android:layout_width="match_parent"
@@ -130,11 +130,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
                 <TextView
-                    android:text="T A R I F A  B A S E"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/textView33"
-                    android:textSize="16sp" android:textColor="@color/colorAccent"/>
-                <TextView
                     android:text="D I S T A N C I A"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/textView32"
@@ -149,12 +144,6 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <TextView
-                    android:text=" $ 500"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/textView36"
-                    android:textAlignment="textEnd" android:textColor="@color/black"
-                    android:textSize="16sp"/>
                 <TextView
                     android:text="-"
                     android:layout_width="match_parent"

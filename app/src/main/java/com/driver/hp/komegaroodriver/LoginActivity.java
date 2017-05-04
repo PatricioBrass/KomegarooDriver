@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private Firebase mRef;
     private Button mEmailSignInButton, plomo;
+    private String emails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,33 +108,16 @@ public class LoginActivity extends AppCompatActivity {
         showButton();
 
     }
-
-   /* private void getHashKey(){
-
-        try{
-            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures)
-            {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-
-        }catch (PackageManager.NameNotFoundException e){
-            Log.e("name not found", e.toString());
-        }catch (NoSuchAlgorithmException e){
-            Log.e("no such algoritmo", e.toString());
-        }
-    }*/
     private void startSignIn(){
-        String email = mEmailView.getText().toString();
+        emails = mEmailView.getText().toString()+"@komegaroo.com";
         String pass = mPasswordView.getText().toString();
 
-        mAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(emails,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(!task.isSuccessful()){
                     Toast.makeText(LoginActivity.this, "Email o Password inválidos", Toast.LENGTH_SHORT).show();
+                    finish();
                     startActivity(new Intent(LoginActivity.this, LoginActivity.class));
                 }
             }
@@ -144,14 +128,10 @@ public class LoginActivity extends AppCompatActivity {
         TextWatcher clear = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-
             }
 
             @Override
@@ -209,14 +189,8 @@ public class LoginActivity extends AppCompatActivity {
         if (password.isEmpty()){
             mPasswordView.setError("ingrese Password");
             return false;
-        }if(!email.contains("@")){
-            mEmailView.setError("ingrese Email válido");
-            return false;
         }if (password.length() < 5){
             mPasswordView.setError("Password debe ser mayor o igual a 6 carácteres");
-            return false;
-        }if(!email.contains("@komegaroo.com")){
-            alertDialog2.show();
             return false;
         }
 
