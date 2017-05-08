@@ -138,6 +138,12 @@
                 android:id="@+id/userData"
                 class="com.driver.hp.komegaroodriver.Fragment.UserFragment"
                 tools:layout="@layout/fragment_user" android:visibility="gone"/>
+            <fragment
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/fragmentPago"
+                class="com.driver.hp.komegaroodriver.Fragment.PagoFragment"
+                tools:layout="@layout/fragment_pago" android:visibility="gone"/>
         </RelativeLayout>
     </LinearLayout>
 

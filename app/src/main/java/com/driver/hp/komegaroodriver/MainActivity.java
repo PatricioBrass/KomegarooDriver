@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -23,8 +22,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.driver.hp.komegaroodriver.Fragment.MapsFragment;
@@ -43,24 +40,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.io.BufferedReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 public class MainActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private TextView nameTextView;
-    private TextView emailTextView;
-    private ImageView photoUrl;
-    private Firebase mRef;
+    private Firebase mRef, pagoDriver;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private HttpURLConnection connection;
-    private URL url;
-    private BufferedReader reader;
     private String uidDriver;
 
     @Override
@@ -69,30 +54,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/drivers");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() == null) {
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    /*intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);*/
-                    startActivity(intent);
-                }
-            }
-        };
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-        /*drawer.openDrawer(GravityCompat.START);*/
-
         NavigationView leftNavigationView = (NavigationView) findViewById(R.id.nav_view);
 
 
@@ -188,8 +157,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
-        //Check status of Google play service in device
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
         if(ConnectionResult.SUCCESS != resultCode) {
             //Check type of error
@@ -217,36 +184,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-
-    /*public void conectionHttp(){
-        try {
-            url = new URL("");
-            connection = (HttpURLConnection)url.openConnection();
-            connection.connect();
-            InputStream stream = connection.getInputStream();
-            reader = new BufferedReader(new InputStreamReader(stream));
-            StringBuffer buffer = new StringBuffer();
-            String line = "";
-            while((line =reader.readLine())!=null){
-                buffer.append(line);
-            }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if(connection!=null) {
-                connection.disconnect();
-            }
-            try {
-                if(reader!=null) {
-                    reader.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
 
     public void loadData(){
         mRef.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -302,7 +239,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
         loadData();
     }
 

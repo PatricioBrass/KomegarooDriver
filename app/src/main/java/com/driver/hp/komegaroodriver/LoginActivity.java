@@ -54,29 +54,6 @@ public class LoginActivity extends AppCompatActivity {
         Firebase.setAndroidContext(this);
         mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/drivers");
         mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener(){
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
-                if(firebaseAuth.getCurrentUser() != null){
-                    /*String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-                    Firebase mRefChild2 = mRef.child(uid.toString());
-                    Firebase mRefChild = mRefChild2.child("email");
-                    Firebase mRefChild3 = mRefChild2.child("name");
-                    Firebase mRefChild1 = mRefChild2.child("photoUrl");
-                    Firebase mRefChild4 = mRefChild2.child("calification");
-                    Firebase mRefChild5 = mRefChild2.child("trips");
-                    mRefChild4.setValue(3);
-                    mRefChild.setValue(email);
-                    mRefChild1.setValue("https://lh4.googleusercontent.com/-k0YDYiIWlAQ/AAAAAAAAAAI/AAAAAAAAAAA/AKB_U8sc4yp9o3yiG9tbs78q_6BeqM77YQ/s96-c/photo.jpg");
-                    mRefChild5.setValue(0);*/
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    /*intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);*/
-                    startActivity(intent);
-
-                }
-            }
-        };
         mEmailView = (EditText) findViewById(R.id.email);
 
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -155,15 +132,11 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
     }
 
     private boolean checkFormFields() {

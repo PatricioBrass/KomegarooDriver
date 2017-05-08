@@ -2,12 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.driver.hp.komegaroodriver">
 
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <permission
         android:name="com.driver.hp.komegaroodriver.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="com.driver.hp.komegaroodriver.C2D_MESSAGE" />
+        android:protectionLevel="signature"/>
+
+    <uses-permission android:name="com.driver.hp.komegaroodriver.C2D_MESSAGE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -26,23 +27,16 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
-            android:name="com.driver.hp.komegaroodriver.LoginActivity"
+            android:name=".LoginActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
@@ -52,21 +46,27 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+
                 <category android:name="com.driver.hp.komegaroodriver"/>
             </intent-filter>
         </receiver>
-        <service android:name=".Notification.GCMPushReceiverService" android:exported="false">
+
+        <service
+            android:name=".Notification.GCMPushReceiverService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
             </intent-filter>
         </service>
-        <service android:name=".Notification.GCMRegistrationIntentService" android:exported="false">
+        <service
+            android:name=".Notification.GCMRegistrationIntentService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID"/>
             </intent-filter>
         </service>
 
-        <activity android:name="com.driver.hp.komegaroodriver.Fragment.MapsFragment"/>
+        <activity android:name=".Fragment.MapsFragment"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -80,72 +80,74 @@
             android:value="@string/google_maps_key"/>
 
         <activity
-            android:name=".MapsActivity"
-            android:label="Ruta"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity android:name="com.driver.hp.komegaroodriver.RegistroActivity"
-                  android:theme="@style/AppTheme.NoActionBar"
-                  android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name="com.driver.hp.komegaroodriver.Fragment.MenuLaterales.HistorialActivity"
+            android:name=".Fragment.MenuLaterales.HistorialActivity"
             android:label="Historial"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name="com.driver.hp.komegaroodriver.Fragment.MenuLaterales.AyudaActivity"
+            android:name=".Fragment.MenuLaterales.AyudaActivity"
             android:label="Ayuda"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name="com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PagoActivity"
+            android:name=".Fragment.MenuLaterales.PagoActivity"
             android:label="Pagos"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name="com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PromoActivity"
+            android:name=".Fragment.MenuLaterales.PromoActivity"
             android:label="Promociones"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name="com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PerfilActivity"
+            android:name=".Fragment.MenuLaterales.PerfilActivity"
             android:label="Perfil"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name="com.driver.hp.komegaroodriver.Fragment.MenuLaterales.NosotrosActivity"
+            android:name=".Fragment.MenuLaterales.NosotrosActivity"
             android:label="Sobre nosotros"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name="com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PreguntasAyuda.Pregunta1Activity"
-                  android:theme="@style/AppTheme.NoActionBar"
-                  android:screenOrientation="portrait">
+        <activity
+            android:name=".Fragment.MenuLaterales.PreguntasAyuda.Pregunta1Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name="com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PreguntasAyuda.Pregunta2Activity"
-                  android:theme="@style/AppTheme.NoActionBar"
-                  android:screenOrientation="portrait">
+        <activity
+            android:name=".Fragment.MenuLaterales.PreguntasAyuda.Pregunta2Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name="com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PreguntasAyuda.Pregunta3Activity"
-                  android:theme="@style/AppTheme.NoActionBar"
-                  android:screenOrientation="portrait">
+        <activity
+            android:name=".Fragment.MenuLaterales.PreguntasAyuda.Pregunta3Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name="com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PreguntasAyuda.Pregunta4Activity"
-                  android:theme="@style/AppTheme.NoActionBar"
-                  android:screenOrientation="portrait">
+        <activity
+            android:name=".Fragment.MenuLaterales.PreguntasAyuda.Pregunta4Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".Objects.TravelsActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".SplashActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
     </application>
 

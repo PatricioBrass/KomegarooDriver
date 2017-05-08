@@ -1,0 +1,145 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:clickable="true"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              tools:context="com.driver.hp.komegaroodriver.Fragment.PagoFragment"
+              android:orientation="vertical" android:background="@drawable/transm"
+              android:id="@+id/pagoFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin" android:gravity="top|center"
+        android:background="@color/white" android:layout_margin="30dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            app:srcCompat="@drawable/default_img"
+            android:id="@+id/imageDriverPago" android:layout_height="70dp"/>
+        <TextView
+            android:text="Juan Pérez"
+            android:layout_width="match_parent"
+            android:id="@+id/nameDriverPago"
+            android:textSize="24sp" android:gravity="center" android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:ellipsize="end"
+            android:maxLines="1" android:layout_marginTop="5dp" android:layout_marginBottom="5dp"
+            android:textColor="@color/colorAccent" android:textStyle="normal|bold"
+            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_margin="10dp" android:layout_height="45dp">
+            <TextView
+                android:text="Banco"
+                android:layout_height="match_parent" android:id="@+id/textView6"
+                android:textSize="18sp" android:gravity="left|center" android:layout_width="100dp"
+                android:textColor="#262626"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/spinnerBancoFr"
+                    android:layout_weight="1" android:dropDownWidth="match_parent"
+                    android:spinnerMode="dialog"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:background="@color/morado"
+                    android:layout_height="1dp" android:layout_marginRight="10dp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_margin="10dp" android:layout_height="45dp">
+            <TextView
+                android:text="Tipo de Cuenta"
+                android:layout_height="match_parent" android:id="@+id/textView9"
+                android:textSize="18sp" android:layout_width="100dp" android:gravity="left|center"
+                android:textColor="#262626"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/spinnerCuentasFr"
+                    android:layout_weight="1"
+                    android:dropDownWidth="match_parent" android:spinnerMode="dialog"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:background="@color/morado"
+                    android:layout_height="1dp" android:layout_marginRight="10dp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_margin="10dp" android:layout_height="45dp">
+            <TextView
+                android:text="Número    de Cuenta"
+                android:layout_height="match_parent" android:id="@+id/textView10"
+                android:textSize="18sp" android:layout_width="100dp" android:gravity="left|center"
+                android:textColor="#262626"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <EditText
+                    android:id="@+id/nCuentaFr"
+                    android:hint="Cuenta Corriente"
+                    android:textColorHint="#838484"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="#262626"
+                    android:textAlignment="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@color/colorAccent"
+                    android:layout_weight="1" android:inputType="number|numberSigned"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_margin="10dp" android:layout_height="45dp">
+            <TextView
+                android:text="Rut"
+                android:layout_height="match_parent" android:id="@+id/textView11"
+                android:textSize="20sp" android:layout_width="100dp"
+                android:gravity="left|center" android:textColor="#262626"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:layout_weight="1">
+                <EditText
+                    android:id="@+id/rutFr"
+                    android:hint="Rut"
+                    android:textColorHint="#838484"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="#262626"
+                    android:textAlignment="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@color/colorAccent"
+                    android:layout_weight="1" android:inputType="number|numberSigned"
+                />
+            </LinearLayout>
+        </LinearLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp" android:id="@+id/buttonGuardar"
+            android:background="@drawable/guardar" android:layout_marginRight="70dp"
+            android:layout_marginLeft="70dp" android:layout_marginTop="5dp"/>
+    </LinearLayout>
+
+</LinearLayout>

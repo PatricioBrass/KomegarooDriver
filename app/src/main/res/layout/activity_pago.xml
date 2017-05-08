@@ -8,22 +8,184 @@
     android:layout_height="match_parent"
     tools:context="com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PagoActivity"
     android:orientation="vertical" android:weightSum="1">
-    <Button
-        android:layout_width="33dp"
-        android:layout_height="30dp" android:id="@+id/btnPago"
-        android:background="@mipmap/ic_back" android:layout_gravity="top|left"/>
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:background="@color/white"
+            app:titleTextColor="@color/colorAccent"
+            app:theme="@style/ThemeToolbar" android:weightSum="1">
+            <Button
+                android:layout_width="33dp"
+                android:layout_height="30dp" android:id="@+id/btnPago"
+                android:background="@mipmap/close" android:layout_gravity="top|left"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="P A G O"
+                android:layout_gravity="center"
+                android:id="@+id/toolbar_title" android:layout_weight="0.19" android:textSize="18sp"
+                android:textColor="@color/colorAccent" android:fontFamily="sans-serif"
+                android:textStyle="normal|bold"/>
+        </android.support.v7.widget.Toolbar>
 
+    </android.support.design.widget.AppBarLayout>
+    <ProgressBar
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/progressBarPago" android:padding="140dp" android:visibility="gone"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:id="@+id/formPago">
 
-    </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin" android:gravity="top|center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                app:srcCompat="@drawable/default_img"
+                android:id="@+id/imageRider" android:layout_height="90dp"/>
+            <TextView
+                android:text="Juan Pérez"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/textViewNameRider"
+                android:textSize="26sp" android:gravity="center" android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:ellipsize="end"
+                android:maxLines="1" android:layout_marginTop="5dp" android:layout_marginBottom="20dp"
+                android:textColor="@color/colorAccent" android:textStyle="normal|bold"/>
+            <TextView
+                android:text="Editar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/txtEditar"
+                android:textColor="@color/colorAccent"
+                android:textStyle="normal|bold" android:textSize="15sp"
+                android:layout_gravity="right"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp" android:layout_height="45dp">
+                <TextView
+                    android:text="Banco"
+                    android:layout_height="match_parent" android:id="@+id/textView6"
+                    android:textSize="18sp" android:gravity="left|center" android:layout_width="100dp"
+                    android:textColor="#262626"/>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:text="Banco"
+                        android:layout_width="match_parent"
+                        android:layout_height="39dp" android:id="@+id/txtBanco"
+                        android:textSize="18sp" android:gravity="center"
+                        android:ellipsize="end"
+                        android:maxLines="1"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:background="@color/morado"
+                        android:layout_height="1dp" android:layout_marginRight="10dp"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp" android:layout_height="45dp">
+                <TextView
+                    android:text="Tipo de Cuenta"
+                    android:layout_height="match_parent" android:id="@+id/textView9"
+                    android:textSize="18sp" android:layout_width="100dp" android:gravity="left|center"
+                    android:textColor="#262626"/>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:text="Cuenta"
+                        android:layout_width="match_parent"
+                        android:layout_height="39dp" android:id="@+id/txtCuenta"
+                        android:ellipsize="end"
+                        android:maxLines="1" android:gravity="center" android:textSize="18sp"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:background="@color/morado"
+                        android:layout_height="1dp" android:layout_marginRight="10dp"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp" android:layout_height="45dp">
+                <TextView
+                    android:text="Número    de Cuenta"
+                    android:layout_height="match_parent" android:id="@+id/textView10"
+                    android:textSize="18sp" android:layout_width="100dp" android:gravity="left|center"
+                    android:textColor="#262626"/>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:text="N° Cuenta"
+                        android:layout_width="match_parent"
+                        android:layout_height="39dp" android:id="@+id/txtNCuenta"
+                        android:ellipsize="end"
+                        android:maxLines="1" android:textSize="18sp" android:gravity="center"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:background="@color/morado"
+                        android:layout_height="1dp" android:layout_marginRight="10dp"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp" android:layout_height="45dp">
+                <TextView
+                    android:text="Rut"
+                    android:layout_height="match_parent" android:id="@+id/textView11"
+                    android:textSize="20sp" android:layout_width="100dp"
+                    android:gravity="left|center" android:textColor="#262626"/>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:layout_weight="1">
+                    <TextView
+                        android:text="R.U.T."
+                        android:layout_width="match_parent"
+                        android:layout_height="39dp" android:id="@+id/txtRut"
+                        android:ellipsize="end"
+                        android:maxLines="1" android:textSize="18sp" android:gravity="center"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:background="@color/morado"
+                        android:layout_height="1dp" android:layout_marginRight="10dp"/>
+                </LinearLayout>
+            </LinearLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dp" android:id="@+id/button2"
+                android:background="@drawable/guardar" android:layout_marginRight="75dp"
+                android:layout_marginLeft="75dp" android:layout_marginTop="10dp"/>
+        </LinearLayout>
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/pagoFrag" class="com.driver.hp.komegaroodriver.Fragment.PagoFragment"
+            tools:layout="@layout/fragment_pago" android:visibility="gone"/>
+    </RelativeLayout>
 
 
 </LinearLayout>

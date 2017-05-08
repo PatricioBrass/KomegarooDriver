@@ -69,7 +69,6 @@ import java.util.TimerTask;
 /**Created by HP on 18/10/2016.*/
 public class  MapsFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, DirectionFinderListener {
-
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
@@ -78,19 +77,17 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
     private GoogleMap mMap;
-    private Firebase mRef, sRef, tRef, cTravels, dTravels, set, rDriverStatus, stateDriver, stateClient, tripState, customer;
-    private Double lat, lng;
+    private Firebase mRef, sRef, tRef, cTravels, dTravels, set, rDriverStatus, stateDriver, stateClient, tripState, customer, pagoDriver;
     private String uidDriver, fDirec, tDirec, estado, estadoTrip;
     public String key, uidClient;
     private StringBuilder str, str2;
-    View mMapView, fValorizar, travelData, userView;
+    View mMapView, fValorizar, travelData, userView, pagoFrag;
     private LatLng latLngDriver;
     private Calendar calander, calander2, calendar, calendar2;
     private AlertDialog alertDialog, cancelCustomer;
     public AlertDialog cancelDriver;
     private Geocoder geocoder, geocoder2;
     private SeekBar sb, sb2, sb3, sb4;
-    private int index;
     private Integer price;
     private TextView name, destino;
     private ImageView user;
@@ -112,6 +109,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         stateClient = new Firebase("https://decoded-pilot-144921.firebaseio.com/customerState");
         tripState = new Firebase("https://decoded-pilot-144921.firebaseio.com/tripState");
         customer = new Firebase("https://decoded-pilot-144921.firebaseio.com/customers");
+        pagoDriver = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverPayments");
         cancelDriver = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
         cancelCustomer = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -142,10 +140,13 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         travelData.setVisibility(View.GONE);
         userView = v.findViewById(R.id.userData);
         userView.setVisibility(View.GONE);
+        pagoFrag = v.findViewById(R.id.fragmentPago);
+        pagoFrag.setVisibility(View.GONE);
         stateDriver.child(uidDriver).child("state").setValue("nil");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
+        pagoExiste();
         delete();
         piden();
         onWay();
@@ -175,7 +176,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
-
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 Log.v("Progress", String.valueOf(progress));
@@ -185,32 +185,23 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse10));
                 } else {
                     switch (progress) {
-                        case 30:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse1));
+                        case 30:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse1));
                             break;
-                        case 35:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse2));
+                        case 35:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse2));
                             break;
-                        case 40:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse3));
+                        case 40:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse3));
                             break;
-                        case 45:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse4));
+                        case 45:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse4));
                             break;
-                        case 50:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse5));
+                        case 50:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse5));
                             break;
-                        case 54:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse6));
+                        case 54:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse6));
                             break;
-                        case 59:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse7));
+                        case 59:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse7));
                             break;
-                        case 63:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse8));
+                        case 63:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse8));
                             break;
-                        case 67:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse9));
+                        case 67:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse9));
                             break;
                     }
                 }
@@ -246,41 +237,29 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse13));
                 } else {
                     switch (progress) {
-                        case 21:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse1));
+                        case 21:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse1));
                             break;
-                        case 26:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse2));
+                        case 26:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse2));
                             break;
-                        case 30:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse3));
+                        case 30:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse3));
                             break;
-                        case 35:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse4));
+                        case 35:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse4));
                             break;
-                        case 40:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse5));
+                        case 40:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse5));
                             break;
-                        case 45:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse6));
+                        case 45:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse6));
                             break;
-                        case 50:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse7));
+                        case 50:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse7));
                             break;
-                        case 55:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse8));
+                        case 55:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse8));
                             break;
-                        case 59:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse9));
+                        case 59:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse9));
                             break;
-                        case 64:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse10));
+                        case 64:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse10));
                             break;
-                        case 68:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse11));
+                        case 68:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse11));
                             break;
-                        case 72:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse12));
+                        case 72:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse12));
                             break;
                     }
                 }
@@ -317,44 +296,31 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega14));
                 } else {
                     switch (progress) {
-                        case 19:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega1));
+                        case 19:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega1));
                             break;
-                        case 24:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega2));
+                        case 24:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega2));
                             break;
-                        case 27:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega3));
+                        case 27:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega3));
                             break;
-                        case 31:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega4));
+                        case 31:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega4));
                             break;
-                        case 34:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega5));
+                        case 34:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega5));
                             break;
-                        case 38:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega6));
+                        case 38:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega6));
                             break;
-                        case 42:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega7));
+                        case 42:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega7));
                             break;
-                        case 50:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega8));
+                        case 50:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega8));
                             break;
-                        case 55:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega9));
+                        case 55:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega9));
                             break;
-                        case 59:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega10));
+                        case 59:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega10));
                             break;
-                        case 62:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega11));
+                        case 62:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega11));
                             break;
-                        case 67:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega12));
+                        case 67:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega12));
                             break;
-                        case 72:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega13));
+                        case 72:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega13));
                             break;
                     }
                 }
@@ -397,50 +363,35 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega16));
                 } else {
                     switch (progress) {
-                        case 18:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega1));
+                        case 18:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega1));
                             break;
-                        case 21:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega2));
+                        case 21:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega2));
                             break;
-                        case 26:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega3));
+                        case 26:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega3));
                             break;
-                        case 30:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega4));
+                        case 30:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega4));
                             break;
-                        case 33:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega5));
+                        case 33:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega5));
                             break;
-                        case 35:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega6));
+                        case 35:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega6));
                             break;
-                        case 40:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega7));
+                        case 40:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega7));
                             break;
-                        case 44:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega8));
+                        case 44:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega8));
                             break;
-                        case 48:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega9));
+                        case 48:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega9));
                             break;
-                        case 55:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega10));
+                        case 55:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega10));
                             break;
-                        case 60:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega11));
+                        case 60:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega11));
                             break;
-                        case 63:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega12));
+                        case 63:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega12));
                             break;
-                        case 67:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega13));
+                        case 67:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega13));
                             break;
-                        case 72:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega14));
+                        case 72:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega14));
                             break;
-                        case 76:
-                            seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega15));
+                        case 76:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega15));
                             break;
                     }
                 }
@@ -670,6 +621,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     public void onClick(DialogInterface dialog, int which) {
                         rDriverStatus.child(uidDriver).removeValue();
                         tripState.child(uidClient).child("state").setValue("canceledByDriver");
+                        infor.setVisibility(View.GONE);
                         sb4.setVisibility(View.GONE);
                         sb.setVisibility(View.VISIBLE);
                         sb3.setVisibility(View.GONE);
@@ -696,6 +648,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         rDriverStatus.child(uidDriver).removeValue();
+                        infor.setVisibility(View.GONE);
                         sb4.setVisibility(View.GONE);
                         sb.setVisibility(View.VISIBLE);
                         sb3.setVisibility(View.GONE);
@@ -1194,5 +1147,17 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void pagoExiste(){
+        pagoDriver.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.hasChild(uidDriver)){
+                    pagoFrag.setVisibility(View.VISIBLE);}
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {}
+        });
     }
 }
