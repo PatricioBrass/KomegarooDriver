@@ -21,6 +21,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -55,27 +56,42 @@ public class MainActivity extends AppCompatActivity {
         mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/drivers");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final NavigationView leftNavigationView = (NavigationView) findViewById(R.id.nav_view);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
         toggle.syncState();
-        NavigationView leftNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+            }
 
+            @Override
+            public void onDrawerOpened(View drawerView) {
+            }
 
-        /*nameTextView = (TextView) header.findViewById(R.id.nameTextView);
-        emailTextView = (TextView) header.findViewById(R.id.emailTextView);
-        photoUrl = (ImageView) header.findViewById(R.id.myProfilePic);
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                if(drawerView==leftNavigationView){
+                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                }
+            }
 
-        Uri photo = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl();
-        String name = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        nameTextView.setText(name);
-        emailTextView.setText(email);
-        Picasso.with(this).load(photo).transform(new CircleTransform()).into(photoUrl);*/
-
+            @Override
+            public void onDrawerStateChanged(int newState) {
+            }
+        });
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                drawer.openDrawer(leftNavigationView);
+            }
+        });
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         leftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -263,12 +279,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void lockedDrawer(){
         toggle.setDrawerIndicatorEnabled(false);
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     public void unlockedDrawer(){
         toggle.setDrawerIndicatorEnabled(true);
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     @Override

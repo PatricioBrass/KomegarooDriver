@@ -162,17 +162,16 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int n = seekBar.getProgress();
-                if (n < 95) {
-                    seekBar.setProgress(1);
-                } else {
+                if (n > 98) {
                     ((MainActivity) getActivity()).lockedDrawer();
                     sb2.setVisibility(View.VISIBLE);
                     sb.setVisibility(View.GONE);
                     seekBar.setProgress(1);
                     send();
+                } else {
+                    seekBar.setProgress(1);
                 }
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
@@ -212,15 +211,15 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int b = seekBar.getProgress();
-                if (b < 95) {
-                    seekBar.setProgress(1);
-                } else {
+                if (b > 98) {
                     ((MainActivity) getActivity()).unlockedDrawer();
                     sb.setVisibility(View.VISIBLE);
                     sb2.setVisibility(View.GONE);
                     seekBar.setProgress(1);
                     mRef.child(uidDriver).removeValue();
                     buildGoogleApiClient();
+                } else {
+                    seekBar.setProgress(1);
                 }
             }
 
@@ -270,9 +269,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int v = seekBar.getProgress();
-                if (v < 95) {
-                    seekBar.setProgress(1);
-                } else {
+                if (v > 98) {
                     showDataTravels();
                     sb2.setVisibility(View.GONE);
                     sb3.setVisibility(View.GONE);
@@ -280,6 +277,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     setOnTrip();
                     setCustomerTravel();
                     setDriversTravels();
+                } else {
+                    seekBar.setProgress(1);
                 }
             }
 
@@ -331,9 +330,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int l = seekBar.getProgress();
-                if (l < 95) {
-                    seekBar.setProgress(1);
-                } else {
+                if (l > 98) {
                     sb.setVisibility(View.VISIBLE);
                     sb4.setVisibility(View.GONE);
                     seekBar.setProgress(1);
@@ -347,6 +344,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     travelData.setVisibility(View.GONE);
                     infor.setVisibility(View.GONE);
                     fValorizar.setVisibility(View.VISIBLE);
+                } else {
+                    seekBar.setProgress(1);
                 }
             }
 
@@ -549,7 +548,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
-                            //sb3.setVisibility(View.VISIBLE);
                             showButtonOnWay();
                             sb2.setVisibility(View.GONE);
                             destino.setText(fDirec);
@@ -565,7 +563,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     }
                 }
             }
-
             @Override
             public void onCancelled(FirebaseError firebaseError) {
             }

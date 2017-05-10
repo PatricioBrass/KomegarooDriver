@@ -58,7 +58,7 @@
                     android:clickable="false"
                     android:max="100"
                     android:progressDrawable="@android:color/transparent"
-                    android:thumb="@mipmap/seekbar" style="@style/Widget.AppCompat.SeekBar"
+                    android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
                     android:background="@drawable/desconectarse0" android:visibility="gone"
                     android:paddingTop="15dp"/>
                 <SeekBar
@@ -68,7 +68,7 @@
                     android:clickable="false"
                     android:max="100"
                     android:progressDrawable="@android:color/transparent"
-                    android:thumb="@mipmap/seekbar" style="@style/Widget.AppCompat.SeekBar"
+                    android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
                     android:background="@drawable/iniciar_entrega0" android:visibility="gone"
                     android:paddingTop="15dp"/>
                 <SeekBar
@@ -78,7 +78,7 @@
                     android:clickable="false"
                     android:max="100"
                     android:progressDrawable="@android:color/transparent"
-                    android:thumb="@mipmap/seekbar" style="@style/Widget.AppCompat.SeekBar"
+                    android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
                     android:background="@drawable/finalizar_entrega0" android:visibility="gone"
                     android:paddingTop="15dp"/>
                 <LinearLayout
