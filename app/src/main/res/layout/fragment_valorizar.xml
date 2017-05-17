@@ -30,7 +30,7 @@
                 android:textAlignment="center" android:textColor="@color/black"
                 android:textSize="17sp"/>
             <TextView
-                android:text="Califica a tú canguro"
+                android:text="Califica a tú cliente"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/textView28"
                 android:textAlignment="center" android:textColor="@color/black"

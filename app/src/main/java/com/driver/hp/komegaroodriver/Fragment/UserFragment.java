@@ -10,30 +10,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.driver.hp.komegaroodriver.R;
-import com.driver.hp.komegaroodriver.RoundedTransformation;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.squareup.picasso.Picasso;
 
 import java.util.Map;
 
 /**28/04/2017
  */
 public class UserFragment extends Fragment {
-    private View userView, salir;
-    private Firebase tRef, customer, stateDriver, stateTrip;
-    private ImageView image;
-    private TextView name, lastname, direccion, num, comentarios;
-    private Button cancelar, contactar;
+    private View userView;
+    private Firebase tRef, customer, stateDriver;
+    private TextView name, direccion, num, comentarios, telefono, phoneE, phoneR, nomE, recep;
+    private Button cancelar, contactar, exit, emer;
     private String uidDriver, uidClient, nom, phone;
     private AlertDialog alertDialog;
+    private View one, two, btns;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,26 +44,32 @@ public class UserFragment extends Fragment {
         stateDriver = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverState");
         tRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/requestedTravels/Santiago");
         customer = new Firebase("https://decoded-pilot-144921.firebaseio.com/customers");
-        stateTrip = new Firebase("https://decoded-pilot-144921.firebaseio.com/tripState");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         userView = v.findViewById(R.id.userData);
-        salir = v.findViewById(R.id.exit);
         userView.setVisibility(View.GONE);
-        salir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userView.setVisibility(View.GONE);
-            }
-        });
-        image = (ImageView)v.findViewById(R.id.imgPhotoData);
         name = (TextView)v.findViewById(R.id.txtNombreData);
-        lastname = (TextView)v.findViewById(R.id.txtApellidoData);
+        phoneE = (TextView)v.findViewById(R.id.txtPhoneEmisor);
+        phoneR = (TextView)v.findViewById(R.id.txtPhoneReceptor);
+        nomE = (TextView)v.findViewById(R.id.txtEmisor);
+        telefono = (TextView)v.findViewById(R.id.txtNumeroData);
         direccion = (TextView)v.findViewById(R.id.txtDirecData);
         num = (TextView)v.findViewById(R.id.txtNumberData);
         comentarios = (TextView)v.findViewById(R.id.txtComentData);
         cancelar = (Button)v.findViewById(R.id.btnCancelData);
         alertDialog = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
         contactar = (Button)v.findViewById(R.id.btnContactarData);
+        one = v.findViewById(R.id.onePhone);
+        two = v.findViewById(R.id.twoPhone);
+        recep = (TextView) v.findViewById(R.id.txtReceptor);
+        emer = (Button)v.findViewById(R.id.btnEmergencia);
+        btns = v.findViewById(R.id.btnTwo);
+        exit = (Button)v.findViewById(R.id.buttonExit);
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userView.setVisibility(View.GONE);
+            }
+        });
         callCustomer();
         statusDriver();
         canceledDriver();
@@ -104,13 +107,9 @@ public class UserFragment extends Fragment {
                 if(dataSnapshot.exists()){
                     Map<String, String> mapS = dataSnapshot.getValue(Map.class);
                     nom = mapS.get("name");
-                    String photo = mapS.get("photoUrl");
                     phone = mapS.get("phoneNumber");
-                    String nombr = nom.substring(0,nom.indexOf(" "));
-                    String apellid = nom.replace(nombr+" " ,"");
-                    name.setText(nombr);
-                    lastname.setText(apellid);
-                    Picasso.with(getActivity()).load(photo).transform(new RoundedTransformation(9,1)).into(image);
+                    name.setText(nom);
+                    telefono.setText(phone);
                 }
             }
             @Override
@@ -128,6 +127,10 @@ public class UserFragment extends Fragment {
                     String nume = mapS.get("blockInfo");
                     String fro = mapS.get("from");
                     String com = mapS.get("comments");
+                    one.setVisibility(View.VISIBLE);
+                    btns.setVisibility(View.VISIBLE);
+                    two.setVisibility(View.GONE);
+                    emer.setVisibility(View.GONE);
                     if(!nume.isEmpty()){num.setText(nume);}
                     if(!com.isEmpty()){comentarios.setText(com);}
                     direccion.setText(fro);
@@ -148,9 +151,20 @@ public class UserFragment extends Fragment {
                     String nume = mapS.get("blockInfo");
                     String dTo = mapS.get("to");
                     String com = mapS.get("comments");
+                    String contac = mapS.get("contactNumber");
+                    String receptor = mapS.get("receptorName");
+                    one.setVisibility(View.GONE);
+                    btns.setVisibility(View.GONE);
+                    two.setVisibility(View.VISIBLE);
+                    emer.setVisibility(View.VISIBLE);
+                    if(!contac.isEmpty()){phoneR.setText(contac);}
                     if(!nume.isEmpty()){num.setText(nume);}
                     if(!com.isEmpty()){comentarios.setText(com);}
+                    if(!receptor.isEmpty()){recep.setText(receptor);}
                     direccion.setText(dTo);
+                    nomE.setText(nom);
+                    phoneE.setText(phone);
+
                 }
             }
             @Override

@@ -8,7 +8,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -35,7 +34,7 @@ public class PerfilActivity extends AppCompatActivity {
     private TextView nom, ape, num, trip, nomApe, dat, nomT, telT, envT, calT;
     private ImageView pho;
     private RatingBar stars;
-    private String uidDriver;
+    private String uidDriver, key;
     private View mProgressView;
     private View mPerfilFormView;
     private ArrayList<String> arrayKey = new ArrayList<>();
@@ -95,6 +94,7 @@ public class PerfilActivity extends AppCompatActivity {
         envT.setTypeface(face1);
         calT = (TextView)findViewById(R.id.califT);
         calT.setTypeface(face1);
+        getTravels();
     }
 
     @Override
@@ -124,8 +124,7 @@ public class PerfilActivity extends AppCompatActivity {
                     ape.setText(apellido);
                     num.setText(phones);
                     Picasso.with(PerfilActivity.this).load(photos).transform(new RoundedTransformation(9,1)).into(pho);
-                    getRating();
-                    showProgress(false);
+                    updateData();
                 }
             }
 
@@ -141,6 +140,7 @@ public class PerfilActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
+        finish();
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -177,33 +177,27 @@ public class PerfilActivity extends AppCompatActivity {
     }
 
     public void getRating(){
-        travel.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
+        travel.child(uidDriver).child(key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    arrayCalif.clear();
-                    for (DataSnapshot infoSnapshot : dataSnapshot.getChildren()) {
-                        String calif = (String) infoSnapshot.child("calification").getValue();
-                        arrayCalif.add(calif);
-                    }
+                    Map<String, String> map = dataSnapshot.getValue(Map.class);
+                    String califica = map.get("calification");
                     Integer t = arrayCalif.size();
-                    int last = t-1;
-                    String califica = arrayCalif.get(last);
-                    Log.v("Valoracion",String.valueOf(califica));
-                    if (!califica.equals("")&&arrayCalif.size()>trips) {
-                        Double d = new Double(((califi * last) + Integer.parseInt(califica)) / t);
+                    if (!califica.equals("")&&t>trips){
+                        Double d = new Double((((t-1)*califi) + Integer.parseInt(califica)) / t);
                         Integer f = d.intValue();
                         mRef.child(uidDriver).child("calification").setValue(f);
                         mRef.child(uidDriver).child("trips").setValue(t);
                         trip.setText(t.toString());
                         stars.setRating(f.floatValue());
+                        showProgress(false);
                     }else{
-                        trip.setText(trips.toString());
+                        mRef.child(uidDriver).child("trips").setValue(t);
+                        trip.setText(t.toString());
                         stars.setRating(califi.floatValue());
+                        showProgress(false);
                     }
-                }else{
-                    trip.setText(trips.toString());
-                    stars.setRating(califi.floatValue());
                 }
             }
 
@@ -213,5 +207,43 @@ public class PerfilActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void updateData(){
+        travel.child(uidDriver).orderByKey().limitToLast(1)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            Map<String, String> mapS = dataSnapshot.getValue(Map.class);
+                            key = mapS.keySet().toString().replace("[","").replace("]","");
+                            getRating();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                    }
+                });
+    }
+
+    public void getTravels(){
+        travel.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    arrayCalif.clear();
+                    for (DataSnapshot infoSnapshot : dataSnapshot.getChildren()) {
+                        String calif = infoSnapshot.getKey();
+                        arrayCalif.add(calif);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 }

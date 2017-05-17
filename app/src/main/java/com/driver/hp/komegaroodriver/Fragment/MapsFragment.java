@@ -142,10 +142,10 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         userView.setVisibility(View.GONE);
         pagoFrag = v.findViewById(R.id.fragmentPago);
         pagoFrag.setVisibility(View.GONE);
-        stateDriver.child(uidDriver).child("state").setValue("nil");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
+        getUidClient();
         pagoExiste();
         delete();
         piden();
@@ -153,7 +153,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         statusDriver();
         slideButtons();
         mRef.child(uidDriver).removeValue();
-        rDriverStatus.child(uidDriver).removeValue();
         return v;
     }
 
@@ -340,6 +339,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     buildGoogleApiClient();
                     stateDriver.child(uidDriver).child("state").setValue("endTrip");
                     stateClient.child(uidClient).child("state").setValue("endTrip");
+                    rDriverStatus.child(uidDriver).removeValue();
                     tripState.child(uidClient).removeValue();
                     travelData.setVisibility(View.GONE);
                     infor.setVisibility(View.GONE);
@@ -520,53 +520,56 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     public void getData() {
-        tRef.child(uidClient).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Map<String, String> mapS = dataSnapshot.getValue(Map.class);
-                    Map<Integer, Integer> map = dataSnapshot.getValue(Map.class);
-                    fDirec = mapS.get("from");
-                    tDirec = mapS.get("to");
-                    price = map.get("price");
-                    if (fDirec != null || tDirec != null) {
-                        showDataTravels();
-                        try {
-                            List<Address> addresses = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
-                            str2 = new StringBuilder();
-                            if (geocoder.isPresent()) {
-                                Address returnAddress = addresses.get(0);
-                                String direccion = returnAddress.getAddressLine(0) + ", " + returnAddress.getAddressLine(1) + ", " + returnAddress.getAddressLine(3);
-                                str2.append(direccion);
-                            }
-                        } catch (IOException e) {
-                            Log.e("tag", e.getMessage());
-                        }
-                        if (estado.equals("onWay")) {
+        if(uidClient!=null) {
+            tRef.child(uidClient).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Map<String, String> mapS = dataSnapshot.getValue(Map.class);
+                        Map<Integer, Integer> map = dataSnapshot.getValue(Map.class);
+                        fDirec = mapS.get("from");
+                        tDirec = mapS.get("to");
+                        price = map.get("price");
+                        if (fDirec != null || tDirec != null) {
+                            showDataTravels();
                             try {
-                                new DirectionFinder(MapsFragment.this, str2.toString(), fDirec).execute();
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
+                                List<Address> addresses = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
+                                str2 = new StringBuilder();
+                                if (geocoder.isPresent()) {
+                                    Address returnAddress = addresses.get(0);
+                                    String direccion = returnAddress.getAddressLine(0) + ", " + returnAddress.getAddressLine(1) + ", " + returnAddress.getAddressLine(3);
+                                    str2.append(direccion);
+                                }
+                            } catch (IOException e) {
+                                Log.e("tag", e.getMessage());
                             }
-                            showButtonOnWay();
-                            sb2.setVisibility(View.GONE);
-                            destino.setText(fDirec);
-                        } else if (estado.equals("onTrip")) {
-                            try {
-                                new DirectionFinder(MapsFragment.this, str2.toString(), tDirec).execute();
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
+                            if (estado.equals("onWay")) {
+                                try {
+                                    new DirectionFinder(MapsFragment.this, str2.toString(), fDirec).execute();
+                                } catch (UnsupportedEncodingException e) {
+                                    e.printStackTrace();
+                                }
+                                showButtonOnWay();
+                                sb2.setVisibility(View.GONE);
+                                destino.setText(fDirec);
+                            } else if (estado.equals("onTrip")) {
+                                try {
+                                    new DirectionFinder(MapsFragment.this, str2.toString(), tDirec).execute();
+                                } catch (UnsupportedEncodingException e) {
+                                    e.printStackTrace();
+                                }
+                                showButtonOnTrip();
+                                destino.setText(tDirec);
                             }
-                            showButtonOnTrip();
-                            destino.setText(tDirec);
                         }
                     }
                 }
-            }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-            }
-        });
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+                }
+            });
+        }
     }
 
     public void onWay() {
@@ -625,6 +628,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         stateDriver.child(uidDriver).child("state").setValue("nil");
                         stateClient.child(uidClient).child("state").setValue("nil");
                         cTravels.child(uidClient).child(key).removeValue();
+                        dTravels.child(uidDriver).child(key).removeValue();
                         mMap.clear();
                         ((MainActivity) getActivity()).unlockedDrawer();
                         buildGoogleApiClient();
@@ -645,6 +649,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         rDriverStatus.child(uidDriver).removeValue();
+                        dTravels.child(uidDriver).child(key).removeValue();
                         infor.setVisibility(View.GONE);
                         sb4.setVisibility(View.GONE);
                         sb.setVisibility(View.VISIBLE);
@@ -658,24 +663,26 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         cancelCustomer.dismiss();
                     }
                 });
-        tripState.child(uidClient).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Map<String, String> mapS = dataSnapshot.getValue(Map.class);
-                    estadoTrip = mapS.get("state");
-                    if (estadoTrip.equals("canceledByCustomer")) {
-                        stateDriver.child(uidDriver).child("state").setValue("nil");
-                        cancelCustomer.show();
+        if(uidClient!=null) {
+            tripState.child(uidClient).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Map<String, String> mapS = dataSnapshot.getValue(Map.class);
+                        estadoTrip = mapS.get("state");
+                        if (estadoTrip.equals("canceledByCustomer")) {
+                            stateDriver.child(uidDriver).child("state").setValue("nil");
+                            cancelCustomer.show();
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
     public void setCustomerTravel() {
@@ -847,26 +854,18 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     public void piden() {
-        sRef.addValueEventListener(new ValueEventListener() {
+        sRef.child(uidDriver).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists() && dataSnapshot.child(uidDriver).hasChild("customerUid")) {
-                    final ArrayList<String> arrayDriver = new ArrayList<>();
-                    final ArrayList<String> arrayClient = new ArrayList<>();
-                    for (DataSnapshot infoSnapshot : dataSnapshot.getChildren()) {
-                        String uid = infoSnapshot.getKey();
-                        String client = (String) infoSnapshot.child("customerUid").getValue();
-                        arrayClient.add(client);
-                        arrayDriver.add(uid);
-                    }
-                    final int v = arrayDriver.indexOf(uidDriver);
+                if (dataSnapshot.exists() && dataSnapshot.hasChild("customerUid")) {
+                    Map<String, String> mapS = dataSnapshot.getValue(Map.class);
+                    uidClient = mapS.get("customerUid");
                     alertDialog.setTitle("Están solicitando un Kamegaroo");
                     alertDialog.setMessage("¿Aceptas el viaje?");
                     alertDialog.setCancelable(false);
                     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Aceptar", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             ((MainActivity) getActivity()).lockedDrawer();
-                            uidClient = arrayClient.get(v);
                             rDriverStatus.child(uidDriver).child("customerUid").setValue(uidClient);
                             rDriverStatus.child(uidDriver).child("latitude").setValue(mLastLocation.getLatitude());
                             rDriverStatus.child(uidDriver).child("longitude").setValue(mLastLocation.getLongitude());
@@ -1156,5 +1155,41 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onCancelled(FirebaseError firebaseError) {}
         });
+    }
+
+    public void getUidClient(){
+        rDriverStatus.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Map<String, String> mapS = dataSnapshot.getValue(Map.class);
+                    uidClient = mapS.get("customerUid");
+                    getLastKey();
+                    sb.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    public void getLastKey(){
+        cTravels.child(uidClient).orderByKey().limitToLast(1)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            Map<String, String> mapS = dataSnapshot.getValue(Map.class);
+                            key = mapS.keySet().toString().replace("[","").replace("]","");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                    }
+                });
     }
 }
