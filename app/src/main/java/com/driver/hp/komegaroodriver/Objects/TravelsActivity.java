@@ -65,6 +65,8 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
     private View mProgressView, recyclerView;
+    private DecimalFormatSymbols simb;
+    private DecimalFormat form;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +87,9 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
         mapView.setClickable(false);
         mapView.onCreate(null);
         mapView.onResume();
+        simb = new DecimalFormatSymbols();
+        simb.setGroupingSeparator('.');
+        form = new DecimalFormat("###,###", simb);
         mProgressView = findViewById(R.id.progressBarTravel);
         recyclerView = findViewById(R.id.histotyT);
         Intent intent = getIntent();
@@ -182,9 +187,6 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
     }
 
     public void setData(){
-        DecimalFormatSymbols simb = new DecimalFormatSymbols();
-        simb.setGroupingSeparator('.');
-        DecimalFormat form = new DecimalFormat("###,###", simb);
         String precio = "CLP $"+form.format(trPrice);
         if (trCalif != null) {
             stars.setRating(trCalif);
@@ -228,6 +230,12 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 for (Route route : routes) {
                     mMap.clear();
+                        Double riderValor = trPrice * .80;
+                        Double komeValor = trPrice * .20;
+                        String valorD = "CLP $" + String.valueOf(form.format(riderValor.intValue()));
+                        String valorT = "CLP $" + String.valueOf(form.format(komeValor.intValue()));
+                        ((TextView) TravelsActivity.this.findViewById(R.id.textViewDistancia)).setText(valorD);
+                        ((TextView) TravelsActivity.this.findViewById(R.id.textViewTiempo)).setText(valorT);
                     originMarkers.add(mMap.addMarker(new MarkerOptions()
                             .icon(BitmapDescriptorFactory.fromResource(R.mipmap.inicio))
                             .title(route.startAddress)

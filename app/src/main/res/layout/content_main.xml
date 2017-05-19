@@ -45,12 +45,12 @@
                     android:id="@+id/myseek"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:clickable="false"
                     android:max="100"
                     android:progressDrawable="@android:color/transparent"
                     android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
                     android:background="@drawable/conectarse0" android:textAlignment="gravity"
-                    android:paddingTop="15dp" android:visibility="visible"/>
+                    android:paddingTop="15dp" android:visibility="visible"
+                    android:clickable="false"/>
                 <SeekBar
                     android:id="@+id/myseek2"
                     android:layout_width="match_parent"

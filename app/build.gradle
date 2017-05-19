@@ -62,6 +62,8 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.cooltechworks:CreditCardView:v1.0.2'
     compile 'com.android.support:multidex:1.0.0'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
+    compile 'me.relex:circleindicator:1.2.2@aar'
     testCompile 'junit:junit:4.12'
 }
 

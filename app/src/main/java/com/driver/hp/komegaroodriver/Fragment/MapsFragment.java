@@ -114,6 +114,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         cancelCustomer = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         sb = (SeekBar) v.findViewById(R.id.myseek);
+        //sb.setEnabled(false);
         sb2 = (SeekBar) v.findViewById(R.id.myseek2);
         sb3 = (SeekBar) v.findViewById(R.id.myseek3);
         sb4 = (SeekBar) v.findViewById(R.id.myseek4);
@@ -173,10 +174,11 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
+                Log.v("ProgressP", String.valueOf(seekBar.getProgress()));
+                Log.v("ProgressD", String.valueOf(seekBar.getProgressDrawable()));
             }
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.v("Progress", String.valueOf(progress));
                 if (progress < 30) {
                     seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse0));
                 } else if (progress >= 72) {

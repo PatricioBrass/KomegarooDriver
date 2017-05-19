@@ -31,7 +31,7 @@ public class SplashActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         }else{
-                            Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                            Intent intent = new Intent(SplashActivity.this, TutorialActivity.class);
                     /*intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);*/
                             startActivity(intent);
                             finish();
