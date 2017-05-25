@@ -9,6 +9,6 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" app:srcCompat="@drawable/tuto_img_two"
+        android:layout_height="match_parent" app:srcCompat="@drawable/tuto_img_2"
         android:id="@+id/imageView5" android:layout_weight="1" android:scaleType="centerCrop"/>
 </LinearLayout>

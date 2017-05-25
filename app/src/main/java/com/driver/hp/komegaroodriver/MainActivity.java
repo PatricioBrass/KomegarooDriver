@@ -26,12 +26,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.driver.hp.komegaroodriver.Fragment.MapsFragment;
-import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.AyudaActivity;
-import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.HistorialActivity;
-import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.NosotrosActivity;
-import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PagoActivity;
-import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PerfilActivity;
-import com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PromoActivity;
+import com.driver.hp.komegaroodriver.MenuLaterales.HistorialActivity;
+import com.driver.hp.komegaroodriver.MenuLaterales.NosotrosActivity;
+import com.driver.hp.komegaroodriver.MenuLaterales.PagoActivity;
+import com.driver.hp.komegaroodriver.MenuLaterales.PerfilActivity;
+import com.driver.hp.komegaroodriver.MenuLaterales.PromoActivity;
+import com.driver.hp.komegaroodriver.MenuLaterales.TutorialMLActivity;
 import com.driver.hp.komegaroodriver.Notification.GCMRegistrationIntentService;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -104,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                 }
-                else if (id == R.id.nav_ayuda) {
-                    Intent intent = new Intent(MainActivity.this, AyudaActivity.class);
+                else if (id == R.id.nav_tutorial) {
+                    Intent intent = new Intent(MainActivity.this, TutorialMLActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                 } else if (id == R.id.nav_pago) {
@@ -321,8 +321,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, HistorialActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
-        }else if (id == R.id.nav_ayuda) {
-            Intent intent = new Intent(MainActivity.this, AyudaActivity.class);
+        }else if (id == R.id.nav_tutorial) {
+            Intent intent = new Intent(MainActivity.this, TutorialMLActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
         } else if (id == R.id.nav_pago) {

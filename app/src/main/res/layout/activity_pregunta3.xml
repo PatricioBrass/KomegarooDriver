@@ -5,7 +5,7 @@
     android:id="@+id/activity_pregunta3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.driver.hp.komegaroodriver.Fragment.MenuLaterales.PreguntasAyuda.Pregunta3Activity">
+    tools:context=".MenuLaterales.PreguntasAyuda.Pregunta3Activity">
 
     <Button
         android:layout_width="33dp"

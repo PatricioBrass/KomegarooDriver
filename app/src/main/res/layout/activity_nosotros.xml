@@ -34,7 +34,7 @@
             android:id="@+id/activity_nosotros"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="com.driver.hp.komegaroodriver.Fragment.MenuLaterales.NosotrosActivity"
+            tools:context=".MenuLaterales.NosotrosActivity"
             android:orientation="vertical">
 
             <TextView

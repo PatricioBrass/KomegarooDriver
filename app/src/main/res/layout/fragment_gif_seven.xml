@@ -2,14 +2,14 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              tools:context="com.driver.hp.komegaroodriver.TutorialesFragment.GifTwoFragment"
+              tools:context="com.driver.hp.komegaroodriver.TutorialesFragment.GifSevenFragment"
               android:orientation="vertical">
 
+    <!-- TODO: Update blank fragment layout -->
     <pl.droidsonroids.gif.GifImageView
         android:layout_width="match_parent"
-        android:src="@drawable/tuto_gif_2"
         android:id="@+id/Imagegif"
         android:layout_height="match_parent" android:scaleType="centerCrop"
-        android:cropToPadding="false"/>
+        android:src="@drawable/tuto_gif_7"/>
 
 </LinearLayout>

@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -158,6 +159,16 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     public void slideButtons() {
+        sb.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.v("Action Seekbar",String.valueOf(event.getAction()));
+                if(event.getAction()==MotionEvent.TOOL_TYPE_FINGER){
+                    Log.v("Action Seekbar","YES!");
+                }
+                return false;
+            }
+        });
         sb.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {

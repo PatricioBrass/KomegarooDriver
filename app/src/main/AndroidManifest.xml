@@ -78,58 +78,58 @@
             android:value="@string/google_maps_key"/>
 
         <activity
-            android:name=".Fragment.MenuLaterales.HistorialActivity"
+            android:name=".MenuLaterales.HistorialActivity"
             android:label="Historial"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Fragment.MenuLaterales.AyudaActivity"
+            android:name=".MenuLaterales.AyudaActivity"
             android:label="Ayuda"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Fragment.MenuLaterales.PagoActivity"
+            android:name=".MenuLaterales.PagoActivity"
             android:label="Pagos"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Fragment.MenuLaterales.PromoActivity"
+            android:name=".MenuLaterales.PromoActivity"
             android:label="Promociones"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Fragment.MenuLaterales.PerfilActivity"
+            android:name=".MenuLaterales.PerfilActivity"
             android:label="Perfil"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Fragment.MenuLaterales.NosotrosActivity"
+            android:name=".MenuLaterales.NosotrosActivity"
             android:label="Sobre nosotros"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Fragment.MenuLaterales.PreguntasAyuda.Pregunta1Activity"
+            android:name=".MenuLaterales.PreguntasAyuda.Pregunta1Activity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Fragment.MenuLaterales.PreguntasAyuda.Pregunta2Activity"
+            android:name=".MenuLaterales.PreguntasAyuda.Pregunta2Activity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Fragment.MenuLaterales.PreguntasAyuda.Pregunta3Activity"
+            android:name=".MenuLaterales.PreguntasAyuda.Pregunta3Activity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Fragment.MenuLaterales.PreguntasAyuda.Pregunta4Activity"
+            android:name=".MenuLaterales.PreguntasAyuda.Pregunta4Activity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
@@ -138,7 +138,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".TutorialActivity"
+        <activity
+            android:name=".TutorialActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".MenuLaterales.TutorialMLActivity"
                   android:screenOrientation="portrait"
                   android:theme="@style/AppTheme.NoActionBar">
         </activity>
@@ -152,7 +157,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

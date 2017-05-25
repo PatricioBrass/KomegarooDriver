@@ -19,8 +19,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -38,12 +36,6 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private SignInButton googlebtn;
-    private static final int RC_SIGN_IN=1;
-    private GoogleApiClient mGoogleApiClient;
-    private static final String TAG = "LoginActivity";
-    private Firebase mRef;
     private Button mEmailSignInButton, plomo;
     private String emails;
 
@@ -52,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Firebase.setAndroidContext(this);
-        mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/drivers");
         mAuth = FirebaseAuth.getInstance();
         mEmailView = (EditText) findViewById(R.id.email);
 
@@ -170,24 +161,9 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
-
-    private void attemptLogin() {
-        if (!checkFormFields())
-            return;
-        showProgress(true);
-        startSignIn();
-
-    }
-
     @Override
     public void onBackPressed() {
-        finishAffinity();
+        moveTaskToBack(true);
     }
     /**
      * Shows the progress UI and hides the login form.
