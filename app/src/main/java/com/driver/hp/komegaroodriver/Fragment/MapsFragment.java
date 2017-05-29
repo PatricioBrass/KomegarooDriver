@@ -82,7 +82,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     private String uidDriver, fDirec, tDirec, estado, estadoTrip;
     public String key, uidClient;
     private StringBuilder str, str2;
-    View mMapView, fValorizar, travelData, userView, pagoFrag;
+    View mMapView, fValorizar, travelData, userView, pagoFrag, seb1, seb2, seb3, seb4;
     private LatLng latLngDriver;
     private Calendar calander, calander2, calendar, calendar2;
     private AlertDialog alertDialog, cancelCustomer;
@@ -90,7 +90,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     private Geocoder geocoder, geocoder2;
     private SeekBar sb, sb2, sb3, sb4;
     private Integer price;
-    private TextView name, destino;
+    private TextView name, destino, conect, descon, iniciar, finalizar;
     private ImageView user;
     private FloatingActionButton infor;
 
@@ -115,13 +115,17 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         cancelCustomer = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         sb = (SeekBar) v.findViewById(R.id.myseek);
-        //sb.setEnabled(false);
+        conect = (TextView)v.findViewById(R.id.txtConectarse);
+        seb1 = v.findViewById(R.id.seek1);
         sb2 = (SeekBar) v.findViewById(R.id.myseek2);
+        descon = (TextView)v.findViewById(R.id.txtDesconectarse);
+        seb2 = v.findViewById(R.id.seek2);
         sb3 = (SeekBar) v.findViewById(R.id.myseek3);
+        iniciar = (TextView)v.findViewById(R.id.txtIniciar);
+        seb3 = v.findViewById(R.id.seek3);
         sb4 = (SeekBar) v.findViewById(R.id.myseek4);
-        sb2.setVisibility(View.GONE);
-        sb3.setVisibility(View.GONE);
-        sb4.setVisibility(View.GONE);
+        finalizar = (TextView)v.findViewById(R.id.txtFinalizar);
+        seb4 = v.findViewById(R.id.seek4);
         alertDialog = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
         geocoder = new Geocoder(getActivity(), Locale.ENGLISH);
         geocoder2 = new Geocoder(getActivity(), Locale.ENGLISH);
@@ -159,24 +163,26 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     public void slideButtons() {
+        /*sb.setEnabled(false);
         sb.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 Log.v("Action Seekbar",String.valueOf(event.getAction()));
                 if(event.getAction()==MotionEvent.TOOL_TYPE_FINGER){
                     Log.v("Action Seekbar","YES!");
+                    sb.setEnabled(true);
                 }
                 return false;
             }
-        });
+        });*/
         sb.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int n = seekBar.getProgress();
                 if (n > 98) {
                     ((MainActivity) getActivity()).lockedDrawer();
-                    sb2.setVisibility(View.VISIBLE);
-                    sb.setVisibility(View.GONE);
+                    seb2.setVisibility(View.VISIBLE);
+                    seb1.setVisibility(View.GONE);
                     seekBar.setProgress(1);
                     send();
                 } else {
@@ -185,34 +191,33 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                Log.v("ProgressP", String.valueOf(seekBar.getProgress()));
-                Log.v("ProgressD", String.valueOf(seekBar.getProgressDrawable()));
             }
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (progress < 30) {
-                    seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse0));
-                } else if (progress >= 72) {
-                    seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse10));
+                Log.v("Progress", String.valueOf(progress));
+                if (progress < 26) {
+                    conect.setText("C o n e c t a r s e");
+                } else if (progress >= 68) {
+                    conect.setText("");
                 } else {
                     switch (progress) {
-                        case 30:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse1));
+                        case 26:conect.setText("  o n e c t a r s e");
                             break;
-                        case 35:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse2));
+                        case 31:conect.setText("    n e c t a r s e");
                             break;
-                        case 40:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse3));
+                        case 36:conect.setText("      e c t a r s e");
                             break;
-                        case 45:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse4));
+                        case 41:conect.setText("        c t a r s e");
                             break;
-                        case 50:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse5));
+                        case 46:conect.setText("          t a r s e");
                             break;
-                        case 54:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse6));
+                        case 49:conect.setText("            a r s e");
                             break;
-                        case 59:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse7));
+                        case 54:conect.setText("              r s e");
                             break;
-                        case 63:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse8));
+                        case 58:conect.setText("                s e");
                             break;
-                        case 67:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.conectarse9));
+                        case 63:conect.setText("                  e");
                             break;
                     }
                 }
@@ -225,8 +230,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 int b = seekBar.getProgress();
                 if (b > 98) {
                     ((MainActivity) getActivity()).unlockedDrawer();
-                    sb.setVisibility(View.VISIBLE);
-                    sb2.setVisibility(View.GONE);
+                    seb1.setVisibility(View.VISIBLE);
+                    seb2.setVisibility(View.GONE);
                     seekBar.setProgress(1);
                     mRef.child(uidDriver).removeValue();
                     buildGoogleApiClient();
@@ -242,35 +247,35 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 Log.v("Progress", String.valueOf(progress));
-                if (progress < 21) {
-                    seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse0));
-                } else if (progress >= 77) {
-                    seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse13));
+                if (progress < 18) {
+                    descon.setText("D e s c o n e c t a r s e");
+                } else if (progress >= 74) {
+                    descon.setText("");
                 } else {
                     switch (progress) {
-                        case 21:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse1));
+                        case 18:descon.setText("  e s c o n e c t a r s e");
                             break;
-                        case 26:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse2));
+                        case 23:descon.setText("    s c o n e c t a r s e");
                             break;
-                        case 30:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse3));
+                        case 27:descon.setText("      c o n e c t a r s e");
                             break;
-                        case 35:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse4));
+                        case 32:descon.setText("        o n e c t a r s e");
                             break;
-                        case 40:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse5));
+                        case 37:descon.setText("          n e c t a r s e");
                             break;
-                        case 45:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse6));
+                        case 42:descon.setText("            e c t a r s e");
                             break;
-                        case 50:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse7));
+                        case 47:descon.setText("              c t a r s e");
                             break;
-                        case 55:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse8));
+                        case 52:descon.setText("                t a r s e");
                             break;
-                        case 59:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse9));
+                        case 55:descon.setText("                  a r s e");
                             break;
-                        case 64:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse10));
+                        case 60:descon.setText("                    r s e");
                             break;
-                        case 68:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse11));
+                        case 64:descon.setText("                      s e");
                             break;
-                        case 72:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.desconectarse12));
+                        case 68:descon.setText("                        e");
                             break;
                     }
                 }
@@ -283,8 +288,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 int v = seekBar.getProgress();
                 if (v > 98) {
                     showDataTravels();
-                    sb2.setVisibility(View.GONE);
-                    sb3.setVisibility(View.GONE);
+                    seb2.setVisibility(View.GONE);
+                    seb3.setVisibility(View.GONE);
                     seekBar.setProgress(1);
                     setOnTrip();
                     setCustomerTravel();
@@ -300,38 +305,37 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.v("Progress", String.valueOf(progress));
-                if (progress < 19) {
-                    seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega0));
-                } else if (progress >= 77) {
-                    seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega14));
+                if (progress < 14) {
+                    iniciar.setText("I n i c i a r   E n t r e g a");
+                } else if (progress >= 78) {
+                    iniciar.setText("");
                 } else {
                     switch (progress) {
-                        case 19:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega1));
+                        case 14:iniciar.setText("  n i c i a r   E n t r e g a");
                             break;
-                        case 24:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega2));
+                        case 19:iniciar.setText("    i c i a r   E n t r e g a");
                             break;
-                        case 27:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega3));
+                        case 23:iniciar.setText("      c i a r   E n t r e g a");
                             break;
-                        case 31:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega4));
+                        case 28:iniciar.setText("        i a r   E n t r e g a");
                             break;
-                        case 34:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega5));
+                        case 32:iniciar.setText("          a r   E n t r e g a");
                             break;
-                        case 38:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega6));
+                        case 37:iniciar.setText("            r   E n t r e g a");
                             break;
-                        case 42:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega7));
+                        case 41:iniciar.setText("                E n t r e g a");
                             break;
-                        case 50:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega8));
+                        case 50:iniciar.setText("                  n t r e g a");
                             break;
-                        case 55:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega9));
+                        case 55:iniciar.setText("                    t r e g a");
                             break;
-                        case 59:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega10));
+                        case 58:iniciar.setText("                      r e g a");
                             break;
-                        case 62:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega11));
+                        case 62:iniciar.setText("                        e g a");
                             break;
-                        case 67:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega12));
+                        case 67:iniciar.setText("                          g a");
                             break;
-                        case 72:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.iniciar_entrega13));
+                        case 72:iniciar.setText("                            a");
                             break;
                     }
                 }
@@ -343,8 +347,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int l = seekBar.getProgress();
                 if (l > 98) {
-                    sb.setVisibility(View.VISIBLE);
-                    sb4.setVisibility(View.GONE);
+                    seb1.setVisibility(View.VISIBLE);
+                    seb4.setVisibility(View.GONE);
                     seekBar.setProgress(1);
                     mMap.clear();
                     setFinish();
@@ -368,42 +372,41 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.v("Progress", String.valueOf(progress));
-                if (progress < 18) {
-                    seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega0));
+                if (progress < 11) {
+                    finalizar.setText("F i n a l i z a r   E n t r e g a");
                 } else if (progress >= 81) {
-                    seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega16));
+                    finalizar.setText("");
                 } else {
                     switch (progress) {
-                        case 18:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega1));
+                        case 11:finalizar.setText("  i n a l i z a r   E n t r e g a");
                             break;
-                        case 21:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega2));
+                        case 16:finalizar.setText("    n a l i z a r   E n t r e g a");
                             break;
-                        case 26:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega3));
+                        case 20:finalizar.setText("      a l i z a r   E n t r e g a");
                             break;
-                        case 30:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega4));
+                        case 24:finalizar.setText("        l i z a r   E n t r e g a");
                             break;
-                        case 33:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega5));
+                        case 27:finalizar.setText("          i z a r   E n t r e g a");
                             break;
-                        case 35:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega6));
+                        case 31:finalizar.setText("            z a r   E n t r e g a");
                             break;
-                        case 40:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega7));
+                        case 36:finalizar.setText("              a r   E n t r e g a");
                             break;
-                        case 44:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega8));
+                        case 41:finalizar.setText("                r   E n t r e g a");
                             break;
-                        case 48:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega9));
+                        case 45:finalizar.setText("                    E n t r e g a");
                             break;
-                        case 55:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega10));
+                        case 54:finalizar.setText("                      n t r e g a");
                             break;
-                        case 60:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega11));
+                        case 59:finalizar.setText("                        t r e g a");
                             break;
-                        case 63:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega12));
+                        case 62:finalizar.setText("                          r e g a");
                             break;
-                        case 67:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega13));
+                        case 66:finalizar.setText("                            e g a");
                             break;
-                        case 72:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega14));
+                        case 72:finalizar.setText("                              g a");
                             break;
-                        case 76:seekBar.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.finalizar_entrega15));
+                        case 76:finalizar.setText("                                a");
                             break;
                     }
                 }
@@ -454,7 +457,20 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                send();
+                rDriverStatus.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(!dataSnapshot.exists()){
+                            send();
+                            alertDialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
             }
 
             @Override
@@ -564,7 +580,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                                     e.printStackTrace();
                                 }
                                 showButtonOnWay();
-                                sb2.setVisibility(View.GONE);
+                                seb2.setVisibility(View.GONE);
                                 destino.setText(fDirec);
                             } else if (estado.equals("onTrip")) {
                                 try {
@@ -636,9 +652,9 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         rDriverStatus.child(uidDriver).removeValue();
                         tripState.child(uidClient).child("state").setValue("canceledByDriver");
                         infor.setVisibility(View.GONE);
-                        sb4.setVisibility(View.GONE);
-                        sb.setVisibility(View.VISIBLE);
-                        sb3.setVisibility(View.GONE);
+                        seb4.setVisibility(View.GONE);
+                        seb1.setVisibility(View.VISIBLE);
+                        seb3.setVisibility(View.GONE);
                         stateDriver.child(uidDriver).child("state").setValue("nil");
                         stateClient.child(uidClient).child("state").setValue("nil");
                         cTravels.child(uidClient).child(key).removeValue();
@@ -665,9 +681,9 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         rDriverStatus.child(uidDriver).removeValue();
                         dTravels.child(uidDriver).child(key).removeValue();
                         infor.setVisibility(View.GONE);
-                        sb4.setVisibility(View.GONE);
-                        sb.setVisibility(View.VISIBLE);
-                        sb3.setVisibility(View.GONE);
+                        seb4.setVisibility(View.GONE);
+                        seb1.setVisibility(View.VISIBLE);
+                        seb3.setVisibility(View.GONE);
                         tripState.child(uidClient).removeValue();
                         cTravels.child(uidClient).child(key).removeValue();
                         mMap.clear();
@@ -885,8 +901,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                             rDriverStatus.child(uidDriver).child("longitude").setValue(mLastLocation.getLongitude());
                             stateDriver.child(uidDriver).child("state").setValue("onWay");
                             stateClient.child(uidClient).child("state").setValue("onWay");
-                            sRef.child(uidDriver).removeValue();
                             tripState.child(uidClient).child("state").setValue("ok");
+                            sRef.child(uidDriver).removeValue();
                             key = cTravels.child(uidClient).push().getKey();
                             cTravels.child(uidClient).child(key).child("driverUid").setValue(uidDriver);
                             alertDialog.dismiss();
@@ -899,14 +915,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         }
                     });
                     alertDialog.show();
-                    Timer timer4 = new Timer();
-                    timer4.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            alertDialog.dismiss();
-                            sRef.child(uidDriver).removeValue();
-                        }
-                    }, 10000);
                 }
             }
 
@@ -1113,11 +1121,11 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             distancia1 = distancia.intValue();
             Log.v("Distancia",distancia1.toString());
             if(distancia1<50){
-                sb3.setVisibility(View.VISIBLE);
+                seb3.setVisibility(View.VISIBLE);
                 travelData.setVisibility(View.GONE);
                 infor.setVisibility(View.VISIBLE);
             }else{
-                sb3.setVisibility(View.GONE);
+                seb3.setVisibility(View.GONE);
                 travelData.setVisibility(View.VISIBLE);
                 infor.setVisibility(View.GONE);
             }
@@ -1146,11 +1154,11 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             distancia1 = distancia.intValue();
             Log.v("Distancia",distancia1.toString());
             if(distancia1<50){
-                sb4.setVisibility(View.VISIBLE);
+                seb4.setVisibility(View.VISIBLE);
                 travelData.setVisibility(View.GONE);
                 infor.setVisibility(View.VISIBLE);
             }else{
-                sb4.setVisibility(View.GONE);
+                seb4.setVisibility(View.GONE);
                 travelData.setVisibility(View.VISIBLE);
                 infor.setVisibility(View.GONE);
             }
@@ -1179,7 +1187,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     Map<String, String> mapS = dataSnapshot.getValue(Map.class);
                     uidClient = mapS.get("customerUid");
                     getLastKey();
-                    sb.setVisibility(View.GONE);
+                    seb1.setVisibility(View.GONE);
                 }
             }
 

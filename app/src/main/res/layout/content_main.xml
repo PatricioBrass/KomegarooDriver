@@ -41,46 +41,122 @@
                         app:backgroundTint="@color/white" app:rippleColor="@color/colorAccent"
                         app:srcCompat="@mipmap/infor" android:layout_marginBottom="10dp"/>
                 </RelativeLayout>
-                <SeekBar
-                    android:id="@+id/myseek"
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:max="100"
-                    android:progressDrawable="@android:color/transparent"
-                    android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
-                    android:background="@drawable/conectarse0" android:textAlignment="gravity"
-                    android:paddingTop="15dp" android:visibility="visible"
-                    android:clickable="false"/>
-                <SeekBar
-                    android:id="@+id/myseek2"
+                    android:id="@+id/seek1">
+
+                    <SeekBar
+                        android:id="@+id/myseek"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:max="100"
+                        android:progressDrawable="@android:color/transparent"
+                        android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
+                        android:background="@drawable/conectarse10" android:textAlignment="gravity"
+                        android:paddingTop="18dp"
+                        android:clickable="false"/>
+
+                    <TextView
+                        android:text="C o n e c t a r s e"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/txtConectarse"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:textAppearance="@style/TextAppearance.AppCompat"
+                        android:textSize="24sp"
+                        android:typeface="normal"
+                        android:textColor="@android:color/white"
+                        android:textStyle="normal|bold" />
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:clickable="false"
-                    android:max="100"
-                    android:progressDrawable="@android:color/transparent"
-                    android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
-                    android:background="@drawable/desconectarse0" android:visibility="gone"
-                    android:paddingTop="15dp"/>
-                <SeekBar
-                    android:id="@+id/myseek3"
+                    android:id="@+id/seek2"
+                    android:visibility="gone">
+
+                    <SeekBar
+                        android:id="@+id/myseek2"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:clickable="false"
+                        android:max="100"
+                        android:progressDrawable="@android:color/transparent"
+                        android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
+                        android:background="@drawable/desconectarse13"
+                        android:paddingTop="18dp"/>
+
+                    <TextView
+                        android:text="D e s c o n e c t a r s e"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/txtDesconectarse"
+                        android:gravity="center"
+                        android:textSize="24sp"
+                        android:textColor="@android:color/white"
+                        android:textStyle="normal|bold" />
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:clickable="false"
-                    android:max="100"
-                    android:progressDrawable="@android:color/transparent"
-                    android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
-                    android:background="@drawable/iniciar_entrega0" android:visibility="gone"
-                    android:paddingTop="15dp"/>
-                <SeekBar
-                    android:id="@+id/myseek4"
+                    android:visibility="gone"
+                    android:id="@+id/seek3">
+
+                    <SeekBar
+                        android:id="@+id/myseek3"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:clickable="false"
+                        android:max="100"
+                        android:progressDrawable="@android:color/transparent"
+                        android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
+                        android:background="@drawable/iniciar_entrega14"
+                        android:paddingTop="18dp"/>
+
+                    <TextView
+                        android:text="I n i c i a r   E n t r e g a"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/txtIniciar"
+                        android:gravity="center"
+                        android:textSize="24sp"
+                        android:textStyle="normal|bold"
+                        android:textColor="@android:color/white" />
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:clickable="false"
-                    android:max="100"
-                    android:progressDrawable="@android:color/transparent"
-                    android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
-                    android:background="@drawable/finalizar_entrega0" android:visibility="gone"
-                    android:paddingTop="15dp"/>
+                    android:visibility="gone"
+                    android:id="@+id/seek4">
+
+                    <SeekBar
+                        android:id="@+id/myseek4"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:clickable="false"
+                        android:max="100"
+                        android:progressDrawable="@android:color/transparent"
+                        android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
+                        android:background="@drawable/finalizar_entrega16"
+                        android:paddingTop="18dp"/>
+
+                    <TextView
+                        android:text="F i n a l i z a r   E n t r e g a"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/txtFinalizar"
+                        android:gravity="center"
+                        android:textSize="24sp"
+                        android:textColor="@android:color/white"
+                        android:textStyle="normal|bold" />
+                </RelativeLayout>
+
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
