@@ -28,9 +28,9 @@ public class UserFragment extends Fragment {
     private Firebase tRef, customer, stateDriver;
     private TextView name, direccion, num, comentarios, telefono, phoneE, phoneR, nomE, recep;
     private Button cancelar, contactar, exit, emer;
-    private String uidDriver, uidClient, nom, phone;
-    private AlertDialog alertDialog;
-    private View one, two, btns;
+    private String uidDriver, uidClient, nom, phone, contac, nomR;
+    private AlertDialog alertDialog, alertReceptor;
+    private View one, two, btns, emisor, receptor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +57,7 @@ public class UserFragment extends Fragment {
         comentarios = (TextView)v.findViewById(R.id.txtComentData);
         cancelar = (Button)v.findViewById(R.id.btnCancelData);
         alertDialog = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
+        alertReceptor = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
         contactar = (Button)v.findViewById(R.id.btnContactarData);
         one = v.findViewById(R.id.onePhone);
         two = v.findViewById(R.id.twoPhone);
@@ -70,7 +71,27 @@ public class UserFragment extends Fragment {
                 userView.setVisibility(View.GONE);
             }
         });
-        callCustomer();
+        emisor = v.findViewById(R.id.emisorCall);
+
+        contactar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callCustomer();
+            }
+        });
+        emisor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callCustomer();
+            }
+        });
+        receptor = v.findViewById(R.id.receptorCall);
+        receptor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callReceptor();
+            }
+        });
         statusDriver();
         canceledDriver();
         return v;
@@ -151,8 +172,8 @@ public class UserFragment extends Fragment {
                     String nume = mapS.get("blockInfo");
                     String dTo = mapS.get("to");
                     String com = mapS.get("comments");
-                    String contac = mapS.get("contactNumber");
-                    String receptor = mapS.get("receptorName");
+                    contac = mapS.get("contactNumber");
+                    nomR = mapS.get("receptorName");
                     one.setVisibility(View.GONE);
                     btns.setVisibility(View.GONE);
                     two.setVisibility(View.VISIBLE);
@@ -160,7 +181,7 @@ public class UserFragment extends Fragment {
                     if(!contac.isEmpty()){phoneR.setText(contac);}
                     if(!nume.isEmpty()){num.setText(nume);}
                     if(!com.isEmpty()){comentarios.setText(com);}
-                    if(!receptor.isEmpty()){recep.setText(receptor);}
+                    if(!nomR.isEmpty()){recep.setText(nomR);}
                     direccion.setText(dTo);
                     nomE.setText(nom);
                     phoneE.setText(phone);
@@ -191,12 +212,28 @@ public class UserFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        contactar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.show();
+        alertDialog.show();
+    }
+
+    public void callReceptor(){
+        alertReceptor.setTitle(nomR);
+        alertReceptor.setMessage(contac);
+        alertReceptor.setCancelable(false);
+        alertReceptor.setButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                alertReceptor.dismiss();
             }
         });
+        alertReceptor.setButton2("Llamar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String uri = "tel:" + contac.trim();
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse(uri));
+                startActivity(intent);
+            }
+        });
+        alertReceptor.show();
     }
 
     public void canceledDriver(){

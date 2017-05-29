@@ -454,6 +454,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                send();
             }
 
             @Override

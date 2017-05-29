@@ -68,7 +68,7 @@
 
                     <ImageView
                         android:adjustViewBounds="true"
-                        app:srcCompat="@mipmap/ic_persona"
+                        app:srcCompat="@mipmap/ic_user"
                         android:id="@+id/imgPhoto"
                         android:layout_gravity="center"
                         android:layout_alignParentTop="true" android:layout_alignParentStart="true"

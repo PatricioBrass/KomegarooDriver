@@ -125,7 +125,9 @@
                         <LinearLayout
                             android:orientation="vertical"
                             android:layout_height="match_parent" android:layout_width="156dp"
-                            android:layout_marginRight="5dp">
+                            android:layout_marginRight="5dp"
+                            android:id="@+id/emisorCall"
+                            android:clickable="true">
                             <LinearLayout
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
@@ -164,7 +166,9 @@
                         <LinearLayout
                             android:orientation="vertical"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" android:layout_marginLeft="5dp">
+                            android:layout_height="match_parent" android:layout_marginLeft="5dp"
+                            android:id="@+id/receptorCall"
+                            android:clickable="true">
                             <LinearLayout
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"

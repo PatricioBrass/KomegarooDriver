@@ -43,7 +43,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Firebase mRef, pagoDriver;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
@@ -53,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/drivers");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -193,15 +191,8 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         moveTaskToBack(true);
     }
-    private void metodo(){
-        FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
 
-    }
-
-    public void loadData(){
+    /*public void loadData(){
         mRef.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -250,12 +241,11 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-    }
+    }*/
 
     @Override
     protected void onStart(){
         super.onStart();
-        loadData();
     }
 
     @Override
