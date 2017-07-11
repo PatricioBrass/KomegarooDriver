@@ -17,6 +17,7 @@ import android.widget.RatingBar;
 import com.driver.hp.komegaroodriver.CircleTransform;
 import com.driver.hp.komegaroodriver.MainActivity;
 import com.driver.hp.komegaroodriver.R;
+import com.driver.hp.komegaroodriver.RoundedTransformation;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -31,12 +32,10 @@ public class ValorizarFragment extends Fragment {
 
     private RatingBar rating;
     private Button btnV;
-    private Firebase travel, customers, dTravels, stateDriver;
+    private Firebase travel, customers, stateDriver;
     private String uidClients, calificacion, keys, uidDriver;
-    private int index;
     private View layout;
     private ImageView imageDriver;
-    private ArrayList<String> arrayClient = new ArrayList<String>();
     private View mProgressView, mPerfilFormView;
     private EditText coment;
     @Override
@@ -52,7 +51,6 @@ public class ValorizarFragment extends Fragment {
         Firebase.setAndroidContext(getActivity());
         travel = new Firebase("https://decoded-pilot-144921.firebaseio.com/customerTravels");
         customers = new Firebase("https://decoded-pilot-144921.firebaseio.com/customers");
-        dTravels = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverTravels");
         stateDriver = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverState");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mPerfilFormView = v.findViewById(R.id.valorLayout);
@@ -117,7 +115,7 @@ public class ValorizarFragment extends Fragment {
                 if(dataSnapshot.exists()){
                     Map<String, String> mapS = dataSnapshot.getValue(Map.class);
                     String photo = mapS.get("photoUrl");
-                    Picasso.with(getActivity()).load(photo).transform(new CircleTransform()).into(imageDriver);
+                    Picasso.with(getActivity()).load(photo).transform(new RoundedTransformation(8,1)).into(imageDriver);
                     showProgress(false);
                 }
             }

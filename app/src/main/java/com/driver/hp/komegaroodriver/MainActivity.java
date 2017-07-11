@@ -1,10 +1,8 @@
 package com.driver.hp.komegaroodriver;
 
-import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
@@ -16,13 +14,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputFilter;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.driver.hp.komegaroodriver.Fragment.MapsFragment;
@@ -33,6 +28,7 @@ import com.driver.hp.komegaroodriver.MenuLaterales.PerfilActivity;
 import com.driver.hp.komegaroodriver.MenuLaterales.PromoActivity;
 import com.driver.hp.komegaroodriver.MenuLaterales.TutorialMLActivity;
 import com.driver.hp.komegaroodriver.Notification.GCMRegistrationIntentService;
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -41,12 +37,23 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.IOException;
+import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private String uidDriver;
+    private String uidDriver, token;
+    private Firebase requested, drivers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        requested = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverStatus/requestedDrivers/Santiago");
+        drivers = new Firebase("https://decoded-pilot-144921.firebaseio.com/drivers");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -137,21 +145,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_view2);
-        rightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                // Handle navigation view item clicks here.
-                int id = item.getItemId();
-
-
-
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.closeDrawer(GravityCompat.END);
-                return true;
-            }
-        });*/
-
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_main, new MapsFragment()).commit();
 
@@ -191,57 +184,6 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         moveTaskToBack(true);
     }
-
-    /*public void loadData(){
-        mRef.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.hasChild("name")&&dataSnapshot.exists()){
-                    final AlertDialog alertDialog3 = new AlertDialog.Builder(MainActivity.this).create();
-                    alertDialog3.setTitle("Ingrese nombre completo");
-                    alertDialog3.setCancelable(false);
-                    final EditText input2 = new EditText(MainActivity.this);
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                    input2.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);//se puede agregar otro con el signo |
-                    input2.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_user, 0, 0, 0);
-                    alertDialog3.setView(input2);
-                    alertDialog3.setButton(AlertDialog.BUTTON_NEUTRAL, "Ingresar",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    mRef.child(uidDriver).child("name").setValue(input2.getText().toString());
-                                }
-                            });
-                    alertDialog3.show();
-
-                }
-                if (!dataSnapshot.hasChild("phoneNumber")&&dataSnapshot.exists()) {
-                    final AlertDialog alertDialog2 = new AlertDialog.Builder(MainActivity.this).create();
-                    alertDialog2.setTitle("Ingrese número de celular o contacto");
-                    alertDialog2.setCancelable(false);
-                    final EditText input = new EditText(MainActivity.this);
-                    InputFilter[] FilterArray = new InputFilter[1];
-                    FilterArray[0] = new InputFilter.LengthFilter(8);
-                    input.setFilters(FilterArray);
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                    input.setInputType(InputType.TYPE_CLASS_NUMBER);//se puede agregar otro con el signo |
-                    input.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.num, 0, 0, 0);
-                    alertDialog2.setView(input);
-                    alertDialog2.setButton(AlertDialog.BUTTON_NEUTRAL, "Ingresar",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    mRef.child(uidDriver).child("phoneNumber").setValue("+569" + input.getText().toString());
-                                }
-                            });
-                    alertDialog2.show();
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-    }*/
 
     @Override
     protected void onStart(){
@@ -286,22 +228,7 @@ public class MainActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         Log.d("VIVZq",""+newConfig.orientation);
     }
-    /*
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            // Handle action bar item clicks here. The action bar will
-            // automatically handle clicks on the Home/Up button, so long
-            // as you specify a parent activity in AndroidManifest.xml.
-            int id = item.getItemId();
 
-            //noinspection SimplifiableIfStatement
-            if (id == R.id.action_settings) {
-                return true;
-            }
-
-            return super.onOptionsItemSelected(item);
-        }
-    */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here.
@@ -342,5 +269,88 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
 
     }
+
+    OkHttpClient client = new OkHttpClient();
+    Call post(String url, String json, Callback callback) {
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        RequestBody body = RequestBody.create(mediaType, json);
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        Call call = client.newCall(request);
+        call.enqueue(callback);
+        return call;
+    }/*
+
+    public void piden(){
+        requested.child(uidDriver).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if(dataSnapshot.exists()){
+                    getToken();
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    public void getToken(){
+        drivers.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Map<String, String> map = dataSnapshot.getValue(Map.class);
+                    token = map.get("deviceToken");
+                    postDriver();
+                }
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+    public void postDriver(){
+        String url = "https://mysterious-wildwood-82898.herokuapp.com/mobile/notification";
+        String message ="Están pidiendo un Komegaroo";
+        String payload ="d";
+        String packages = "com.driver.hp.komegaroodriver";
+        String body ="token="+token+"&message="+message+"&payload="+payload+"&package="+packages;
+        post(url,body,new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseStr = response.body().string();
+                    Log.v("POSTYes!", responseStr);
+                } else {
+                    String responseStr = response.body().string();
+                    Log.v("POSTNo!", responseStr);
+                }
+            }
+        });
+    }*/
 
 }

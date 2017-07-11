@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.driver.hp.komegaroodriver.Fragment.MapsFragment;
 import com.driver.hp.komegaroodriver.MainActivity;
 import com.driver.hp.komegaroodriver.R;
 import com.google.android.gms.gcm.GcmListenerService;
@@ -37,6 +38,7 @@ public class GCMPushReceiverService extends GcmListenerService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
         //Setup notification
         //Sound
+        //MapsFragment.newInstance("ImgTwoFragment, Instance 2").send();
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         //Build notification
         NotificationCompat.Builder noBuilder = new NotificationCompat.Builder(this)

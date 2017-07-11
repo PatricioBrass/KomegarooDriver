@@ -18,6 +18,7 @@ import com.driver.hp.komegaroodriver.TutorialesFragment.GifNineFragment;
 import com.driver.hp.komegaroodriver.TutorialesFragment.GifOneFragment;
 import com.driver.hp.komegaroodriver.TutorialesFragment.GifSevenFragment;
 import com.driver.hp.komegaroodriver.TutorialesFragment.GifSixFragment;
+import com.driver.hp.komegaroodriver.TutorialesFragment.GifTenFragment;
 import com.driver.hp.komegaroodriver.TutorialesFragment.GifThreeFragment;
 import com.driver.hp.komegaroodriver.TutorialesFragment.GifTwoFragment;
 import com.driver.hp.komegaroodriver.TutorialesFragment.ImgFinalFragment;
@@ -78,14 +79,15 @@ public class TutorialActivity extends AppCompatActivity {
                 case 8: return GifSevenFragment.newInstance("GifSevenFragment, Instance 4");
                 case 9: return GifEightFragment.newInstance("GifEightFragment, Instance 4");
                 case 10: return GifNineFragment.newInstance("GifNineFragment, Instance 4");
-                case 11: return ImgFinalFragment.newInstance("ImgFinalFragment, Instance 4");
+                case 11: return GifTenFragment.newInstance("ImgFinalFragment, Instance 4");
+                case 12: return ImgFinalFragment.newInstance("ImgFinalFragment, Instance 4");
                 default: return ImgOneFragment.newInstance("ImgOneFragment, Instance 1");
             }
         }
 
         @Override
         public int getCount() {
-            return 12;
+            return 13;
         }
     }
 

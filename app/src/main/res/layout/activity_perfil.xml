@@ -211,14 +211,14 @@
                 android:layout_marginTop="5dp" android:layout_marginRight="10dp">
                 <TextView
                     android:text="Saldo"
-                    android:id="@+id/nombreT"
+                    android:id="@+id/txtSaldo"
                     android:textColor="#262626"
                     android:textSize="20sp" android:layout_height="match_parent"
                     android:layout_width="90dp"/>
                 <TextView
-                    android:text="CLP $10.000.-"
+                    android:text="CLP $0"
                     android:layout_width="match_parent"
-                    android:id="@+id/txtNombreApellido"
+                    android:id="@+id/txtDriverSaldo"
                     android:textAlignment="center"
                     android:textColor="#262626"
                     android:ellipsize="end"
