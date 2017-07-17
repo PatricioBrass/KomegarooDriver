@@ -331,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void postDriver(){
-        String url = "https://mysterious-wildwood-82898.herokuapp.com/mobile/notification";
+        String url = "https://komegaroo-server.herokuapp.com/mobile/notification";
         String message ="Están pidiendo un Komegaroo";
         String payload ="d";
         String packages = "com.driver.hp.komegaroodriver";

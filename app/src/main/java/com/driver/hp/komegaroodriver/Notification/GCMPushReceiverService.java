@@ -50,7 +50,7 @@ public class GCMPushReceiverService extends GcmListenerService {
                         R.mipmap.ic_launcher))
                 .setContentText(message)
                 .setAutoCancel(true)
-                /*.setContentIntent(pendingIntent)*/;
+                .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(Integer.parseInt(notifi), noBuilder.build()); //0 = ID of notification

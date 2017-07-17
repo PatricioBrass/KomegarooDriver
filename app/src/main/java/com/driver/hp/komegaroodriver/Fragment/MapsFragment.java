@@ -72,6 +72,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
@@ -116,6 +117,9 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     protected Integer priceTime;
     protected String email;
     protected String nombre;
+    protected String token;
+    protected boolean actionW=true;
+    protected boolean actionT=true;
 
     @Nullable
     @Override
@@ -357,6 +361,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     travelData.setVisibility(View.GONE);
                     infor.setVisibility(View.GONE);
                     fValorizar.setVisibility(View.VISIBLE);
+                    actionT = true;
+                    actionW = true;
                 } else {seekBar.setProgress(1);}
             }
             @Override
@@ -537,10 +543,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         }
                     }
                 }
-
                 @Override
-                public void onCancelled(FirebaseError firebaseError) {
-                }
+                public void onCancelled(FirebaseError firebaseError) {}
             });
         }
     }
@@ -974,6 +978,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 Map<String, String> mapS = dataSnapshot.getValue(Map.class);
                 nombre = mapS.get("name");
                 email = mapS.get("email");
+                token = mapS.get("deviceToken");
                 String photo = mapS.get("photoUrl");
                 name.setText(nombre);
                 Picasso.with(getActivity()).load(photo).transform(new RoundedTransformation(9, 1)).into(user);
@@ -1007,7 +1012,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             distancia = target.distanceTo(target2);
             distancia1 = distancia.intValue();
             Log.v("Distancia",distancia1.toString());
-            if(distancia1<50){
+            if(distancia1<500){
+                postOnWay();
                 seb3.setVisibility(View.VISIBLE);
                 travelData.setVisibility(View.GONE);
                 infor.setVisibility(View.VISIBLE);
@@ -1038,7 +1044,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             distancia = target.distanceTo(target2);
             distancia1 = distancia.intValue();
             Log.v("Distancia",distancia1.toString());
-            if(distancia1<50){
+            if(distancia1<500){
+                postOnTrip();
                 seb4.setVisibility(View.VISIBLE);
                 travelData.setVisibility(View.GONE);
                 infor.setVisibility(View.VISIBLE);
@@ -1093,12 +1100,10 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     public static MapsFragment newInstance(String text) {
-
         MapsFragment f = new MapsFragment();
         Bundle b = new Bundle();
         b.putString("msg", text);
         f.setArguments(b);
-
         return f;
     }
 
@@ -1115,11 +1120,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     lastD = mapS.get("lastDigits");
                 }
             }
-
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
+            public void onCancelled(FirebaseError firebaseError) {}
         });
     }
 
@@ -1137,7 +1139,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     public void postGetPayments(){
-        String url = "https://mysterious-wildwood-82898.herokuapp.com/payments/payment";
+        String url = "https://komegaroo-server.herokuapp.com/payments/payment";
         String body ="amount="+price+"&token="+tokenPago+"&paymentMethod="+paymentMethod+"&payer="+customerId;
         post(url,body,new okhttp3.Callback() {
             @Override
@@ -1234,12 +1236,11 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     public void postAddBlackList(){
-        String url = "https://mysterious-wildwood-82898.herokuapp.com/cards/addBlackList";
+        String url = "https://komegaroo-server.herokuapp.com/cards/addBlackList";
         String body ="number="+blackToken;
         post(url,body,new okhttp3.Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-            }
+            public void onFailure(Call call, IOException e) {}
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
@@ -1254,7 +1255,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     public void postFailPayment(){
-        String url = "https://mysterious-wildwood-82898.herokuapp.com/mobile/failurePaymentEmail";
+        String url = "https://komegaroo-server.herokuapp.com/mobile/failurePaymentEmail";
         String body ="email="+email+"&name="+nombre+"&amount="+price;
         post(url,body,new okhttp3.Callback() {
             @Override
@@ -1275,7 +1276,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     public void postSuccesPayment(){
-        String url = "https://mysterious-wildwood-82898.herokuapp.com/mobile/succesPaymentEmail";
+        String url = "https://komegaroo-server.herokuapp.com/mobile/succesPaymentEmail";
         String body ="email="+email+"&name="+nombre+"&kPrice="+priceKm+"&tPrice="+priceTime+"&lastDigits="+lastD;
         post(url,body,new okhttp3.Callback() {
             @Override
@@ -1293,5 +1294,55 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 }
             }
         });
+    }
+
+    public void postOnWay(){
+        if(actionW) {
+            actionW = false;
+            String url = "https://komegaroo-server.herokuapp.com/mobile/notification";
+            String message = "Tu canguro está llegando a retirar tu pedido.";
+            String payload = "d";
+            String packages = "com.kome.hp.komegarooandroid";
+            String body = "token=" + token + "&message=" + message + "&payload=" + payload + "&package=" + packages;
+            post(url, body, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {}
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        String responseStr = response.body().string();
+                        Log.v("POSTOnWayYes!", responseStr);
+                    } else {
+                        String responseStr = response.body().string();
+                        Log.v("POSTOnWayNo!", responseStr);
+                    }
+                }
+            });
+        }
+    }
+
+    public void postOnTrip(){
+        if(actionT) {
+            actionT = false;
+            String url = "https://komegaroo-server.herokuapp.com/mobile/notification";
+            String message = "Tu canguro está llegando a destino.";
+            String payload = "d";
+            String packages = "com.kome.hp.komegarooandroid";
+            String body = "token=" + token + "&message=" + message + "&payload=" + payload + "&package=" + packages;
+            post(url, body, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {}
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        String responseStr = response.body().string();
+                        Log.v("POSTOnTripYes!", responseStr);
+                    } else {
+                        String responseStr = response.body().string();
+                        Log.v("POSTOnTripNo!", responseStr);
+                    }
+                }
+            });
+        }
     }
 }
