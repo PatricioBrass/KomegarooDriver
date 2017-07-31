@@ -13,11 +13,12 @@ import android.widget.TextView;
 
 import com.driver.hp.komegaroodriver.R;
 import com.driver.hp.komegaroodriver.RoundedTransformation;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.Map;
@@ -29,15 +30,16 @@ public class PagoActivity extends AppCompatActivity {
     private Button close;
     View frPago;
     private String uidDriver;
-    private Firebase driver, payment;
+    private DatabaseReference driver, payment;
     private View mProgressView;
     private View mPerfilFormView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pago);
-        driver = new Firebase("https://decoded-pilot-144921.firebaseio.com/drivers");
-        payment = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverPayments");
+        driver = FirebaseDatabase.getInstance().getReference().child("drivers");
+        payment = FirebaseDatabase.getInstance().getReference().child("driverPayments");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         close = (Button) findViewById(R.id.btnPago);
         close.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +80,7 @@ public class PagoActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Map<String, String> mapS =dataSnapshot.getValue(Map.class);
+                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                     String name = mapS.get("name");
                     String photos = mapS.get("photoUrl");
                     nombre.setText(name);
@@ -86,7 +88,7 @@ public class PagoActivity extends AppCompatActivity {
                 }
             }
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError firebaseError) {
             }
         });
     }
@@ -96,7 +98,7 @@ public class PagoActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Map<String, String> mapS = dataSnapshot.getValue(Map.class);
+                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                     String cuent = mapS.get("account");
                     String nCuent = mapS.get("accountNumber");
                     String bank = mapS.get("bank");
@@ -109,7 +111,7 @@ public class PagoActivity extends AppCompatActivity {
                 showProgress(false);
             }
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError firebaseError) {
             }
         });
     }

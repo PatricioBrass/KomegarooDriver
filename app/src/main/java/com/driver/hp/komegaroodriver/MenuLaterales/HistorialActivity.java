@@ -16,11 +16,14 @@ import android.widget.Button;
 import com.driver.hp.komegaroodriver.Objects.Adapter;
 import com.driver.hp.komegaroodriver.Objects.Travels;
 import com.driver.hp.komegaroodriver.R;
-import com.firebase.client.DataSnapshot;
+import com.google.firebase.database.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +31,7 @@ import java.util.List;
 public class HistorialActivity extends AppCompatActivity {
 
     private Button close;
-    private Firebase mRef;
+    private DatabaseReference mRef;
     private String uidDriver;
     private RecyclerView recyclerView;
     private List<Travels>list;
@@ -40,7 +43,7 @@ public class HistorialActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
-        mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverTravels");
+        mRef = FirebaseDatabase.getInstance().getReference().child("driverTravels");
         setContentView(R.layout.activity_historial);
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         close = (Button)findViewById(R.id.btnHistorial);
@@ -99,7 +102,7 @@ public class HistorialActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError firebaseError) {
 
             }
         });

@@ -18,11 +18,12 @@ import com.driver.hp.komegaroodriver.CircleTransform;
 import com.driver.hp.komegaroodriver.MainActivity;
 import com.driver.hp.komegaroodriver.R;
 import com.driver.hp.komegaroodriver.RoundedTransformation;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class ValorizarFragment extends Fragment {
 
     private RatingBar rating;
     private Button btnV;
-    private Firebase travel, customers, stateDriver;
+    private DatabaseReference travel, customers, stateDriver;
     private String uidClients, calificacion, keys, uidDriver;
     private View layout;
     private ImageView imageDriver;
@@ -48,10 +49,9 @@ public class ValorizarFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_valorizar, container, false);
-        Firebase.setAndroidContext(getActivity());
-        travel = new Firebase("https://decoded-pilot-144921.firebaseio.com/customerTravels");
-        customers = new Firebase("https://decoded-pilot-144921.firebaseio.com/customers");
-        stateDriver = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverState");
+        travel = FirebaseDatabase.getInstance().getReference().child("customerTravels");
+        customers = FirebaseDatabase.getInstance().getReference().child("customers");
+        stateDriver = FirebaseDatabase.getInstance().getReference().child("driverState");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mPerfilFormView = v.findViewById(R.id.valorLayout);
         mProgressView = v.findViewById(R.id.progressBarValorizar);
@@ -69,6 +69,7 @@ public class ValorizarFragment extends Fragment {
                 travel.child(uidClients).child(keys).child("calification").setValue(calificacion);
                 travel.child(uidClients).child(keys).child("comments").setValue(coment.getText().toString());
                 ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).buildGoogleApiClient();
+                ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).send();
                 stateDriver.child(uidDriver).child("state").setValue("nil");
                 ((MainActivity)getActivity()).unlockedDrawer();
                 coment.setText("");
@@ -91,7 +92,7 @@ public class ValorizarFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Map<String, String> mapS = dataSnapshot.getValue(Map.class);
+                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                     String estado = mapS.get("state");
                     if(estado.equals("endTrip")){
                         uidClients = ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).uidClient;
@@ -102,7 +103,7 @@ public class ValorizarFragment extends Fragment {
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError firebaseError) {
 
             }
         });
@@ -113,7 +114,7 @@ public class ValorizarFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Map<String, String> mapS = dataSnapshot.getValue(Map.class);
+                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                     String photo = mapS.get("photoUrl");
                     Picasso.with(getActivity()).load(photo).transform(new RoundedTransformation(8,1)).into(imageDriver);
                     showProgress(false);
@@ -121,7 +122,7 @@ public class ValorizarFragment extends Fragment {
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError firebaseError) {
 
             }
         });

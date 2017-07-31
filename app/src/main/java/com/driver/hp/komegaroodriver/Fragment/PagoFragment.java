@@ -17,11 +17,12 @@ import android.widget.TextView;
 
 import com.driver.hp.komegaroodriver.R;
 import com.driver.hp.komegaroodriver.RoundedTransformation;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.Map;
@@ -39,10 +40,10 @@ public class PagoFragment extends Fragment {
     private View close;
     private EditText nCuenta, id;
     private String uidDriver;
-    private Firebase payment, driver;
     private TextView nombre;
     private ImageView photo;
-    private String name;
+    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabaseD;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,9 +54,12 @@ public class PagoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_pago, container, false);
-        payment = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverPayments");
-        driver = new Firebase("https://decoded-pilot-144921.firebaseio.com/drivers");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("driverPayments");
+        mDatabaseD = FirebaseDatabase.getInstance().getReference().child("drivers");
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        Log.v("Uid", uidDriver);
+        Log.v("data", database.toString());
         showData();
         close = v.findViewById(R.id.pagoFragment);
         close.setVisibility(View.GONE);
@@ -83,10 +87,10 @@ public class PagoFragment extends Fragment {
     }
 
     public void sendData(){
-        payment.child(uidDriver).child("account").setValue(cuentas.getSelectedItem().toString());
-        payment.child(uidDriver).child("accountNumber").setValue(nCuenta.getText().toString());
-        payment.child(uidDriver).child("bank").setValue(bancos.getSelectedItem().toString());
-        payment.child(uidDriver).child("dni").setValue(id.getText().toString());
+        mDatabase.child(uidDriver).child("account").setValue(cuentas.getSelectedItem().toString());
+        mDatabase.child(uidDriver).child("accountNumber").setValue(nCuenta.getText().toString());
+        mDatabase.child(uidDriver).child("bank").setValue(bancos.getSelectedItem().toString());
+        mDatabase.child(uidDriver).child("dni").setValue(id.getText().toString());
     }
 
     private boolean checkEmpty(){
@@ -142,19 +146,21 @@ public class PagoFragment extends Fragment {
     }
 
     public void showData(){
-        driver.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseD.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Map<String, String> mapS =dataSnapshot.getValue(Map.class);
+                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                     String name = mapS.get("name");
                     String photos = mapS.get("photoUrl");
                     nombre.setText(name);
                     Picasso.with(getActivity()).load(photos).transform(new RoundedTransformation(9,1)).into(photo);
                 }
             }
+
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

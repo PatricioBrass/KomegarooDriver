@@ -28,11 +28,6 @@ import com.driver.hp.komegaroodriver.MenuLaterales.PerfilActivity;
 import com.driver.hp.komegaroodriver.MenuLaterales.PromoActivity;
 import com.driver.hp.komegaroodriver.MenuLaterales.TutorialMLActivity;
 import com.driver.hp.komegaroodriver.Notification.GCMRegistrationIntentService;
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle toggle;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private String uidDriver, token;
-    private Firebase requested, drivers;
+    //private Firebase requested, drivers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        requested = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverStatus/requestedDrivers/Santiago");
-        drivers = new Firebase("https://decoded-pilot-144921.firebaseio.com/drivers");
+        /*requested = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverStatus/requestedDrivers/Santiago");
+        drivers = new Firebase("https://decoded-pilot-144921.firebaseio.com/drivers");*/
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

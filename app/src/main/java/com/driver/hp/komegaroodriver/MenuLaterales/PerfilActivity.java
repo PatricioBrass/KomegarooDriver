@@ -20,18 +20,15 @@ import android.widget.TextView;
 import com.driver.hp.komegaroodriver.R;
 import com.driver.hp.komegaroodriver.RoundedTransformation;
 import com.driver.hp.komegaroodriver.TutorialActivity;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
-
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Timer;
@@ -47,7 +44,7 @@ public class PerfilActivity extends AppCompatActivity {
 
     public static final String MESSAGE_KEY="com.driver.hp.komegaroodriver.message_key";
     private Button close, sClose;
-    private Firebase mRef, travel;
+    private DatabaseReference mRef, travel;
     private TextView nom, ape, num, trip, driverSaldo, dat, saldo, telT, envT, calT;
     private ImageView pho;
     private RatingBar stars;
@@ -64,8 +61,8 @@ public class PerfilActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
-        mRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/drivers");
-        travel = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverTravels");
+        mRef = FirebaseDatabase.getInstance().getReference().child("drivers");
+        travel = FirebaseDatabase.getInstance().getReference().child("driverTravels");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         close = (Button) findViewById(R.id.btnPerfil);
         close.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +71,6 @@ public class PerfilActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        Firebase.setAndroidContext(this);
         alertDialog = new AlertDialog.Builder(this, R.style.MyAlertDialogStyle).create();
         alertDialog.setTitle("Komegaroo");
         alertDialog.setMessage("Revise su conexión a internet.");
@@ -146,18 +142,17 @@ public class PerfilActivity extends AppCompatActivity {
 
     public void perfil(){
 
-        Firebase mRefChild = mRef.child(uidDriver);
-        mRefChild.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Map<Integer, Integer> map = dataSnapshot.getValue(Map.class);
-                    Map<String, String>mapS =dataSnapshot.getValue(Map.class);
-                    califi = map.get("calification");
+                    Map<Long, Long> map = (Map<Long, Long>) dataSnapshot.getValue();
+                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
+                    califi = map.get("calification").intValue();
                     String name = mapS.get("name");
                     String phones = mapS.get("phoneNumber");
                     String photos = mapS.get("photoUrl");
-                    trips = map.get("trips");
+                    trips = map.get("trips").intValue();
                     String nombre = name.substring(0,name.indexOf(" "));
                     String apellido = name.replace(nombre+" " ,"");
                     nom.setText(nombre);
@@ -166,11 +161,13 @@ public class PerfilActivity extends AppCompatActivity {
                     Picasso.with(PerfilActivity.this).load(photos).transform(new RoundedTransformation(9,1)).into(pho);
                     timer.cancel();
                     updateData();
+                    Log.v("DatosPerfil", califi.toString());
+                    Log.v("DatosPerfil", trips.toString());
                 }
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError firebaseError) {
 
             }
         });
@@ -222,7 +219,7 @@ public class PerfilActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    Map<String, String> map = dataSnapshot.getValue(Map.class);
+                    Map<String, String> map = (Map<String, String>) dataSnapshot.getValue();
                     String califica = map.get("calification");
                     Integer t = arrayCalif.size();
                     if (!califica.equals("")&&t>trips){
@@ -243,7 +240,7 @@ public class PerfilActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError firebaseError) {
 
             }
         });
@@ -256,7 +253,7 @@ public class PerfilActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
-                            Map<String, String> mapS = dataSnapshot.getValue(Map.class);
+                            Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                             key = mapS.keySet().toString().replace("[","").replace("]","");
                             getRating();
                         }else{
@@ -265,7 +262,7 @@ public class PerfilActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onCancelled(FirebaseError firebaseError) {
+                    public void onCancelled(DatabaseError firebaseError) {
                     }
                 });
     }
@@ -284,7 +281,7 @@ public class PerfilActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError firebaseError) {
 
             }
         });
@@ -325,8 +322,12 @@ public class PerfilActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            driverSaldo.setText("CLP $"+responseStr.substring(0,responseStr.length()-3)+"."+responseStr.substring(responseStr.length()-3));
-                            showProgress(false);
+                            if(responseStr.length()>1) {
+                                driverSaldo.setText("CLP $" + responseStr.substring(0, responseStr.length() - 3) + "." + responseStr.substring(responseStr.length() - 3));
+                                showProgress(false);
+                            }else{
+                                showProgress(false);
+                            }
                         }
                     });
                 } else {

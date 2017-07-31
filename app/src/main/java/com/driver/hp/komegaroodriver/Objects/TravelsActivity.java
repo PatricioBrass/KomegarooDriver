@@ -16,10 +16,11 @@ import com.driver.hp.komegaroodriver.Fragment.Modules.DirectionFinder;
 import com.driver.hp.komegaroodriver.Fragment.Modules.DirectionFinderListener;
 import com.driver.hp.komegaroodriver.Fragment.Modules.Route;
 import com.driver.hp.komegaroodriver.R;
-import com.firebase.client.DataSnapshot;
+import com.google.firebase.database.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -31,6 +32,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.io.UnsupportedEncodingException;
@@ -45,7 +48,7 @@ import java.util.Set;
 public class TravelsActivity extends AppCompatActivity implements DirectionFinderListener {
 
     private Button close;
-    private Firebase customers, travels;
+    private DatabaseReference customers, travels;
     private String uidDriver, uidClient, trFrom, trTo, tKey;
     private Float trCalif;
     private TextView nombre, from, to, price, apellido;
@@ -73,8 +76,8 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_travels);
-        customers = new Firebase("https://decoded-pilot-144921.firebaseio.com/customers");
-        travels = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverTravels");
+        customers = FirebaseDatabase.getInstance().getReference().child("customers");
+        travels = FirebaseDatabase.getInstance().getReference().child("driverTravels");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         nombre = (TextView)findViewById(R.id.nameTravels);
         apellido = (TextView)findViewById(R.id.apellidoTravel);
@@ -159,7 +162,7 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError firebaseError) {
 
             }
         });
@@ -170,7 +173,7 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Map<String, String> mapS = dataSnapshot.getValue(Map.class);
+                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                     String photo = mapS.get("photoUrl");
                     String name = mapS.get("name");
                     String nombree = name.substring(0,name.indexOf(" "));
@@ -181,7 +184,7 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
                 }
             }
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError firebaseError) {
             }
         });
     }

@@ -15,27 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "927161131516-cnkk3gficnfhg7bdrv6guej5namfb7in.apps.googleusercontent.com",
+          "client_id": "927161131516-1p3589ter0fh1lfqteqqkukadjmr28qr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.kome.hp.komegarooandroid",
             "certificate_hash": "d0ad8edc1e08772a64a22f62e80d1c3b6590a717"
-          }
-        },
-        {
-          "client_id": "927161131516-hmdrvq32ld7nut48tg83j8m610iium4n.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.kome.hp.komegarooandroid",
-            "certificate_hash": "d4ff62334e353962da6d8e3983e9342fd680af68"
-          }
-        },
-        {
-          "client_id": "927161131516-ushdnnmbjuaodrtsmevhqjfpoacekon2.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.kome.hp.komegarooandroid",
-            "certificate_hash": "a4a7c0f09b511cc0239cbf14689af8d8a7622c53"
           }
         },
         {

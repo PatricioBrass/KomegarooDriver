@@ -1,6 +1,15 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'MyAndroidKey'
+            keyPassword '4kcmhp29'
+            storeFile file('C:/Users/Patricio/keystore/android.jks')
+            storePassword '19930806'
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -17,11 +26,14 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
     productFlavors {
     }
-
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
         exclude 'META-INF/LICENSE.txt'
@@ -38,6 +50,7 @@ android {
 repositories {
     jcenter()
     maven { url "https://jitpack.io" }
+    maven { url 'https://maven.fabric.io/public' }
 }
 
 dependencies {
@@ -47,16 +60,16 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:support-v4:24.2.1'
-    compile 'com.google.android.gms:play-services:11.0.1'
-    compile 'com.google.android.gms:play-services-gcm:11.0.1'
+    compile 'com.google.android.gms:play-services:11.0.4'
+    compile 'com.google.android.gms:play-services-gcm:11.0.4'
     compile 'com.android.support:design:24.2.1'
     compile 'com.wrapp.floatlabelededittext:library:0.0.6'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta2'
-    compile 'com.google.firebase:firebase-core:11.0.1'
-    compile 'com.google.firebase:firebase-config:11.0.1'
-    compile 'com.google.firebase:firebase-auth:11.0.1'
-    compile 'com.google.firebase:firebase-database:11.0.1'
-    compile 'com.google.firebase:firebase-messaging:11.0.1'
+    compile 'com.google.firebase:firebase-core:11.0.4'
+    compile 'com.google.firebase:firebase-config:11.0.4'
+    compile 'com.google.firebase:firebase-auth:11.0.4'
+    compile 'com.google.firebase:firebase-database:11.0.4'
+    compile 'com.google.firebase:firebase-messaging:11.0.4'
     compile 'com.firebase:firebase-client-android:2.3.1'
     compile 'com.android.support:recyclerview-v7:24.2.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
@@ -65,6 +78,9 @@ dependencies {
     compile 'me.relex:circleindicator:1.2.2@aar'
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
     testCompile 'junit:junit:4.12'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true;
+    }
 }
 
 apply plugin: 'com.google.gms.google-services'

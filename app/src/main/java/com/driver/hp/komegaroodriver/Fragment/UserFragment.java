@@ -13,11 +13,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.driver.hp.komegaroodriver.R;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.Map;
 
@@ -25,7 +26,7 @@ import java.util.Map;
  */
 public class UserFragment extends Fragment {
     private View userView;
-    private Firebase tRef, customer, stateDriver;
+    private DatabaseReference tRef, customer, stateDriver;
     private TextView name, direccion, num, comentarios, telefono, phoneE, phoneR, nomE, recep;
     private Button cancelar, contactar, exit, emer;
     private String uidDriver, uidClient, nom, phone, contac, nomR;
@@ -41,9 +42,9 @@ public class UserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user, container, false);
-        stateDriver = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverState");
-        tRef = new Firebase("https://decoded-pilot-144921.firebaseio.com/requestedTravels/Santiago");
-        customer = new Firebase("https://decoded-pilot-144921.firebaseio.com/customers");
+        stateDriver = FirebaseDatabase.getInstance().getReference().child("driverState");
+        tRef = FirebaseDatabase.getInstance().getReference().child("requestedTravels").child("Santiago");
+        customer = FirebaseDatabase.getInstance().getReference().child("customers");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         userView = v.findViewById(R.id.userData);
         userView.setVisibility(View.GONE);
@@ -102,7 +103,7 @@ public class UserFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Map<String, String> mapS = dataSnapshot.getValue(Map.class);
+                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                     String estado = mapS.get("state");
                     if(estado.equals("onWay")){
                         uidClient = ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).uidClient;
@@ -116,7 +117,7 @@ public class UserFragment extends Fragment {
                 }
             }
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError firebaseError) {
             }
         });
     }
@@ -126,7 +127,7 @@ public class UserFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Map<String, String> mapS = dataSnapshot.getValue(Map.class);
+                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                     nom = mapS.get("name");
                     phone = mapS.get("phoneNumber");
                     name.setText(nom);
@@ -134,7 +135,7 @@ public class UserFragment extends Fragment {
                 }
             }
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError firebaseError) {
             }
         });
     }
@@ -144,7 +145,7 @@ public class UserFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Map<String, String> mapS = dataSnapshot.getValue(Map.class);
+                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                     String nume = mapS.get("blockInfo");
                     String fro = mapS.get("from");
                     String com = mapS.get("comments");
@@ -158,7 +159,7 @@ public class UserFragment extends Fragment {
                 }
             }
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError firebaseError) {
             }
         });
     }
@@ -168,7 +169,7 @@ public class UserFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Map<String, String> mapS = dataSnapshot.getValue(Map.class);
+                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                     String nume = mapS.get("blockInfo");
                     String dTo = mapS.get("to");
                     String com = mapS.get("comments");
@@ -189,7 +190,7 @@ public class UserFragment extends Fragment {
                 }
             }
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError firebaseError) {
             }
         });
     }
