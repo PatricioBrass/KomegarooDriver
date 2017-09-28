@@ -24,14 +24,7 @@ public class GifOneFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_gif_one, container, false);
-        LinearLayout content = (LinearLayout) v.findViewById(R.id.gif_one);
-        try {
-            GifDrawable gifFromResource = new GifDrawable( getResources(), R.drawable.tuto_gif_1 );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return v;
+        return inflater.inflate(R.layout.fragment_gif_one, container, false);
     }
 
     public static GifOneFragment newInstance(String text) {

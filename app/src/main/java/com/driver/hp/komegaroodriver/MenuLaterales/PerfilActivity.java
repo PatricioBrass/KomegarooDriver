@@ -53,7 +53,8 @@ public class PerfilActivity extends AppCompatActivity {
     private View mPerfilFormView;
     private ArrayList<String> arrayKey = new ArrayList<>();
     private ArrayList<String> arrayCalif = new ArrayList<>();
-    private Integer califi, trips;
+    private Integer trips;
+    private Double califi;
     private AlertDialog alertDialog;
     private Timer timer;
 
@@ -148,7 +149,8 @@ public class PerfilActivity extends AppCompatActivity {
                 if(dataSnapshot.exists()){
                     Map<Long, Long> map = (Map<Long, Long>) dataSnapshot.getValue();
                     Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
-                    califi = map.get("calification").intValue();
+                    Map<Double, Double> ma = (Map<Double, Double>) dataSnapshot.getValue();
+                    califi = ma.get("calification");
                     String name = mapS.get("name");
                     String phones = mapS.get("phoneNumber");
                     String photos = mapS.get("photoUrl");
@@ -158,6 +160,7 @@ public class PerfilActivity extends AppCompatActivity {
                     nom.setText(nombre);
                     ape.setText(apellido);
                     num.setText(phones);
+                    trip.setText(trips.toString());
                     Picasso.with(PerfilActivity.this).load(photos).transform(new RoundedTransformation(9,1)).into(pho);
                     timer.cancel();
                     updateData();
@@ -222,17 +225,12 @@ public class PerfilActivity extends AppCompatActivity {
                     Map<String, String> map = (Map<String, String>) dataSnapshot.getValue();
                     String califica = map.get("calification");
                     Integer t = arrayCalif.size();
-                    if (!califica.equals("")&&t>trips){
+                    if (!califica.equals("")){
                         Double d = new Double((((t-1)*califi) + Integer.parseInt(califica)) / t);
-                        Integer f = d.intValue();
-                        mRef.child(uidDriver).child("calification").setValue(f);
-                        mRef.child(uidDriver).child("trips").setValue(t);
-                        trip.setText(t.toString());
-                        stars.setRating(f.floatValue());
+                        mRef.child(uidDriver).child("calification").setValue(d);
+                        stars.setRating(d.floatValue());
                         postGetSaldo();
                     }else{
-                        mRef.child(uidDriver).child("trips").setValue(t);
-                        trip.setText(t.toString());
                         stars.setRating(califi.floatValue());
                         postGetSaldo();
                     }

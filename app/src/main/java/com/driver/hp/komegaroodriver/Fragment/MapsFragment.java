@@ -1,9 +1,13 @@
 package com.driver.hp.komegaroodriver.Fragment;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -12,7 +16,9 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -34,6 +40,7 @@ import com.driver.hp.komegaroodriver.Fragment.Modules.Route;
 import com.driver.hp.komegaroodriver.MainActivity;
 import com.driver.hp.komegaroodriver.R;
 import com.driver.hp.komegaroodriver.RoundedTransformation;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -92,19 +99,20 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     private String uidDriver, fDirec, tDirec, estado, estadoTrip;
     public String key, uidClient;
     private StringBuilder str2;
-    View mMapView, fValorizar, travelData, userView, pagoFrag, seb1, seb2, seb3, seb4;
+    View mMapView, fValorizar, travelData, userView, pagoFrag, seb1, seb2, seb3, seb4, seb5;
     private LatLng latLngDriver;
     private Calendar calander, calander2, calendar, calendar2, calendarCancel;
     private AlertDialog alertDialog, cancelCustomer;
     public AlertDialog cancelDriver;
     private Geocoder geocoder;
-    private SeekBar sb, sb2, sb3, sb4;
+    private SeekBar sb, sb2, sb3, sb4, sb5;
     private Integer price;
-    private TextView name, destino, conect, descon, iniciar, finalizar;
+    private TextView name, destino, conect, descon, iniciar, finalizar, retornar;
     private ImageView user;
     private FloatingActionButton infor;
     protected DatabaseReference paymentStatus;
     protected DatabaseReference payment;
+    protected DatabaseReference drivers;
     protected String tokenPago;
     protected String customerId;
     protected String paymentMethod;
@@ -114,13 +122,17 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     protected String lastD;
     protected Integer priceKm;
     protected Integer priceTime;
+    protected Integer tripsDriver;
+    protected Integer tripsClient;
     protected String email;
     protected String nombre;
     protected String token;
     protected String code;
     protected String device;
+    protected boolean returnTravel;
     protected boolean actionW=true;
     protected boolean actionT=true;
+    protected boolean actionR=true;
     protected boolean setCust=true;
     protected boolean setDriv=true;
 
@@ -141,6 +153,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         stateClient = FirebaseDatabase.getInstance().getReference().child("customerState");
         tripState = FirebaseDatabase.getInstance().getReference().child("tripState");
         customer = FirebaseDatabase.getInstance().getReference().child("customers");
+        drivers = FirebaseDatabase.getInstance().getReference().child("drivers");
         pagoDriver = FirebaseDatabase.getInstance().getReference().child("driverPayments");
         Typeface face = Typeface.createFromAsset(getActivity().getAssets(), "monserrat/Montserrat-SemiBold.ttf");
         cancelDriver = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
@@ -162,6 +175,10 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         finalizar = (TextView)v.findViewById(R.id.txtFinalizar);
         finalizar.setTypeface(face);
         seb4 = v.findViewById(R.id.seek4);
+        sb5 = (SeekBar) v.findViewById(R.id.myseek5);
+        retornar = (TextView)v.findViewById(R.id.txtRetornar);
+        retornar.setTypeface(face);
+        seb5 = v.findViewById(R.id.seek5);
         alertDialog = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
         geocoder = new Geocoder(getActivity(), Locale.ENGLISH);
         fValorizar = v.findViewById(R.id.valorizar);
@@ -183,7 +200,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         userView.setVisibility(View.GONE);
         pagoFrag = v.findViewById(R.id.fragmentPago);
         pagoFrag.setVisibility(View.GONE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
         getUidClient();
@@ -193,8 +210,20 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         onWay();
         statusDriver();
         slideButtons();
+        getDriver();
         mRef.child(uidDriver).removeValue();
         return v;
+    }
+
+    public void notificationReceiver(){
+        AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+        Intent notificationIntent = new Intent("android.media.action.DISPLAY_NOTIFICATION");
+        notificationIntent.addCategory("android.intent.category.DEFAULT");
+        int requestCode = 100;
+        PendingIntent broadcast = PendingIntent.getBroadcast(getActivity(), requestCode, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.SECOND,0);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(),broadcast);
     }
     public void slideButtons() {
         sb.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -347,7 +376,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 int l = seekBar.getProgress();
                 if (l > 98) {
                     postGetPayments();
-                    seb1.setVisibility(View.VISIBLE);
+                    seb2.setVisibility(View.VISIBLE);
                     seb4.setVisibility(View.GONE);
                     seekBar.setProgress(1);
                     mMap.clear();
@@ -356,13 +385,14 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     buildGoogleApiClient();
                     stateDriver.child(uidDriver).child("state").setValue("endTrip");
                     stateClient.child(uidClient).child("state").setValue("endTrip");
+                    tripState.child(uidClient).child("state").setValue("end");
                     rDriverStatus.child(uidDriver).removeValue();
-                    tripState.child(uidClient).removeValue();
                     travelData.setVisibility(View.GONE);
                     infor.setVisibility(View.GONE);
                     fValorizar.setVisibility(View.VISIBLE);
                     actionT = true;
                     actionW = true;
+                    actionR = true;
                 } else {seekBar.setProgress(1);}
             }
             @Override
@@ -404,6 +434,48 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         case 72:finalizar.setText("                              g a");
                             break;
                         case 76:finalizar.setText("                                a");
+                            break;
+                    }}
+            }
+        });
+        sb5.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int l = seekBar.getProgress();
+                if (l > 98) {
+                    seekBar.setProgress(1);
+                    seb5.setVisibility(View.GONE);
+                    mMap.clear();
+                    showDataTravels();
+                    postOnReturn();
+                    stateDriver.child(uidDriver).child("state").setValue("onReturn");
+                    stateClient.child(uidClient).child("state").setValue("onReturn");
+                    returnTravel = false;
+                } else {seekBar.setProgress(1);}
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (progress < 30) {
+                    retornar.setText("R e t o r n a r");
+                } else if (progress >= 62) {
+                    retornar.setText("");
+                } else {
+                    switch (progress) {
+                        case 30:retornar.setText("  e t o r n a r");
+                            break;
+                        case 34:retornar.setText("    t o r n a r");
+                            break;
+                        case 39:retornar.setText("      o r n a r");
+                            break;
+                        case 43:retornar.setText("        r n a r");
+                            break;
+                        case 48:retornar.setText("          n a r");
+                            break;
+                        case 52:retornar.setText("            a r");
+                            break;
+                        case 57:retornar.setText("              r");
                             break;
                     }}
             }
@@ -498,6 +570,23 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             public void onCancelled(DatabaseError firebaseError) {}
         });
     }
+
+    public void getReturn(){
+        tRef.child(uidClient).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Map<Boolean, Boolean> mapB = (Map<Boolean, Boolean>) dataSnapshot.getValue();
+                    returnTravel = mapB.get("return");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
     public void getData() {
         if(uidClient!=null) {
             tRef.child(uidClient).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -508,41 +597,47 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         Map<Long, Long> map = (Map<Long, Long>) dataSnapshot.getValue();
                         fDirec = mapS.get("from");
                         tDirec = mapS.get("to");
-                        code = mapS.get("code");
+                        code = mapS.get("certificatedNumber");
                         price = map.get("price").intValue();
                         priceKm = map.get("kPrice").intValue();
                         priceTime = map.get("tPrice").intValue();
-                        setCustomerTravel();
-                        setDriversTravels();
                         if (fDirec != null || tDirec != null) {
-                            showDataTravels();
-                            try {
-                                List<Address> addresses = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
-                                str2 = new StringBuilder();
-                                if (geocoder.isPresent()) {
-                                    Address returnAddress = addresses.get(0);
-                                    String direccion = returnAddress.getAddressLine(0) + ", " + returnAddress.getAddressLine(1) + ", " + returnAddress.getAddressLine(3);
-                                    str2.append(direccion);}
-                            } catch (IOException e) {
-                                Log.e("tag", e.getMessage());
-                            }
-                            if (estado.equals("onWay")) {
-                                try {
-                                    new DirectionFinder(MapsFragment.this, str2.toString(), fDirec).execute();
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
-                                }
-                                showButtonOnWay();
-                                seb2.setVisibility(View.GONE);
-                                destino.setText(fDirec);
-                            } else if (estado.equals("onTrip")) {
-                                try {
-                                    new DirectionFinder(MapsFragment.this, str2.toString(), tDirec).execute();
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
-                                }
-                                showButtonOnTrip();
-                                destino.setText(tDirec);
+                            switch (estado) {
+                                case "onWay":
+                                    try {
+                                        String lat = String.valueOf(mLastLocation.getLatitude());
+                                        String lng = String.valueOf(mLastLocation.getLongitude());
+                                        new DirectionFinder(MapsFragment.this, lat+","+lng, fDirec).execute();
+                                    } catch (UnsupportedEncodingException e) {
+                                        e.printStackTrace();
+                                    }
+                                    setCustomerTravel();
+                                    setDriversTravels();
+                                    showButtonOnWay();
+                                    destino.setText(fDirec);
+                                    break;
+                                case "onTrip":
+                                    try {
+                                        String lat = String.valueOf(mLastLocation.getLatitude());
+                                        String lng = String.valueOf(mLastLocation.getLongitude());
+                                        new DirectionFinder(MapsFragment.this, lat+","+lng, tDirec).execute();
+                                    } catch (UnsupportedEncodingException e) {
+                                        e.printStackTrace();
+                                    }
+                                    showButtonOnTrip();
+                                    destino.setText(tDirec);
+                                    break;
+                                case "onReturn":
+                                    try {
+                                        String lat = String.valueOf(mLastLocation.getLatitude());
+                                        String lng = String.valueOf(mLastLocation.getLongitude());
+                                        new DirectionFinder(MapsFragment.this, lat+","+lng, fDirec).execute();
+                                    } catch (UnsupportedEncodingException e) {
+                                        e.printStackTrace();
+                                    }
+                                    showButtonOnReturn();
+                                    destino.setText(fDirec);
+                                    break;
                             }
                         }
                     }
@@ -594,6 +689,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     public void onClick(DialogInterface dialog, int which) {
                         rDriverStatus.child(uidDriver).removeValue();
                         tripState.child(uidClient).child("state").setValue("canceledByDriver");
+                        cTravels.child(uidClient).child(key).child("status").setValue("canceledByDriver");
                         infor.setVisibility(View.GONE);
                         seb4.setVisibility(View.GONE);
                         seb2.setVisibility(View.VISIBLE);
@@ -611,6 +707,9 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         buildGoogleApiClient();
                         travelData.setVisibility(View.GONE);
                         cancelDriver.dismiss();
+                        actionW=true;
+                        actionT=true;
+                        actionR=true;
                     }
                 });
         cancelDriver.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar",
@@ -626,6 +725,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         rDriverStatus.child(uidDriver).removeValue();
+                        cTravels.child(uidClient).child(key).child("status").setValue("canceledByCustomer");
+                        uidClient = null;
                         send();
                         infor.setVisibility(View.GONE);
                         seb4.setVisibility(View.GONE);
@@ -635,6 +736,9 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         buildGoogleApiClient();
                         travelData.setVisibility(View.GONE);
                         cancelCustomer.dismiss();
+                        actionW=true;
+                        actionT=true;
+                        actionR=true;
                     }
                 });
         if(uidClient!=null) {
@@ -644,9 +748,10 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     if (dataSnapshot.exists()) {
                         Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                         estadoTrip = mapS.get("state");
-                        if (estadoTrip.equals("canceledByCustomer")) {
+                        if (estadoTrip.equals("canceledByCustomer")&&uidClient!=null) {
                             stateDriver.child(uidDriver).child("state").setValue("nil");
-                            cancelCustomer.show();}}
+                            cancelCustomer.show();
+                        }}
                 }
                 @Override
                 public void onCancelled(DatabaseError firebaseError) {}
@@ -672,7 +777,10 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             String hora2 = "0" + cHour + ":" + "0" + cMinute;
             String hora3 = cHour + ":" + "0" + cMinute;
             String hora4 = "0" + cHour + ":" + cMinute;
+            int viajesC = tripsClient + 1;
+            customer.child(uidClient).child("trips").setValue(viajesC);
             cTravels.child(uidClient).child(key).child("customerUid").setValue(uidClient);
+            cTravels.child(uidClient).child(key).child("driverUid").setValue(uidDriver);
             cTravels.child(uidClient).child(key).child("status").setValue("onWay");
             cTravels.child(uidClient).child(key).child("from").setValue(fDirec);
             cTravels.child(uidClient).child(key).child("to").setValue(tDirec);
@@ -698,7 +806,11 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 cTravels.child(uidClient).child(key).child("startHour").setValue(hora);
             }
             cTravels.child(uidClient).child(key).child("endHour").setValue("");
-            cTravels.child(uidClient).child(key).child("code").setValue(code);
+            if(!code.equals("")) {
+                cTravels.child(uidClient).child(key).child("certificatedNumber").setValue(code);
+            }else{
+                cTravels.child(uidClient).child(key).child("certificatedNumber").setValue("");
+            }
         }
     }
     public void setFinish() {
@@ -731,6 +843,25 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             setCust = true;
         }
     }
+
+    public void getDriver(){
+        drivers.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Map<Long, Long> map = (Map<Long, Long>) dataSnapshot.getValue();
+                    tripsDriver = map.get("trips").intValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
     public void setDriversTravels() {
         if(setDriv) {
             setDriv = false;
@@ -750,7 +881,10 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             String hora2 = "0" + cHour + ":" + "0" + cMinute;
             String hora3 = cHour + ":" + "0" + cMinute;
             String hora4 = "0" + cHour + ":" + cMinute;
+            int viajesD = tripsDriver + 1;
+            drivers.child(uidDriver).child("trips").setValue(viajesD);
             dTravels.child(uidDriver).child(key).child("customerUid").setValue(uidClient);
+            dTravels.child(uidDriver).child(key).child("driverUid").setValue(uidDriver);
             dTravels.child(uidDriver).child(key).child("status").setValue("onWay");
             dTravels.child(uidDriver).child(key).child("from").setValue(fDirec);
             dTravels.child(uidDriver).child(key).child("to").setValue(tDirec);
@@ -776,7 +910,11 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                 dTravels.child(uidDriver).child(key).child("startHour").setValue(hora);
             }
             dTravels.child(uidDriver).child(key).child("endHour").setValue("");
-            dTravels.child(uidDriver).child(key).child("code").setValue(code);
+            if(!code.equals("")) {
+                dTravels.child(uidDriver).child(key).child("certificatedNumber").setValue(code);
+            }else {
+                dTravels.child(uidDriver).child(key).child("certificatedNumber").setValue("");
+            }
         }
     }
     public void setFinishTravel() {
@@ -819,21 +957,25 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             cTravels.child(uidClient).child(key).child("endHour").setValue(horaE2);
             setDriv = true;
             setCust = true;
+            uidClient = null;
         } else if (String.valueOf(cHour).length() < 2) {
             dTravels.child(uidDriver).child(key).child("endHour").setValue(horaE4);
             cTravels.child(uidClient).child(key).child("endHour").setValue(horaE4);
             setDriv = true;
             setCust = true;
+            uidClient = null;
         } else if (String.valueOf(cMinute).length() < 2) {
             dTravels.child(uidDriver).child(key).child("endHour").setValue(horaE3);
             cTravels.child(uidClient).child(key).child("endHour").setValue(horaE3);
             setDriv = true;
             setCust = true;
+            uidClient = null;
         } else {
             dTravels.child(uidDriver).child(key).child("endHour").setValue(horaE);
             cTravels.child(uidClient).child(key).child("endHour").setValue(horaE);
             setDriv = true;
             setCust = true;
+            uidClient = null;
         }
     }
     @Override
@@ -844,8 +986,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     }
     @Override
     public void onStop() {
-        mGoogleApiClient.connect();
         super.onStop();
+        mGoogleApiClient.connect();
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -872,6 +1014,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists() && dataSnapshot.hasChild("customerUid")) {
+                    notificationReceiver();
                     Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                     uidClient = mapS.get("customerUid");
                     alertDialog.setTitle("Están solicitando un Kamegaroo");
@@ -880,6 +1023,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Aceptar", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             if(dataSnapshot.exists()) {
+                                seb2.setVisibility(View.GONE);
+                                showDataTravels();
                                 ((MainActivity) getActivity()).lockedDrawer();
                                 rDriverStatus.child(uidDriver).child("customerUid").setValue(uidClient);
                                 rDriverStatus.child(uidDriver).child("latitude").setValue(mLastLocation.getLatitude());
@@ -890,6 +1035,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                                 sRef.child(uidDriver).removeValue();
                                 key = cTravels.child(uidClient).push().getKey();
                                 getDataPayment();
+                                getReturn();
                             }
                             alertDialog.dismiss();
                         }
@@ -950,44 +1096,99 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         });
     }
     public void send() {
-        mRef.child(uidDriver).child("latitude").setValue(mLastLocation.getLatitude());
-        mRef.child(uidDriver).child("longitude").setValue(mLastLocation.getLongitude());
-        sRef.child(uidDriver).removeValue();
-        rDriverStatus.child(uidDriver).removeValue();
+        if(mGoogleApiClient!=null) {
+            mRef.child(uidDriver).child("latitude").setValue(mLastLocation.getLatitude());
+            mRef.child(uidDriver).child("longitude").setValue(mLastLocation.getLongitude());
+            sRef.child(uidDriver).removeValue();
+            rDriverStatus.child(uidDriver).removeValue();
+        }
     }
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {}
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION)
+                Manifest.permission. ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    Manifest.permission. ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Permiso")
+                        .setMessage("Concedes?")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(getActivity(),
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        new String[]{Manifest.permission. ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
-            } else {ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);}
+            }
             return false;
         } else {
             return true;
         }
     }
+
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // location-related task you need to do.
                     if (ContextCompat.checkSelfPermission(getActivity(),
-                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            Manifest.permission. ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
-                        if (mGoogleApiClient == null) {
-                            buildGoogleApiClient();}
-                        mMap.setMyLocationEnabled(true);}
-                } else {Toast.makeText(getActivity(), "permission denied", Toast.LENGTH_LONG).show();}
+
+                        //Request location updates:
+                        buildGoogleApiClient();
+                        mMap.setMyLocationEnabled(true);
+                }
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                }
+                return;
+            }
+
+        }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (checkLocationPermission()) {
+            if (ContextCompat.checkSelfPermission(getActivity(),
+                    Manifest.permission. ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                //Request location updates:
+                if(mMap!=null&&mGoogleApiClient.isConnected()) {
+                    buildGoogleApiClient();
+                    mMap.setMyLocationEnabled(true);
+                }
             }
         }
     }
@@ -1024,7 +1225,9 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).
                     color(Color.rgb(119, 21, 204)).
-                    width(8);
+                    width(8).
+                    visible(true).
+                    zIndex(5);
             for (int i = 0; i < route.points.size(); i++) {
                 polylineOptions.add(route.points.get(i));
             }
@@ -1037,10 +1240,12 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
+                Map<Long, Long> map = (Map<Long, Long>) dataSnapshot.getValue();
                 nombre = mapS.get("name");
                 email = mapS.get("email");
                 token = mapS.get("deviceToken");
                 device = mapS.get("device");
+                tripsClient = map.get("trips").intValue();
                 String photo = mapS.get("photoUrl");
                 name.setText(nombre);
                 Picasso.with(getActivity()).load(photo).transform(new RoundedTransformation(9, 1)).into(user);
@@ -1050,31 +1255,35 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                         userView.setVisibility(View.VISIBLE);
                     }
                 });
+                Log.v("ClienteTrips",tripsClient.toString());
             }
             @Override
             public void onCancelled(DatabaseError firebaseError) {}
         });
         travelData.setVisibility(View.VISIBLE);
     }
+    public static double distFrom(double lat1, double lng1, double lat2, double lng2) {
+        double earthRadius = 6371000; //meters
+        double dLat = Math.toRadians(lat2-lat1);
+        double dLng = Math.toRadians(lng2-lng1);
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                        Math.sin(dLng/2) * Math.sin(dLng/2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double dist = (double) (earthRadius * c);
+
+        return dist;
+    }
     public void showButtonOnWay(){
         Geocoder coder = new Geocoder(getActivity());
         List<Address> address;
-        Float distancia;
-        Integer distancia1;
         try {
             address = coder.getFromLocationName(fDirec, 5);
             if (address == null) {}
             Address location = address.get(0);
-            Location target = new Location("");
-            Location target2 = new Location("");
-            target.setLatitude(mLastLocation.getLatitude());
-            target.setLongitude(mLastLocation.getLongitude());
-            target2.setLatitude(location.getLatitude());
-            target2.setLongitude(location.getLongitude());
-            distancia = target.distanceTo(target2);
-            distancia1 = distancia.intValue();
-            Log.v("DistanciaInicio",distancia1.toString());
-            if(distancia1<700){
+            Double distancia = distFrom(mLastLocation.getLatitude(),mLastLocation.getLongitude(),location.getLatitude(),location.getLongitude());
+            Log.v("DistanciaInicio",distancia.toString());
+            if(distancia<1000){
                 postOnWay();
                 seb3.setVisibility(View.VISIBLE);
                 travelData.setVisibility(View.GONE);
@@ -1091,28 +1300,48 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     public void showButtonOnTrip() {
         Geocoder coder = new Geocoder(getActivity());
         List<Address> address;
-        Float distancia;
-        Integer distancia1;
         try {
             address = coder.getFromLocationName(tDirec, 5);
             if (address == null) {}
             Address location = address.get(0);
-            Location target = new Location("");
-            Location target2 = new Location("");
-            target.setLatitude(mLastLocation.getLatitude());
-            target.setLongitude(mLastLocation.getLongitude());
-            target2.setLatitude(location.getLatitude());
-            target2.setLongitude(location.getLongitude());
-            distancia = target.distanceTo(target2);
-            distancia1 = distancia.intValue();
-            Log.v("DistanciaFinal",distancia1.toString());
-            if(distancia1<700){
+            Double distancia = distFrom(mLastLocation.getLatitude(),mLastLocation.getLongitude(),location.getLatitude(),location.getLongitude());
+            Log.v("DistanciaFinal",distancia.toString());
+            if(distancia<1000&&!returnTravel){
+                postOnTrip();
+                seb4.setVisibility(View.VISIBLE);
+                travelData.setVisibility(View.GONE);
+                infor.setVisibility(View.VISIBLE);
+            }else if(distancia<1000&&returnTravel&&returnTravel){
+                seb5.setVisibility(View.VISIBLE);
+                travelData.setVisibility(View.GONE);
+                infor.setVisibility(View.VISIBLE);
+            }else{
+                seb4.setVisibility(View.GONE);
+                seb5.setVisibility(View.GONE);
+                travelData.setVisibility(View.VISIBLE);
+                infor.setVisibility(View.GONE);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void showButtonOnReturn() {
+        Geocoder coder = new Geocoder(getActivity());
+        List<Address> address;
+        try {
+            address = coder.getFromLocationName(fDirec, 5);
+            if (address == null) {}
+            Address location = address.get(0);
+            Double distancia = distFrom(mLastLocation.getLatitude(),mLastLocation.getLongitude(),location.getLatitude(),location.getLongitude());
+            Log.v("DistanciaFinal",distancia.toString());
+            if(distancia<1000&&!returnTravel){
                 postOnTrip();
                 seb4.setVisibility(View.VISIBLE);
                 travelData.setVisibility(View.GONE);
                 infor.setVisibility(View.VISIBLE);
             }else{
                 seb4.setVisibility(View.GONE);
+                seb5.setVisibility(View.GONE);
                 travelData.setVisibility(View.VISIBLE);
                 infor.setVisibility(View.GONE);
             }
@@ -1154,6 +1383,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                             Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                             key = mapS.keySet().toString().replace("[","").replace("]","");
                             getDataPayment();
+                            getReturn();
                         }
                     }
                     @Override
@@ -1381,7 +1611,29 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             });
         }
     }
-
+    public void postOnReturn(){
+        if(actionR) {
+            actionR = false;
+            String url = "https://komegaroo-server.herokuapp.com/mobile/notification";
+            String message = "Tu canguro está retornando al punto de origen.";
+            String payload = "d";
+            String body = "token=" + token + "&message=" + message + "&payload=" + payload + "&package=" + device;
+            post(url, body, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {}
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        String responseStr = response.body().string();
+                        Log.v("POSTOnWayYes!", responseStr);
+                    } else {
+                        String responseStr = response.body().string();
+                        Log.v("POSTOnWayNo!", responseStr);
+                    }
+                }
+            });
+        }
+    }
     public void postOnTrip(){
         if(actionT) {
             actionT = false;

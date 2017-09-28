@@ -11,11 +11,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -38,6 +40,9 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Button mEmailSignInButton, plomo;
     private String emails;
+    private TextView noClave;
+    private AlertDialog alertSend;
+    private EditText input;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +75,15 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-
+        input = new EditText(this);
+        alertSend = new AlertDialog.Builder(this, R.style.MyAlertDialogStyle).create();
+        noClave = (TextView)findViewById(R.id.txtNoPass);
+        noClave.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                noRememberPass();
+            }
+        });
         mLoginFormView = findViewById(R.id.email_login_form);
         mProgressView = findViewById(R.id.login_progress);
         showButton();
@@ -178,6 +191,77 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    public void noRememberPass(){
+        alertSend.setTitle("Ingrese su nombre de usuario.");
+        input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);//se puede agregar otro con el signo |
+        input.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_mail, 0, 0, 0);
+        alertSend.setView(input);
+        alertSend.setButton(AlertDialog.BUTTON_POSITIVE, "Enviar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        sendPassword();
+                        alertSend.dismiss();
+                    }
+                });
+        alertSend.show();
+        alertSend.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        checkAlertDialog();
+        e();
+    }
+
+    public void checkAlertDialog(){
+        input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if(s.toString().length()<2){
+                    alertSend.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                }else{
+                    alertSend.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                }
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.toString().length()<2){
+                    alertSend.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                }else{
+                    alertSend.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.toString().length()<2){
+                    alertSend.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                }else{
+                    alertSend.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                }
+            }
+        });
+    }
+
+    public void e (){
+        if(alertSend.isShowing()){
+            input.setText("");
+        }
+    }
+
+    public void sendPassword(){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        String emailAddress = input.getText().toString()+"@komegaroo.com";
+
+        auth.sendPasswordResetEmail(emailAddress)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "El correo ha sido enviado.",
+                                    Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(LoginActivity.this, "Correo no se encuentra registrado.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
 
 }
 

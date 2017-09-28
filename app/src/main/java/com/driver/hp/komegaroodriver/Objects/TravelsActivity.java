@@ -49,7 +49,7 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
 
     private Button close;
     private DatabaseReference customers, travels;
-    private String uidDriver, uidClient, trFrom, trTo, tKey;
+    private String uidDriver, uidClient, trFrom, trTo, tKey, tStatus;
     private Float trCalif;
     private TextView nombre, from, to, price, apellido;
     private ImageView photoDriver;
@@ -62,6 +62,7 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
     private ArrayList<String> arrayTo = new ArrayList<>();
     private ArrayList<Integer> arrayPrice = new ArrayList<>();
     private ArrayList<String> arrayKey = new ArrayList<>();
+    private ArrayList<String> arrayStatus = new ArrayList<>();
     GoogleMap mMap;
     MapView mapView;
     private List<Marker> originMarkers = new ArrayList<>();
@@ -70,6 +71,7 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
     private View mProgressView, recyclerView;
     private DecimalFormatSymbols simb;
     private DecimalFormat form;
+    private ImageView cancelado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +101,7 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
         position = intent.getIntExtra(MESSAGE_KEY,1);
         Log.v("Position",String.valueOf(position));
         getDataForm();
+        cancelado = (ImageView)findViewById(R.id.imageViajeCancelado);
         close = (Button)findViewById(R.id.btnCloseT);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,12 +131,14 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
                         String from = (String) infoSnapshot.child("from").getValue();
                         String to = (String) infoSnapshot.child("to").getValue();
                         Integer price = infoSnapshot.child("tripPrice").getValue().hashCode();
+                        String status = (String) infoSnapshot.child("status").getValue();
                         arrayKey.add(uid);
                         arrayClient.add(driver);
                         arrayCalif.add(califi);
                         arrayFrom.add(from);
                         arrayTo.add(to);
                         arrayPrice.add(price);
+                        arrayStatus.add(status);
                     }
                     h1.addAll(arrayKey);
                     arrayKey.clear();
@@ -147,6 +152,7 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
                     trFrom = arrayFrom.get(posi);
                     trTo = arrayTo.get(posi);
                     trPrice = arrayPrice.get(posi);
+                    tStatus = arrayStatus.get(posi);
                     showDriver();
                     setData();
                     try {
@@ -191,12 +197,29 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
 
     public void setData(){
         String precio = "CLP $"+form.format(trPrice);
-        if (trCalif != null) {
-            stars.setRating(trCalif);
+        switch (tStatus) {
+            case "canceledByCustomer":
+                cancelado.setVisibility(View.VISIBLE);
+                stars.setRating(1);
+                from.setText(trFrom);
+                to.setText(trTo);
+                price.setText("CLP $1.000");
+                break;
+            case "canceledByDriver":
+                cancelado.setVisibility(View.VISIBLE);
+                stars.setRating(1);
+                from.setText(trFrom);
+                to.setText(trTo);
+                price.setText("CLP $0");
+                break;
+            default:
+                if(trCalif!=null) {
+                    stars.setRating(trCalif);
+                }
+                from.setText(trFrom);
+                to.setText(trTo);
+                price.setText(precio);
         }
-        from.setText(trFrom);
-        to.setText(trTo);
-        price.setText(precio);
     }
 
     @Override
@@ -233,12 +256,17 @@ public class TravelsActivity extends AppCompatActivity implements DirectionFinde
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 for (Route route : routes) {
                     mMap.clear();
+                    if(!tStatus.equals("endTrip")){
+                        ((TextView) TravelsActivity.this.findViewById(R.id.textViewDistancia)).setText("CLP $0");
+                        ((TextView) TravelsActivity.this.findViewById(R.id.textViewTiempo)).setText("CLP $0");
+                    }else {
                         Double riderValor = trPrice * .80;
                         Double komeValor = trPrice * .20;
                         String valorD = "CLP $" + String.valueOf(form.format(riderValor.intValue()));
                         String valorT = "CLP $" + String.valueOf(form.format(komeValor.intValue()));
                         ((TextView) TravelsActivity.this.findViewById(R.id.textViewDistancia)).setText(valorD);
                         ((TextView) TravelsActivity.this.findViewById(R.id.textViewTiempo)).setText(valorT);
+                    }
                     originMarkers.add(mMap.addMarker(new MarkerOptions()
                             .icon(BitmapDescriptorFactory.fromResource(R.mipmap.inicio))
                             .title(route.startAddress)

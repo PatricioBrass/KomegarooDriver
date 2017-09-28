@@ -1,6 +1,7 @@
 package com.driver.hp.komegaroodriver.Fragment.Modules;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -88,7 +89,7 @@ public class DirectionFinder {
     private void parseJSon(String data) throws JSONException {
         if (data == null )
             return;
-
+        Log.v("Mapa", data);
         List<Route> routes = new ArrayList<Route>();
         JSONObject jsonData = new JSONObject(data);
         JSONArray jsonRoutes = jsonData.getJSONArray("routes");

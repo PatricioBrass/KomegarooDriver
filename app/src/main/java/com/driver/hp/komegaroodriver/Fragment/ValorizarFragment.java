@@ -33,7 +33,7 @@ public class ValorizarFragment extends Fragment {
 
     private RatingBar rating;
     private Button btnV;
-    private DatabaseReference travel, customers, stateDriver;
+    private DatabaseReference travel, customers, stateDriver, drivers;
     private String uidClients, calificacion, keys, uidDriver;
     private View layout;
     private ImageView imageDriver;
@@ -75,7 +75,7 @@ public class ValorizarFragment extends Fragment {
                 coment.setText("");
                 rating.setRating(1);
                 layout.setVisibility(View.GONE);
-
+                ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).uidClient = null;
             }
         });
 
@@ -85,7 +85,6 @@ public class ValorizarFragment extends Fragment {
         return v;
 
     }
-
 
     public void getCliente(){
         stateDriver.child(uidDriver).addValueEventListener(new ValueEventListener() {
@@ -114,6 +113,7 @@ public class ValorizarFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
+                    Map<Long, Long> map = (Map<Long, Long>) dataSnapshot.getValue();
                     Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                     String photo = mapS.get("photoUrl");
                     Picasso.with(getActivity()).load(photo).transform(new RoundedTransformation(8,1)).into(imageDriver);

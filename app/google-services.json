@@ -66,27 +66,19 @@
       },
       "oauth_client": [
         {
+          "client_id": "927161131516-5dribrvru7ra4dba3p4dsalqtekl4ndd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.driver.hp.komegaroodriver",
+            "certificate_hash": "d962f7b14251da4fb212a340b2d12fc910e30e85"
+          }
+        },
+        {
           "client_id": "927161131516-r9iph6nt7jmt6lfbec01dndfkkvfs1gf.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.driver.hp.komegaroodriver",
             "certificate_hash": "d0ad8edc1e08772a64a22f62e80d1c3b6590a717"
-          }
-        },
-        {
-          "client_id": "927161131516-2s68rv8adqfha9ls1o002q9618nahcn2.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.driver.hp.komegaroodriver",
-            "certificate_hash": "d4ff62334e353962da6d8e3983e9342fd680af68"
-          }
-        },
-        {
-          "client_id": "927161131516-dlvdpdiaki4qj3c4148t4bpf5o3ucbc8.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.driver.hp.komegaroodriver",
-            "certificate_hash": "a4a7c0f09b511cc0239cbf14689af8d8a7622c53"
           }
         },
         {

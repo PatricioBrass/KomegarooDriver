@@ -43,34 +43,36 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/seek1"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:id="@+id/seek1">
+                    android:layout_height="80dp">
 
                     <SeekBar
                         android:id="@+id/myseek"
+                        style="@style/Widget.AppCompat.SeekBar"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
+                        android:background="@color/green_button"
+                        android:clickable="false"
                         android:max="100"
-                        android:progressDrawable="@android:color/transparent"
-                        android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
-                        android:background="@drawable/conectarse10" android:textAlignment="gravity"
                         android:paddingTop="18dp"
-                        android:clickable="false"/>
+                        android:progressDrawable="@android:color/transparent"
+                        android:textAlignment="gravity"
+                        android:thumb="@mipmap/seekbar1" />
 
                     <TextView
-                        android:text="C o n e c t a r s e"
+                        android:id="@+id/txtConectarse"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/txtConectarse"
-                        android:layout_centerVertical="true"
                         android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
                         android:gravity="center"
+                        android:text="C o n e c t a r s e"
                         android:textAppearance="@style/TextAppearance.AppCompat"
-                        android:textSize="24sp"
-                        android:typeface="normal"
                         android:textColor="@android:color/white"
-                        android:textStyle="normal|bold" />
+                        android:textSize="24sp"
+                        android:textStyle="normal|bold"
+                        android:typeface="normal" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -81,14 +83,15 @@
 
                     <SeekBar
                         android:id="@+id/myseek2"
+                        style="@style/Widget.AppCompat.SeekBar"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
+                        android:background="@color/red_button"
                         android:clickable="false"
                         android:max="100"
+                        android:paddingTop="18dp"
                         android:progressDrawable="@android:color/transparent"
-                        android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
-                        android:background="@drawable/desconectarse13"
-                        android:paddingTop="18dp"/>
+                        android:thumb="@mipmap/seekbar1" />
 
                     <TextView
                         android:text="D e s c o n e c t a r s e"
@@ -102,58 +105,89 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/seek3"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:visibility="gone"
-                    android:id="@+id/seek3">
+                    android:visibility="gone">
 
                     <SeekBar
                         android:id="@+id/myseek3"
+                        style="@style/Widget.AppCompat.SeekBar"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
+                        android:background="@color/green_button"
                         android:clickable="false"
                         android:max="100"
+                        android:paddingTop="18dp"
                         android:progressDrawable="@android:color/transparent"
-                        android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
-                        android:background="@drawable/iniciar_entrega14"
-                        android:paddingTop="18dp"/>
+                        android:thumb="@mipmap/seekbar1" />
 
                     <TextView
-                        android:text="I n i c i a r   E n t r e g a"
+                        android:id="@+id/txtIniciar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/txtIniciar"
                         android:gravity="center"
+                        android:text="I n i c i a r   E n t r e g a"
+                        android:textColor="@android:color/white"
                         android:textSize="24sp"
-                        android:textStyle="normal|bold"
-                        android:textColor="@android:color/white" />
+                        android:textStyle="normal|bold" />
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/seek4"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:visibility="gone"
-                    android:id="@+id/seek4">
+                    android:visibility="gone">
 
                     <SeekBar
                         android:id="@+id/myseek4"
+                        style="@style/Widget.AppCompat.SeekBar"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
+                        android:background="@color/red_button"
                         android:clickable="false"
                         android:max="100"
+                        android:paddingTop="18dp"
                         android:progressDrawable="@android:color/transparent"
-                        android:thumb="@mipmap/seekbar1" style="@style/Widget.AppCompat.SeekBar"
-                        android:background="@drawable/finalizar_entrega16"
-                        android:paddingTop="18dp"/>
+                        android:thumb="@mipmap/seekbar1" />
 
                     <TextView
-                        android:text="F i n a l i z a r   E n t r e g a"
+                        android:id="@+id/txtFinalizar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/txtFinalizar"
                         android:gravity="center"
-                        android:textSize="24sp"
+                        android:text="F i n a l i z a r   E n t r e g a"
                         android:textColor="@android:color/white"
+                        android:textSize="24sp"
+                        android:textStyle="normal|bold" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/seek5"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:visibility="gone">
+
+                    <SeekBar
+                        android:id="@+id/myseek5"
+                        style="@style/Widget.AppCompat.SeekBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:background="@color/yellow_button"
+                        android:clickable="false"
+                        android:max="100"
+                        android:paddingTop="18dp"
+                        android:progressDrawable="@android:color/transparent"
+                        android:thumb="@mipmap/seekbar1" />
+
+                    <TextView
+                        android:id="@+id/txtRetornar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="R e t o r n a r"
+                        android:textColor="@android:color/white"
+                        android:textSize="24sp"
                         android:textStyle="normal|bold" />
                 </RelativeLayout>
 

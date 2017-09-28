@@ -22,4 +22,7 @@
     <color name="blue">#0000FF</color>
     <color name="navy">#000080</color>
     <color name="morado">#4c378d</color>
+    <color name="green_button">#52aa52</color>
+    <color name="red_button">#e42328</color>
+    <color name="yellow_button">#ffcd00</color>
 </resources>

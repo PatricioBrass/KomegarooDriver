@@ -13,23 +13,25 @@ public class Travels {
     String endHour;
     String from;
     String startHour;
+    String status;
     String to;
     Integer tripPrice;
 
     public Travels() {
     }
 
-    public Travels(String calification, String code, String comments, String customerUid, String date, String endHour, String startHour, String to, Integer tripPrice, String from) {
+    public Travels(String calification, String code, String comments, String customerUid, String date, String endHour, String from, String startHour, String status, String to, Integer tripPrice) {
         this.calification = calification;
         this.code = code;
         this.comments = comments;
         this.customerUid = customerUid;
         this.date = date;
         this.endHour = endHour;
+        this.from = from;
         this.startHour = startHour;
+        this.status = status;
         this.to = to;
         this.tripPrice = tripPrice;
-        this.from = from;
     }
 
     public String getCalification() {
@@ -94,6 +96,14 @@ public class Travels {
 
     public void setStartHour(String startHour) {
         this.startHour = startHour;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getTo() {

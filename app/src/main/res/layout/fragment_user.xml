@@ -7,254 +7,363 @@
                 tools:context="com.driver.hp.komegaroodriver.Fragment.UserFragment"
                 android:orientation="vertical" android:id="@+id/userData"
                 android:background="@color/white">
+
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/exit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true" android:id="@+id/exit" android:background="@drawable/transm"
-        android:layout_alignParentTop="true" android:layout_alignParentStart="true"
-        android:gravity="center">
-        <LinearLayout android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:clickable="true"
-                      android:orientation="vertical"
-                      android:background="@color/white" android:layout_margin="15dp">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="@color/white"
+            android:clickable="true"
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/buttonExit"
-                android:background="@mipmap/close" android:layout_width="33dp"
-                android:layout_height="30dp"/>
+                android:layout_width="33dp"
+                android:layout_height="30dp"
+                android:background="@mipmap/close" />
+
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/textView2"
-                    android:text="Dirección"
-                    android:textSize="20sp" android:textColor="#262626"
-                    android:textStyle="normal|bold" android:gravity="center"
-                />
-                <View
-                    android:layout_width="fill_parent"
-                    android:background="@color/morado" android:layout_marginRight="40dp"
-                    android:layout_height="2dp" android:layout_marginLeft="40dp"/>
-                <TextView
-                    android:text="Dirección"
+                    android:id="@+id/textView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp" android:id="@+id/txtDirecData"
-                    android:ellipsize="end"
-                    android:maxLines="1" android:gravity="center" android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp" android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/textView4"
-                    android:text="Block, depto, etc"
-                    android:textSize="20sp" android:textColor="#262626"
-                    android:layout_marginTop="5dp"
-                    android:textStyle="normal|bold" android:gravity="center"
-                />
+                    android:gravity="center"
+                    android:text="Dirección"
+                    android:textColor="#262626"
+                    android:textSize="20sp"
+                    android:textStyle="normal|bold" />
+
                 <View
                     android:layout_width="fill_parent"
-                    android:background="@color/morado" android:layout_marginRight="40dp"
-                    android:layout_height="2dp" android:layout_marginLeft="40dp"/>
+                    android:layout_height="2dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:background="@color/morado" />
+
                 <TextView
-                    android:text="Sin número"
+                    android:id="@+id/txtDirecData"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/txtNumberData"
-                    android:textSize="16sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
                     android:ellipsize="end"
-                    android:maxLines="1" android:gravity="center" android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp" android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"/>
-                <LinearLayout
-                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="Dirección"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/textView4"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:layout_marginTop="10dp"
-                    android:id="@+id/onePhone">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="Block, depto, etc"
+                    android:textColor="#262626"
+                    android:textSize="20sp"
+                    android:textStyle="normal|bold" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:background="@color/morado" />
+
+                <TextView
+                    android:id="@+id/txtNumberData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="Sin número"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:id="@+id/onePhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
                     <TextView
+                        android:id="@+id/textView12"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" android:id="@+id/textView12"
-                        android:textColor="#262626" android:textSize="20sp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
                         android:text="Cliente"
-                        android:textStyle="normal|bold"
-                        android:gravity="center"/>
+                        android:textColor="#262626"
+                        android:textSize="20sp"
+                        android:textStyle="normal|bold" />
+
                     <View
                         android:layout_width="fill_parent"
-                        android:background="@color/morado" android:layout_marginRight="40dp"
-                        android:layout_height="2dp" android:layout_marginLeft="40dp"/>
+                        android:layout_height="2dp"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
+                        android:background="@color/morado" />
+
                     <TextView
+                        android:id="@+id/txtNombreData"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
                         android:text="Juan Pérez"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:id="@+id/txtNombreData"
-                        android:textSize="18sp" android:textColor="#262626"
-                        android:gravity="center" android:layout_marginTop="5dp"
-                    />
+                        android:textColor="#262626"
+                        android:textSize="18sp" />
+
                     <TextView
+                        android:id="@+id/txtNumeroData"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:text="87654321"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:id="@+id/txtNumeroData"
-                        android:textSize="18sp"
-                        android:gravity="center"/>
+                        android:textSize="18sp" />
                 </LinearLayout>
+
                 <LinearLayout
-                    android:orientation="vertical"
+                    android:id="@+id/twoPhone"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:visibility="gone"
-                    android:layout_marginLeft="15dp" android:layout_marginRight="15dp"
-                    android:layout_marginBottom="5dp" android:layout_marginTop="5dp"
-                    android:id="@+id/twoPhone">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
                     <TextView
-                        android:text="Números de Contacto"
+                        android:id="@+id/textView8"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:id="@+id/textView8"
-                        android:textColor="#262626" android:textSize="20sp"
-                        android:textStyle="normal|bold" android:gravity="center"
-                    />
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Números de Contacto"
+                        android:textColor="#262626"
+                        android:textSize="20sp"
+                        android:textStyle="normal|bold" />
+
                     <View
                         android:layout_width="fill_parent"
-                        android:background="@color/morado" android:layout_marginRight="40dp"
-                        android:layout_height="2dp" android:layout_marginLeft="40dp"/>
+                        android:layout_height="2dp"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
+                        android:background="@color/morado" />
+
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" android:layout_marginTop="5dp">
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
                         <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_height="match_parent"
+                            android:id="@+id/emisorCall"
                             android:layout_width="132dp"
-                            android:id="@+id/emisorCall">
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
                             <LinearLayout
-                                android:orientation="horizontal"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
                                 <ImageView
+                                    android:id="@+id/imageView4"
                                     android:layout_width="wrap_content"
-                                    app:srcCompat="@mipmap/call"
-                                    android:id="@+id/imageView4" android:layout_height="30dp"/>
+                                    android:layout_height="30dp"
+                                    app:srcCompat="@mipmap/call" />
+
                                 <TextView
+                                    android:id="@+id/textView19"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent" android:id="@+id/textView19"
-                                    android:textColor="#262626" android:textSize="18sp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="left|center"
                                     android:text="Cliente"
-                                    android:textStyle="normal|bold" android:layout_weight="1"
-                                    android:gravity="left|center"/>
-                            </LinearLayout>
-                            <View
-                                android:layout_width="fill_parent"
-                                android:background="@color/morado" android:layout_marginRight="10dp"
-                                android:layout_height="2dp" android:layout_marginLeft="10dp"/>
-                            <TextView
-                                android:text="Emisor"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content" android:id="@+id/txtEmisor"
-                                android:textSize="18sp" android:textColor="#262626"
-                                android:gravity="center"
-                                android:ellipsize="end"
-                                android:maxLines="1"/>
-                            <TextView
-                                android:text="879654321"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content" android:id="@+id/txtPhoneEmisor"
-                                android:textSize="18sp"
-                                android:gravity="center"/>
-                        </LinearLayout>
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_height="match_parent"
-                            android:layout_width="132dp"
-                            android:id="@+id/receptorCall">
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    app:srcCompat="@mipmap/call"
-                                    android:id="@+id/imageView2" android:layout_height="30dp"/>
-                                <TextView
-                                    android:text="Receptor"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent" android:id="@+id/textView13"
+                                    android:textColor="#262626"
                                     android:textSize="18sp"
-                                    android:textColor="#262626" android:textStyle="normal|bold"
-                                    android:layout_weight="1" android:gravity="left|center"/>
+                                    android:textStyle="normal|bold" />
                             </LinearLayout>
+
                             <View
                                 android:layout_width="fill_parent"
-                                android:background="@color/morado" android:layout_marginRight="10dp"
-                                android:layout_height="2dp" android:layout_marginLeft="10dp"/>
+                                android:layout_height="2dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:background="@color/morado" />
+
                             <TextView
-                                android:text="Receptor"
+                                android:id="@+id/txtEmisor"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" android:id="@+id/txtReceptor"
-                                android:textSize="18sp" android:textColor="#262626"
-                                android:gravity="center"
+                                android:layout_height="wrap_content"
                                 android:ellipsize="end"
-                                android:maxLines="1"/>
+                                android:gravity="center"
+                                android:maxLines="1"
+                                android:text="Emisor"
+                                android:textColor="#262626"
+                                android:textSize="18sp" />
+
                             <TextView
-                                android:text="Sin número"
+                                android:id="@+id/txtPhoneEmisor"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" android:id="@+id/txtPhoneReceptor"
-                                android:textSize="18sp"
-                                android:gravity="center"/>
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="879654321"
+                                android:textSize="18sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/receptorCall"
+                            android:layout_width="132dp"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/imageView2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="30dp"
+                                    app:srcCompat="@mipmap/call" />
+
+                                <TextView
+                                    android:id="@+id/textView13"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="left|center"
+                                    android:text="Receptor"
+                                    android:textColor="#262626"
+                                    android:textSize="18sp"
+                                    android:textStyle="normal|bold" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="fill_parent"
+                                android:layout_height="2dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:background="@color/morado" />
+
+                            <TextView
+                                android:id="@+id/txtReceptor"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center"
+                                android:maxLines="1"
+                                android:text="Receptor"
+                                android:textColor="#262626"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/txtPhoneReceptor"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="Sin número"
+                                android:textSize="18sp" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
+
                 <TextView
+                    android:id="@+id/textView3"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/textView3"
-                    android:text="Comentarios"
-                    android:textSize="20sp" android:textColor="#262626"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:textStyle="normal|bold" android:gravity="center"
-                />
+                    android:gravity="center"
+                    android:text="Comentarios"
+                    android:textColor="#262626"
+                    android:textSize="20sp"
+                    android:textStyle="normal|bold" />
+
                 <View
                     android:layout_width="fill_parent"
-                    android:background="@color/morado"
-                    android:layout_height="2dp" android:layout_marginLeft="40dp"
-                    android:layout_marginRight="40dp"/>
+                    android:layout_height="2dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:background="@color/morado" />
+
                 <TextView
-                    android:layout_width="match_parent"
                     android:id="@+id/txtComentData"
-                    android:textSize="16sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
                     android:ellipsize="end"
-                    android:maxLines="2" android:text="Sin comentarios" android:gravity="center"
-                    android:layout_marginLeft="20dp" android:layout_marginRight="20dp"
-                    android:layout_marginBottom="5dp" android:layout_marginTop="5dp"
-                    android:layout_height="50dp"/>
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:text="Sin comentarios"
+                    android:textSize="16sp" />
+
                 <Button
-                    android:text="Emergencias"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/btnEmergencia"
+                    android:id="@+id/btnEmergencia"
                     style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textSize="18sp" android:textColor="@color/colorAccent"
-                    android:visibility="gone"/>
-                <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp" android:gravity="bottom|center"
-                    android:layout_gravity="bottom" android:id="@+id/btnTwo">
+                    android:layout_height="wrap_content"
+                    android:text="Emergencias"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/btnTwo"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_gravity="bottom"
+                    android:gravity="bottom|center"
+                    android:orientation="horizontal">
+
                     <Button
-                        android:layout_height="match_parent" android:id="@+id/btnCancelData"
+                        android:id="@+id/btnCancelData"
                         style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                        android:layout_width="145dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
                         android:text="Cancelar Viaje"
-                        android:background="@color/white"
                         android:textAppearance="@style/TextAppearance.AppCompat"
-                        android:textSize="20sp" android:textColor="@color/colorAccent"
-                        android:layout_width="145dp"/>
+                        android:textColor="@color/colorAccent"
+                        android:textSize="20sp" />
+
                     <Button
-                        android:layout_height="match_parent" android:id="@+id/btnContactarData"
-                        android:text="Contactar"
+                        android:id="@+id/btnContactarData"
                         style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                        android:layout_width="145dp"
+                        android:layout_height="match_parent"
                         android:background="@color/white"
+                        android:text="Contactar"
                         android:textAppearance="@style/TextAppearance.AppCompat"
-                        android:textSize="20sp" android:textColor="@color/colorAccent"
-                        android:layout_width="145dp"/>
+                        android:textColor="@color/colorAccent"
+                        android:textSize="20sp" />
                 </LinearLayout>
 
             </LinearLayout>

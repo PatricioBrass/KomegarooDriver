@@ -4,18 +4,18 @@ apply plugin: 'io.fabric'
 android {
     signingConfigs {
         config {
-            keyAlias 'MyAndroidKey'
+            keyAlias 'mykey'
             keyPassword '4kcmhp29'
-            storeFile file('C:/Users/Patricio/keystore/android.jks')
-            storePassword '19930806'
+            storeFile file('C:/Users/Patricio/keystore/key.jks')
+            storePassword '4kcmhp29'
         }
     }
-    compileSdkVersion 24
+    compileSdkVersion 26
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId 'com.driver.hp.komegaroodriver'
         minSdkVersion 21
-        targetSdkVersion 24
+        targetSdkVersion 26
         multiDexEnabled true
         versionCode 1
         versionName "1.0"
@@ -29,7 +29,6 @@ android {
             signingConfig signingConfigs.config
         }
         debug {
-            signingConfig signingConfigs.config
         }
     }
     productFlavors {
@@ -73,7 +72,7 @@ dependencies {
     compile 'com.firebase:firebase-client-android:2.3.1'
     compile 'com.android.support:recyclerview-v7:24.2.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:multidex:1.0.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
     compile 'me.relex:circleindicator:1.2.2@aar'
     compile 'com.squareup.okhttp3:okhttp:3.6.0'

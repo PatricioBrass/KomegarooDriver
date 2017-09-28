@@ -47,17 +47,12 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private String uidDriver, token;
-    //private Firebase requested, drivers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        /*requested = new Firebase("https://decoded-pilot-144921.firebaseio.com/driverStatus/requestedDrivers/Santiago");
-        drivers = new Firebase("https://decoded-pilot-144921.firebaseio.com/drivers");*/
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -114,7 +109,12 @@ public class MainActivity extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
 
-                } else if (id == R.id.nav_notificaciones) {
+                } else if (id == R.id.nav_perfil) {
+                    Intent intent = new Intent(MainActivity.this, PerfilActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+
+                } /*else if (id == R.id.nav_notificaciones) {
 
 
                 } else if (id == R.id.nav_promociones) {
@@ -122,16 +122,11 @@ public class MainActivity extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
 
-                } else if (id == R.id.nav_perfil) {
-                    Intent intent = new Intent(MainActivity.this, PerfilActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(intent);
-
                 } else if (id == R.id.nav_nosotros) {
                     Intent intent = new Intent(MainActivity.this, NosotrosActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
-                }
+                }*/
 
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
@@ -242,15 +237,15 @@ public class MainActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
 
-        } else if (id == R.id.nav_notificaciones) {
-
-        } else if (id == R.id.nav_promociones) {
-            Intent intent = new Intent(MainActivity.this, PromoActivity.class);
+        } else if (id == R.id.nav_perfil) {
+            Intent intent = new Intent(MainActivity.this, PerfilActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
 
-        } else if (id == R.id.nav_perfil) {
-            Intent intent = new Intent(MainActivity.this, PerfilActivity.class);
+        } /*else if (id == R.id.nav_notificaciones) {
+
+        } else if (id == R.id.nav_promociones) {
+            Intent intent = new Intent(MainActivity.this, PromoActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
 
@@ -259,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
 
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
 
@@ -276,76 +271,6 @@ public class MainActivity extends AppCompatActivity {
         Call call = client.newCall(request);
         call.enqueue(callback);
         return call;
-    }/*
-
-    public void piden(){
-        requested.child(uidDriver).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if(dataSnapshot.exists()){
-                    getToken();
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
     }
-
-    public void getToken(){
-        drivers.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    Map<String, String> map = dataSnapshot.getValue(Map.class);
-                    token = map.get("deviceToken");
-                    postDriver();
-                }
-            }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-    }
-    public void postDriver(){
-        String url = "https://komegaroo-server.herokuapp.com/mobile/notification";
-        String message ="Están pidiendo un Komegaroo";
-        String payload ="d";
-        String packages = "com.driver.hp.komegaroodriver";
-        String body ="token="+token+"&message="+message+"&payload="+payload+"&package="+packages;
-        post(url,body,new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseStr = response.body().string();
-                    Log.v("POSTYes!", responseStr);
-                } else {
-                    String responseStr = response.body().string();
-                    Log.v("POSTNo!", responseStr);
-                }
-            }
-        });
-    }*/
 
 }

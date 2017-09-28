@@ -5,5 +5,11 @@
     android:layout_height="match_parent"
     tools:context="com.driver.hp.komegaroodriver.TutorialesFragment.GifOneFragment"
     android:orientation="vertical" android:gravity="center" android:id="@+id/gif_one">
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="match_parent"
+        android:src="@drawable/tuto_gif_1"
+        android:id="@+id/Imagegif"
+        android:layout_height="match_parent" android:scaleType="centerCrop"
+        android:cropToPadding="false"/>
 
 </LinearLayout>
