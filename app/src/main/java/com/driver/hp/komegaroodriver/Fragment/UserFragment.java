@@ -26,10 +26,10 @@ import java.util.Map;
  */
 public class UserFragment extends Fragment {
     private View userView;
-    private DatabaseReference tRef, customer, stateDriver;
+    private DatabaseReference tRef, customer, stateDriver, validation;
     private TextView name, direccion, num, comentarios, telefono, phoneE, phoneR, nomE, recep;
     private Button cancelar, contactar, exit, emer;
-    private String uidDriver, uidClient, nom, phone, contac, nomR;
+    private String uidDriver, uidClient, nom, phone, contac, nomR, dTo, dFr;
     private AlertDialog alertDialog, alertReceptor;
     private View one, two, btns, emisor, receptor;
 
@@ -45,6 +45,7 @@ public class UserFragment extends Fragment {
         stateDriver = FirebaseDatabase.getInstance().getReference().child("driverState");
         tRef = FirebaseDatabase.getInstance().getReference().child("requestedTravels").child("Santiago");
         customer = FirebaseDatabase.getInstance().getReference().child("customers");
+        validation = FirebaseDatabase.getInstance().getReference().child("customerValidation");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         userView = v.findViewById(R.id.userData);
         userView.setVisibility(View.GONE);
@@ -105,12 +106,13 @@ public class UserFragment extends Fragment {
                 if(dataSnapshot.exists()){
                     Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                     String estado = mapS.get("state");
+                    uidClient = ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).uidClient;
                     if(estado.equals("onWay")){
-                        uidClient = ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).uidClient;
+                        cancelar.setVisibility(View.VISIBLE);
                         showDataonWay();
                         showDataCustomer();
                     }else if(estado.equals("onTrip")){
-                        uidClient = ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).uidClient;
+                        cancelar.setVisibility(View.GONE);
                         showDataCustomer();
                         showDataonTrip();
                     }
@@ -147,7 +149,7 @@ public class UserFragment extends Fragment {
                 if(dataSnapshot.exists()){
                     Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                     String nume = mapS.get("blockInfo");
-                    String fro = mapS.get("from");
+                    dFr = mapS.get("from");
                     String com = mapS.get("comments");
                     one.setVisibility(View.VISIBLE);
                     btns.setVisibility(View.VISIBLE);
@@ -155,7 +157,7 @@ public class UserFragment extends Fragment {
                     emer.setVisibility(View.GONE);
                     if(!nume.isEmpty()){num.setText(nume);}
                     if(!com.isEmpty()){comentarios.setText(com);}
-                    direccion.setText(fro);
+                    direccion.setText(dFr);
                 }
             }
             @Override
@@ -171,7 +173,7 @@ public class UserFragment extends Fragment {
                 if(dataSnapshot.exists()){
                     Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                     String nume = mapS.get("blockInfo");
-                    String dTo = mapS.get("to");
+                    dTo = mapS.get("to");
                     String com = mapS.get("comments");
                     contac = mapS.get("contactNumber");
                     nomR = mapS.get("receptorName");
@@ -183,10 +185,9 @@ public class UserFragment extends Fragment {
                     if(!nume.isEmpty()){num.setText(nume);}
                     if(!com.isEmpty()){comentarios.setText(com);}
                     if(!nomR.isEmpty()){recep.setText(nomR);}
-                    direccion.setText(dTo);
                     nomE.setText(nom);
                     phoneE.setText(phone);
-
+                    changeData();
                 }
             }
             @Override
@@ -243,6 +244,34 @@ public class UserFragment extends Fragment {
             public void onClick(View v) {
                 userView.setVisibility(View.GONE);
                 ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).cancelDriver.show();
+            }
+        });
+    }
+
+    public void changeData(){
+        validation.child(uidClient).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    String direc = "Sta Mónica 2121, Santiago, Región Metropolitana, Chile";
+                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
+                    String validateR = mapS.get("validateReturn");
+                    switch (validateR) {
+                        case "no":
+                            direccion.setText(direc);
+                            break;
+                        case "yes":
+                            direccion.setText(dFr);
+                            break;
+                        default:
+                            direccion.setText(dTo);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

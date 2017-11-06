@@ -4,7 +4,7 @@
     android:id="@+id/pagoFragment"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/transparent"
+    android:background="@android:drawable/screen_background_dark_transparent"
     android:clickable="true"
     android:orientation="vertical"
     tools:context="com.driver.hp.komegaroodriver.Fragment.PagoFragment">
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="30dp"
-        android:background="@color/white"
+        android:background="@drawable/border3"
         android:gravity="top|center"
         android:orientation="vertical"
         android:paddingBottom="@dimen/activity_vertical_margin"

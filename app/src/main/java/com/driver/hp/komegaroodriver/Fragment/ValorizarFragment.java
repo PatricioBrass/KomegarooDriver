@@ -68,14 +68,13 @@ public class ValorizarFragment extends Fragment {
                 calificacion = String.valueOf(Math.round(rating.getRating()));
                 travel.child(uidClients).child(keys).child("calification").setValue(calificacion);
                 travel.child(uidClients).child(keys).child("comments").setValue(coment.getText().toString());
-                ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).buildGoogleApiClient();
+                //((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).buildGoogleApiClient();
                 ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).send();
                 stateDriver.child(uidDriver).child("state").setValue("nil");
                 ((MainActivity)getActivity()).unlockedDrawer();
                 coment.setText("");
                 rating.setRating(1);
                 layout.setVisibility(View.GONE);
-                ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).uidClient = null;
             }
         });
 
@@ -109,28 +108,29 @@ public class ValorizarFragment extends Fragment {
     }
 
     public void showDriver(){
-        customers.child(uidClients).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    Map<Long, Long> map = (Map<Long, Long>) dataSnapshot.getValue();
-                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
-                    String photo = mapS.get("photoUrl");
-                    Picasso.with(getActivity()).load(photo).transform(new RoundedTransformation(8,1)).into(imageDriver);
-                    showProgress(false);
+        if(uidClients!=null) {
+            customers.child(uidClients).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
+                        String photo = mapS.get("photoUrl");
+                        Picasso.with(getActivity()).load(photo).transform(new RoundedTransformation(8, 1)).into(imageDriver);
+                        showProgress(false);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError firebaseError) {
+                @Override
+                public void onCancelled(DatabaseError firebaseError) {
 
-            }
-        });
+                }
+            });
+        }
 
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
+    public void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.

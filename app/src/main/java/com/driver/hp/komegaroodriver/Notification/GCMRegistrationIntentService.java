@@ -40,7 +40,7 @@ public class GCMRegistrationIntentService extends IntentService {
             InstanceID instanceID = InstanceID.getInstance(getApplicationContext());
             token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             driver.child(uidDriver).child("deviceToken").setValue(token);
-            driver.child(uidDriver).child("device").setValue("com.driver.hp.komegaroodriver");
+            driver.child(uidDriver).child("package").setValue("com.driver.hp.komegaroodriver");
             Log.w("GCMRegIntentService", "token:" + token);
             //notify to UI that registration complete success
             registrationComplete = new Intent(REGISTRATION_SUCCESS);

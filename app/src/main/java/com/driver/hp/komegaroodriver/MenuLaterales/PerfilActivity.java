@@ -225,10 +225,13 @@ public class PerfilActivity extends AppCompatActivity {
                     Map<String, String> map = (Map<String, String>) dataSnapshot.getValue();
                     String califica = map.get("calification");
                     Integer t = arrayCalif.size();
-                    if (!califica.equals("")){
+                    String viajes = "trips "+t+" - "+"ArrayTrips "+trips;
+                    Log.v("ViajesPerfil", viajes);
+                    if (!califica.equals("")&&trips<t){
                         Double d = new Double((((t-1)*califi) + Integer.parseInt(califica)) / t);
                         mRef.child(uidDriver).child("calification").setValue(d);
                         stars.setRating(d.floatValue());
+                        mRef.child(uidDriver).child("trips").setValue(t);
                         postGetSaldo();
                     }else{
                         stars.setRating(califi.floatValue());
@@ -316,12 +319,14 @@ public class PerfilActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     final String responseStr = response.body().string();
-                    Log.v("POSTYesSaldo!", responseStr);
+                    Double saldo = Double.parseDouble(responseStr);
+                    Log.v("POSTYesSaldo!", String.valueOf(saldo.intValue()));
+                    final String sSaldo = String.valueOf(saldo.intValue());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             if(responseStr.length()>1) {
-                                driverSaldo.setText("CLP $" + responseStr.substring(0, responseStr.length() - 3) + "." + responseStr.substring(responseStr.length() - 3));
+                                driverSaldo.setText("CLP $" + sSaldo.substring(0, sSaldo.length() - 3) + "." + sSaldo.substring(sSaldo.length() - 3));
                                 showProgress(false);
                             }else{
                                 showProgress(false);

@@ -1,78 +1,115 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent"
-             android:clickable="true"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             tools:context="com.driver.hp.komegaroodriver.Fragment.ValorizarFragment"
-             android:id="@+id/valorizar" android:background="@drawable/trans">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/valorizar"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:drawable/screen_background_dark_transparent"
+    android:clickable="true"
+    tools:context="com.driver.hp.komegaroodriver.Fragment.ValorizarFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" android:gravity="center"
-        android:background="@drawable/border5" android:layout_margin="20dp">
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:background="@drawable/border3"
+        android:gravity="center"
+        android:orientation="vertical">
+
         <ProgressBar
+            android:id="@+id/progressBarValorizar"
+            style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/progressBarValorizar" style="@style/Widget.AppCompat.ProgressBar"
-            android:visibility="gone" android:layout_margin="120dp"/>
+            android:layout_margin="120dp"
+            android:visibility="gone" />
+
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/valorLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:layout_margin="10dp" android:weightSum="1"
-            android:id="@+id/valorLayout">
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:weightSum="1">
+
             <TextView
+                android:id="@+id/textView27"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Tu viaje ha finalizado con éxito"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/textView27"
-                android:textAlignment="center" android:textColor="@color/black"
-                android:textSize="17sp"/>
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="17sp" />
+
             <TextView
+                android:id="@+id/textView28"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:text="Califica a tú cliente"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/textView28"
-                android:textAlignment="center" android:textColor="@color/black"
-                android:textSize="18sp" android:layout_margin="5dp"/>
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
             <ImageView
+                android:id="@+id/imageViewDriver"
                 android:layout_width="match_parent"
-                app:srcCompat="@mipmap/ic_perfil"
-                android:id="@+id/imageViewDriver" android:layout_weight="0.35"
-                android:layout_margin="10dp" android:layout_gravity="center"
-                android:layout_height="60dp"/>
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="0.35"
+                app:srcCompat="@mipmap/ic_perfil" />
 
             <RatingBar
                 android:id="@+id/ratingBarDriver"
-                android:layout_width="wrap_content"
-                android:numStars="5"
-                android:stepSize="1.0"
-                android:theme="@style/RatingBar"
                 style="@style/Widget.AppCompat.RatingBar.Indicator"
+                android:layout_width="wrap_content"
                 android:layout_height="35dp"
-                android:layout_margin="10dp"
                 android:layout_gravity="center"
-                android:isIndicator="false" android:rating="1.0"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/textView26"
-                android:text="¿Algún comentario?"
-                android:textAlignment="center" android:textSize="18sp"
-                android:layout_margin="10dp" android:textColor="@color/black"/>
-            <EditText
-                android:layout_width="match_parent"
-                android:inputType="textMultiLine"
-                android:ems="10"
-                android:id="@+id/editTextComent"
-                android:hint="C O M E N T A R I O" android:textAlignment="center"
-                android:layout_margin="10dp" android:background="@drawable/border"
-                android:padding="10dp" android:layout_height="70dp"/>
-            <Button
-                android:layout_width="match_parent"
-                android:id="@+id/btnValor"
-                android:background="@drawable/listo" android:textColor="@color/white"
                 android:layout_margin="10dp"
-                android:layout_height="60dp" />
+                android:isIndicator="false"
+                android:numStars="5"
+                android:rating="1.0"
+                android:stepSize="1.0"
+                android:theme="@style/RatingBar" />
+
+            <TextView
+                android:id="@+id/textView26"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="¿Algún comentario?"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/editTextComent"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/border"
+                android:ems="10"
+                android:hint="C O M E N T A R I O"
+                android:inputType="textMultiLine"
+                android:padding="10dp"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/btnValor"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/btn_relieve"
+                android:paddingStart="25dp"
+                android:text="L i s t o"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 

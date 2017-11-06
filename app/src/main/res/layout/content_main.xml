@@ -30,6 +30,20 @@
                               android:layout_width="match_parent"
                               android:layout_height="match_parent"
                               class="com.google.android.gms.maps.MapFragment" android:layout_weight="0.99"></fragment>
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/btnRetorno"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:clickable="true"
+                        android:visibility="gone"
+                        app:backgroundTint="@android:color/white"
+                        app:fabSize="mini"
+                        app:rippleColor="@color/colorAccent"
+                        app:srcCompat="@mipmap/retorno" />
+
                     <android.support.design.widget.FloatingActionButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -55,9 +69,8 @@
                         android:background="@color/green_button"
                         android:clickable="false"
                         android:max="100"
-                        android:paddingTop="18dp"
+                        android:padding="15dp"
                         android:progressDrawable="@android:color/transparent"
-                        android:textAlignment="gravity"
                         android:thumb="@mipmap/seekbar1" />
 
                     <TextView
@@ -89,7 +102,7 @@
                         android:background="@color/red_button"
                         android:clickable="false"
                         android:max="100"
-                        android:paddingTop="18dp"
+                        android:padding="15dp"
                         android:progressDrawable="@android:color/transparent"
                         android:thumb="@mipmap/seekbar1" />
 
@@ -118,7 +131,7 @@
                         android:background="@color/green_button"
                         android:clickable="false"
                         android:max="100"
-                        android:paddingTop="18dp"
+                        android:padding="15dp"
                         android:progressDrawable="@android:color/transparent"
                         android:thumb="@mipmap/seekbar1" />
 
@@ -147,7 +160,7 @@
                         android:background="@color/red_button"
                         android:clickable="false"
                         android:max="100"
-                        android:paddingTop="18dp"
+                        android:padding="15dp"
                         android:progressDrawable="@android:color/transparent"
                         android:thumb="@mipmap/seekbar1" />
 
@@ -176,7 +189,7 @@
                         android:background="@color/yellow_button"
                         android:clickable="false"
                         android:max="100"
-                        android:paddingTop="18dp"
+                        android:padding="15dp"
                         android:progressDrawable="@android:color/transparent"
                         android:thumb="@mipmap/seekbar1" />
 
@@ -242,12 +255,21 @@
                 class="com.driver.hp.komegaroodriver.Fragment.ValorizarFragment"
                 android:id="@+id/valorizar"
                 tools:layout="@layout/fragment_valorizar" android:visibility="gone"/>
+
             <fragment
+                android:id="@+id/fragmentRetorno"
+                class="com.driver.hp.komegaroodriver.Fragment.ReturnFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                tools:layout="@layout/fragment_return" android:visibility="gone"/>
+
+            <fragment
                 android:id="@+id/userData"
                 class="com.driver.hp.komegaroodriver.Fragment.UserFragment"
-                tools:layout="@layout/fragment_user" android:visibility="gone"/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:layout="@layout/fragment_user" />
             <fragment
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
