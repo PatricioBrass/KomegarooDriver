@@ -135,8 +135,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.content_main, new MapsFragment()).commit();
+        /*FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.content_main, new MapsFragment()).commit();*/
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.driver.hp.komegaroodriver.MenuLaterales.PagoActivity;
 import com.driver.hp.komegaroodriver.R;
 import com.driver.hp.komegaroodriver.RoundedTransformation;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PagoFragment extends Fragment {
 
@@ -91,6 +94,7 @@ public class PagoFragment extends Fragment {
         mDatabase.child(uidDriver).child("accountNumber").setValue(nCuenta.getText().toString());
         mDatabase.child(uidDriver).child("bank").setValue(bancos.getSelectedItem().toString());
         mDatabase.child(uidDriver).child("dni").setValue(id.getText().toString());
+        ((PagoActivity) getActivity()).showDataPago();
     }
 
     private boolean checkEmpty(){
@@ -124,25 +128,26 @@ public class PagoFragment extends Fragment {
             alertDialog2.show();
             return false;
         }
-        String digito = rut.substring(rut.length()-1);
-        char dverif = digito.charAt(0);
-        String rutDV = rut.substring(0,rut.length()-1);
-        Integer dni = Integer.parseInt(rutDV);
-        if (!ValidarRut(dni,dverif)){
+        if (!validaRut(rut)){
             alertDialog.show();
             return false;
         }
         return true;
     }
+    public static Boolean validaRut ( String rut ) {
+        Pattern pattern = Pattern.compile("^[0-9]+-[0-9kK]{1}$");
+        Matcher matcher = pattern.matcher(rut);
+        if ( !matcher.matches() )
+            return false;
+        String[] stringRut = rut.split("-");
+        return stringRut[1].toLowerCase().equals(dv(stringRut[0]));
 
-    public static boolean ValidarRut(int rut, char dv)
-    {
-        int m = 0, s = 1;
-        for (; rut != 0; rut /= 10)
-        {
-            s = (s + rut % 10 * (9 - m++ % 6)) % 11;
-        }
-        return dv == (char) (s != 0 ? s + 47 : 75);
+    }
+    public static String dv ( String rut ) {
+        Integer M=0,S=1,T=Integer.parseInt(rut);
+        for (;T!=0;T=(int) Math.floor(T/=10))
+            S=(S+T%10*(9-M++%6))%11;
+        return ( S > 0 ) ? String.valueOf(S-1) : "k";
     }
 
     public void showData(){

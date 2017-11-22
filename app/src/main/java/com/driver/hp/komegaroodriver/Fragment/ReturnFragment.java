@@ -49,7 +49,7 @@ public class ReturnFragment extends Fragment {
     protected View vista, layout;
     protected Button solicita, cancelar;
     protected TextView chrono;
-    protected DatabaseReference validation, drivers;
+    protected DatabaseReference validation, drivers, stateDriver;
     protected String uidClient, uidDriver;
     protected String token, device;
 
@@ -59,6 +59,7 @@ public class ReturnFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_return, container, false);
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        stateDriver = FirebaseDatabase.getInstance().getReference().child("driverState");
         validation = FirebaseDatabase.getInstance().getReference().child("customerValidation");
         drivers = FirebaseDatabase.getInstance().getReference().child("drivers");
         solicita = (Button)v.findViewById(R.id.btnSolicitaRetorno);
@@ -113,6 +114,7 @@ public class ReturnFragment extends Fragment {
 
         public void onFinish() {
             validation.child(uidClient).child("validateReturn").setValue("no");
+            //stateDriver.child(uidDriver).child("state").setValue("onTripReturn");
             chrono.setVisibility(View.GONE);
             vista.setVisibility(View.GONE);
             layout.setVisibility(View.VISIBLE);
@@ -123,6 +125,7 @@ public class ReturnFragment extends Fragment {
         uidClient = ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).uidClient;
         retorno.getSelectedItem().toString();
         validation.child(uidClient).child("validateReturn").setValue("nil");
+        stateDriver.child(uidDriver).child("state").setValue("onTripReturn");
         //drivers.child(uidDriver).child("extraBalance").setValue(3000);
     }
 

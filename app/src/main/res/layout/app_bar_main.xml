@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context="com.driver.hp.komegaroodriver.MainActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -19,24 +20,39 @@
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:background="@color/white"
-            app:titleTextColor="@color/colorAccent"
-            app:theme="@style/ThemeToolbar" android:weightSum="1">
+            android:weightSum="1"
+            app:theme="@style/ThemeToolbar"
+            app:titleTextColor="@color/colorAccent">
+
             <TextView
+                android:id="@+id/toolbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="KomeGaroo Riders"
                 android:layout_gravity="center"
-                android:id="@+id/toolbar_title" android:layout_weight="0.19" android:textSize="18sp"
-                android:textColor="@color/colorAccent" android:fontFamily="sans-serif"
-                android:textStyle="normal|bold"/>
+                android:layout_weight="0.19"
+                android:fontFamily="sans-serif"
+                android:text="KomeGaroo Riders"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                android:textStyle="normal|bold" />
+
             <ImageView
+                android:id="@+id/imageView3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" app:srcCompat="@mipmap/ic_logo"
-                android:id="@+id/imageView3" android:layout_gravity="right"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                app:srcCompat="@mipmap/ic_logo" />
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <fragment
+        android:id="@+id/fragment"
+        class="com.driver.hp.komegaroodriver.Fragment.MapsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/content_main" />
 
-</android.support.design.widget.CoordinatorLayout>
+    <!--<include layout="@layout/content_main" />-->
+
+</LinearLayout>

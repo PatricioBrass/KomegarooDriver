@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.driver.hp.komegaroodriver.R;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +33,7 @@ public class UserFragment extends Fragment {
     private String uidDriver, uidClient, nom, phone, contac, nomR, dTo, dFr;
     private AlertDialog alertDialog, alertReceptor;
     private View one, two, btns, emisor, receptor;
+    private String estado;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,7 +96,6 @@ public class UserFragment extends Fragment {
                 callReceptor();
             }
         });
-        statusDriver();
         canceledDriver();
         return v;
     }
@@ -104,17 +105,31 @@ public class UserFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
-                    String estado = mapS.get("state");
                     uidClient = ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).uidClient;
-                    if(estado.equals("onWay")){
-                        cancelar.setVisibility(View.VISIBLE);
-                        showDataonWay();
-                        showDataCustomer();
-                    }else if(estado.equals("onTrip")){
-                        cancelar.setVisibility(View.GONE);
-                        showDataCustomer();
-                        showDataonTrip();
+                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
+                    estado = mapS.get("state");
+                    switch (estado){
+                        case "onWay":
+                            cancelar.setVisibility(View.VISIBLE);
+                            showDataonWay();
+                            showDataCustomer();
+                            break;
+                        case "onTrip":
+                            cancelar.setVisibility(View.GONE);
+                            showDataCustomer();
+                            showDataonTrip();
+                            break;
+                        case "onReturn":
+                            cancelar.setVisibility(View.GONE);
+                            showDataCustomer();
+                            showDataonTrip();
+                            break;
+                        case "onTripReturn":
+                            cancelar.setVisibility(View.GONE);
+                            showDataCustomer();
+                            showDataonTrip();
+                            changeData();
+                            break;
                     }
                 }
             }
@@ -125,75 +140,101 @@ public class UserFragment extends Fragment {
     }
 
     public void showDataCustomer(){
-        customer.child(uidClient).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
-                    nom = mapS.get("name");
-                    phone = mapS.get("phoneNumber");
-                    name.setText(nom);
-                    telefono.setText(phone);
+        if(uidClient!=null) {
+            customer.child(uidClient).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
+                        nom = mapS.get("name");
+                        phone = mapS.get("phoneNumber");
+                        name.setText(nom);
+                        telefono.setText(phone);
+                    }
                 }
-            }
-            @Override
-            public void onCancelled(DatabaseError firebaseError) {
-            }
-        });
+
+                @Override
+                public void onCancelled(DatabaseError firebaseError) {
+                }
+            });
+        }
     }
 
     public void showDataonWay(){
-        tRef.child(uidClient).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
-                    String nume = mapS.get("blockInfo");
-                    dFr = mapS.get("from");
-                    String com = mapS.get("comments");
-                    one.setVisibility(View.VISIBLE);
-                    btns.setVisibility(View.VISIBLE);
-                    two.setVisibility(View.GONE);
-                    emer.setVisibility(View.GONE);
-                    if(!nume.isEmpty()){num.setText(nume);}
-                    if(!com.isEmpty()){comentarios.setText(com);}
-                    direccion.setText(dFr);
+        if(uidClient!=null) {
+            tRef.child(uidClient).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
+                        String nume = mapS.get("blockInfo");
+                        dFr = mapS.get("from");
+                        String com = mapS.get("comments");
+                        one.setVisibility(View.VISIBLE);
+                        btns.setVisibility(View.VISIBLE);
+                        two.setVisibility(View.GONE);
+                        emer.setVisibility(View.GONE);
+                        if (!nume.isEmpty()) {
+                            num.setText(nume);
+                        }
+                        if (!com.isEmpty()) {
+                            comentarios.setText(com);
+                        }
+                        direccion.setText(dFr);
+                    }
                 }
-            }
-            @Override
-            public void onCancelled(DatabaseError firebaseError) {
-            }
-        });
+
+                @Override
+                public void onCancelled(DatabaseError firebaseError) {
+                }
+            });
+        }
     }
 
     public void showDataonTrip(){
-        tRef.child(uidClient).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
-                    String nume = mapS.get("blockInfo");
-                    dTo = mapS.get("to");
-                    String com = mapS.get("comments");
-                    contac = mapS.get("contactNumber");
-                    nomR = mapS.get("receptorName");
-                    one.setVisibility(View.GONE);
-                    btns.setVisibility(View.GONE);
-                    two.setVisibility(View.VISIBLE);
-                    emer.setVisibility(View.VISIBLE);
-                    if(!contac.isEmpty()){phoneR.setText(contac);}
-                    if(!nume.isEmpty()){num.setText(nume);}
-                    if(!com.isEmpty()){comentarios.setText(com);}
-                    if(!nomR.isEmpty()){recep.setText(nomR);}
-                    nomE.setText(nom);
-                    phoneE.setText(phone);
-                    changeData();
+        if(uidClient!=null) {
+            tRef.child(uidClient).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
+                        String nume = mapS.get("blockInfo");
+                        dFr = mapS.get("from");
+                        dTo = mapS.get("to");
+                        String com = mapS.get("comments");
+                        contac = mapS.get("contactNumber");
+                        nomR = mapS.get("receptorName");
+                        one.setVisibility(View.GONE);
+                        btns.setVisibility(View.GONE);
+                        two.setVisibility(View.VISIBLE);
+                        emer.setVisibility(View.VISIBLE);
+                        if (!contac.isEmpty()) {
+                            phoneR.setText(contac);
+                        }
+                        if (!nume.isEmpty()) {
+                            num.setText(nume);
+                        }
+                        if (!com.isEmpty()) {
+                            comentarios.setText(com);
+                        }
+                        if (!nomR.isEmpty()) {
+                            recep.setText(nomR);
+                        }
+                        nomE.setText(nom);
+                        phoneE.setText(phone);
+                        if (estado.equals("onTrip")) {
+                            direccion.setText(dTo);
+                        } else {
+                            direccion.setText(dFr);
+                        }
+                    }
                 }
-            }
-            @Override
-            public void onCancelled(DatabaseError firebaseError) {
-            }
-        });
+
+                @Override
+                public void onCancelled(DatabaseError firebaseError) {
+                }
+            });
+        }
     }
 
     public void callCustomer(){
@@ -248,31 +289,33 @@ public class UserFragment extends Fragment {
         });
     }
 
-    public void changeData(){
-        validation.child(uidClient).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    String direc = "Sta Mónica 2121, Santiago, Región Metropolitana, Chile";
-                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
-                    String validateR = mapS.get("validateReturn");
-                    switch (validateR) {
-                        case "no":
-                            direccion.setText(direc);
-                            break;
-                        case "yes":
-                            direccion.setText(dFr);
-                            break;
-                        default:
-                            direccion.setText(dTo);
+    public void changeData() {
+        if (uidClient != null) {
+            validation.child(uidClient).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        String direc = "Sta Mónica 2121, Santiago, Región Metropolitana, Chile";
+                        Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
+                        String validateR = mapS.get("validateReturn");
+                        switch (validateR) {
+                            case "no":
+                                direccion.setText(direc);
+                                break;
+                            case "yes":
+                                direccion.setText(dFr);
+                                break;
+                            default:
+                                direccion.setText(dTo);
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
     }
 }

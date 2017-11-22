@@ -8,18 +8,23 @@
     <!-- TODO: Update blank fragment layout -->
 
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" app:srcCompat="@drawable/tuto_img_final"
-            android:id="@+id/imageView7" android:scaleType="centerCrop"/>
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/tuto_img_final" />
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent" android:gravity="center">
+
         <Button
-            android:id="@+id/btn_tuto" android:background="@drawable/tuto_btn"
+            android:id="@+id/btn_tuto"
             android:layout_width="250dp"
-            android:layout_alignParentTop="true" android:layout_alignParentStart="true"
-            android:layout_height="44dp" android:layout_marginBottom="40dp"/>
+            android:layout_height="44dp"
+            android:layout_marginBottom="100dp"
+            android:background="@drawable/tuto_btn" />
     </LinearLayout>
 </RelativeLayout>

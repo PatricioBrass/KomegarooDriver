@@ -25,6 +25,7 @@
             android:id="@+id/imageDriverPago"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
+            android:contentDescription="@string/app_name"
             app:srcCompat="@drawable/default_img" />
 
         <TextView
@@ -53,7 +54,7 @@
                 android:id="@+id/textView6"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:gravity="left|center"
+                android:gravity="center|start"
                 android:text="Banco"
                 android:textColor="#262626"
                 android:textSize="18sp" />
@@ -74,7 +75,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:background="@color/morado" />
             </LinearLayout>
         </LinearLayout>
@@ -89,7 +90,7 @@
                 android:id="@+id/textView9"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:gravity="left|center"
+                android:gravity="center|start"
                 android:text="Tipo de Cuenta"
                 android:textColor="#262626"
                 android:textSize="18sp" />
@@ -110,7 +111,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:background="@color/morado" />
             </LinearLayout>
         </LinearLayout>
@@ -125,30 +126,25 @@
                 android:id="@+id/textView10"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:gravity="left|center"
+                android:gravity="center|start"
                 android:text="Número    de Cuenta"
                 android:textColor="#262626"
                 android:textSize="18sp" />
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/nCuentaFr"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_weight="1"
+                android:backgroundTint="@color/colorAccent"
+                android:ellipsize="end"
+                android:hint="9876543210"
+                android:inputType="number|numberSigned"
+                android:maxLines="1"
+                android:textAlignment="center"
+                android:textColor="#262626"
+                android:textColorHint="#838484" />
 
-                <EditText
-                    android:id="@+id/nCuentaFr"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/colorAccent"
-                    android:ellipsize="end"
-                    android:hint="Cuenta Corriente"
-                    android:inputType="number|numberSigned"
-                    android:maxLines="1"
-                    android:textAlignment="center"
-                    android:textColor="#262626"
-                    android:textColorHint="#838484" />
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -161,31 +157,24 @@
                 android:id="@+id/textView11"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:gravity="left|center"
+                android:gravity="center|start"
                 android:text="Rut"
                 android:textColor="#262626"
                 android:textSize="20sp" />
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/rutFr"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:backgroundTint="@color/colorAccent"
+                android:ellipsize="end"
+                android:hint="12999000-K"
+                android:maxLines="1"
+                android:textAlignment="center"
+                android:textColor="#262626"
+                android:textColorHint="#838484" />
 
-                <EditText
-                    android:id="@+id/rutFr"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/colorAccent"
-                    android:ellipsize="end"
-                    android:hint="Rut"
-                    android:inputType="number|numberSigned"
-                    android:maxLines="1"
-                    android:textAlignment="center"
-                    android:textColor="#262626"
-                    android:textColorHint="#838484" />
-            </LinearLayout>
         </LinearLayout>
 
         <Button

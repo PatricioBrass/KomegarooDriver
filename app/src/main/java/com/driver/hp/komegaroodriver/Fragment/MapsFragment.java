@@ -14,6 +14,7 @@ import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -32,6 +33,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -153,6 +155,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
     protected boolean setCust=true;
     protected boolean setDriv=true;
     protected boolean changePrice=true;
+    private View active;
+    private Button btnActivar;
 
     @Nullable
     @Override
@@ -222,6 +226,17 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View view) {
                 fRetorno.setVisibility(View.VISIBLE);
+            }
+        });
+        active = v.findViewById(R.id.active_localiza);
+        btnActivar = (Button)v.findViewById(R.id.btnActivar);
+        btnActivar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(myIntent);
+                ((MainActivity)getActivity()).unlockedDrawer();
+                active.setVisibility(View.GONE);
             }
         });
         travelData = v.findViewById(R.id.dataTravel);
@@ -705,7 +720,13 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                                     destino.setText(fDirec);
                                     break;
                                 case "onTrip":
-                                    validationReturn();
+                                    try {
+                                        new DirectionFinder(MapsFragment.this, lat+","+lng, tDirec).execute();
+                                    } catch (UnsupportedEncodingException e) {
+                                        e.printStackTrace();
+                                    }
+                                    showButtonOnTrip();
+                                    destino.setText(tDirec);
                                     break;
                                 case "onReturn":
                                     try {
@@ -715,6 +736,9 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                                     }
                                     showButtonOnReturn();
                                     destino.setText(fDirec);
+                                    break;
+                                case "onTripReturn":
+                                    validationReturn();
                                     break;
                             }
                         }
@@ -1096,6 +1120,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         super.onStart();
         mGoogleApiClient.connect();
         buildGoogleApiClient();
+        checkLocationActive();
     }
     @Override
     public void onStop() {
@@ -1139,7 +1164,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                             if(dataSnapshot.exists()) {
                                 seb2.setVisibility(View.GONE);
                                 showDataTravels();
-                                ((MainActivity) getActivity()).lockedDrawer();
                                 rDriverStatus.child(uidDriver).child("customerUid").setValue(uidClient);
                                 rDriverStatus.child(uidDriver).child("latitude").setValue(mLastLocation.getLatitude());
                                 rDriverStatus.child(uidDriver).child("longitude").setValue(mLastLocation.getLongitude());
@@ -1149,7 +1173,6 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                                 sRef.child(uidDriver).removeValue();
                                 key = cTravels.child(uidClient).push().getKey();
                                 getDataPayment();
-                                getReturn();
                             }
                             alertDialog.dismiss();
                         }
@@ -1370,6 +1393,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     }
                 });
                 Log.v("ClienteTrips",tripsClient.toString());
+                getReturn();
             }
             @Override
             public void onCancelled(DatabaseError firebaseError) {}
@@ -1442,6 +1466,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
         }
     }
     public void showButtonOnReturn() {
+        returnTravel=false;
         Geocoder coder = new Geocoder(getActivity());
         List<Address> address;
         try {
@@ -1449,7 +1474,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
             if (address == null) {}
             Address location = address.get(0);
             Double distancia = distFrom(mLastLocation.getLatitude(),mLastLocation.getLongitude(),location.getLatitude(),location.getLongitude());
-            Log.v("DistanciaFinal",distancia.toString());
+            Log.v("DistanciaFinalReturn",distancia.toString());
             if(distancia<1000&&!returnTravel){
                 postOnTrip();
                 seb4.setVisibility(View.VISIBLE);
@@ -1538,7 +1563,8 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
                     uidClient = mapS.get("customerUid");
                     getLastKey();
-                    seb1.setVisibility(View.GONE);}
+                    seb1.setVisibility(View.GONE);
+                    showDataTravels();}
             }
             @Override
             public void onCancelled(DatabaseError firebaseError) {}
@@ -1580,6 +1606,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                     tokenPago = mapS.get("token");
                     blackToken = mapS.get("blackToken");
                     lastD = mapS.get("lastDigits");
+                    ((UserFragment)getActivity().getFragmentManager().findFragmentById(R.id.userData)).statusDriver();
                 }
             }
             @Override
@@ -1931,23 +1958,7 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
                             showButtonOnTripReturnYes();
                             destino.setText(fDirec);
                             break;
-                        default:
-                            try {
-                                new DirectionFinder(MapsFragment.this, lat+","+lng, tDirec).execute();
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
-                            showButtonOnTrip();
-                            destino.setText(tDirec);
                     }
-                }else {
-                    try {
-                        new DirectionFinder(MapsFragment.this, lat+","+lng, tDirec).execute();
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    showButtonOnTrip();
-                    destino.setText(tDirec);
                 }
             }
 
@@ -1956,5 +1967,23 @@ public class  MapsFragment extends Fragment implements OnMapReadyCallback, Googl
 
             }
         });
+    }
+    public void checkLocationActive(){
+        LocationManager lm = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception ex) {}
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch(Exception ex) {}
+
+        if(!gps_enabled && !network_enabled) {
+            active.setVisibility(View.VISIBLE);
+            ((MainActivity) getActivity()).lockedDrawer();
+        }
     }
 }

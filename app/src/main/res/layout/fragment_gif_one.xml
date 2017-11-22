@@ -1,15 +1,19 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.driver.hp.komegaroodriver.TutorialesFragment.GifOneFragment"
-    android:orientation="vertical" android:gravity="center" android:id="@+id/gif_one">
-    <pl.droidsonroids.gif.GifImageView
+    android:orientation="vertical"
+    android:gravity="center"
+    android:id="@+id/gif_one">
+
+    <ImageView
+        android:id="@+id/imageView6"
         android:layout_width="match_parent"
-        android:src="@drawable/tuto_gif_1"
-        android:id="@+id/Imagegif"
-        android:layout_height="match_parent" android:scaleType="centerCrop"
-        android:cropToPadding="false"/>
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/tuto_img_3" />
 
 </LinearLayout>

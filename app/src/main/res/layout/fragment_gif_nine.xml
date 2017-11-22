@@ -1,15 +1,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              tools:context="com.driver.hp.komegaroodriver.TutorialesFragment.GifNineFragment"
-              android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.driver.hp.komegaroodriver.TutorialesFragment.GifNineFragment"
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
+        android:id="@+id/imageView6"
         android:layout_width="match_parent"
-        android:id="@+id/Imagegif"
-        android:layout_height="match_parent" android:scaleType="centerCrop"
-        android:src="@drawable/tuto_gif_9"/>
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/tuto_img_11" />
 
 </LinearLayout>

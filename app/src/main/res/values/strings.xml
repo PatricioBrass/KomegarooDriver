@@ -33,5 +33,6 @@
         completions."
     </string>
     <string name="title_activity_maps2">Map</string>
+    <string name="btn_listo">Listo</string>
 
 </resources>

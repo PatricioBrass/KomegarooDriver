@@ -249,6 +249,31 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/active_localiza"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/activar_ubicacion"
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/btnActivar"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_marginBottom="80dp"
+                    android:layout_marginEnd="70dp"
+                    android:layout_marginStart="70dp"
+                    android:background="@drawable/btn_relieve"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="50dp"
+                    android:text="@string/btn_listo"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
             <fragment
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

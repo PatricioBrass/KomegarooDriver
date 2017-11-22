@@ -68,10 +68,8 @@ public class ValorizarFragment extends Fragment {
                 calificacion = String.valueOf(Math.round(rating.getRating()));
                 travel.child(uidClients).child(keys).child("calification").setValue(calificacion);
                 travel.child(uidClients).child(keys).child("comments").setValue(coment.getText().toString());
-                //((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).buildGoogleApiClient();
                 ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).send();
                 stateDriver.child(uidDriver).child("state").setValue("nil");
-                ((MainActivity)getActivity()).unlockedDrawer();
                 coment.setText("");
                 rating.setRating(1);
                 layout.setVisibility(View.GONE);

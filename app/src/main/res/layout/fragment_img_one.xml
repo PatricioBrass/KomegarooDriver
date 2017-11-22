@@ -7,7 +7,10 @@
 
 
     <ImageView
+        android:id="@+id/imageView6"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" app:srcCompat="@drawable/tuto_img_1"
-        android:id="@+id/imageView6" android:scaleType="centerCrop"/>
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/tuto_img_1" />
 </LinearLayout>
