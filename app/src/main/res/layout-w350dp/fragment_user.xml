@@ -1,12 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:clickable="true"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                tools:context="com.driver.hp.komegaroodriver.Fragment.UserFragment"
-                android:orientation="vertical" android:id="@+id/userData"
-                android:background="@color/white">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/userData"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clickable="true"
+    android:orientation="vertical"
+    tools:context="com.driver.hp.komegaroodriver.Fragment.UserFragment">
 
     <LinearLayout
         android:id="@+id/exit"

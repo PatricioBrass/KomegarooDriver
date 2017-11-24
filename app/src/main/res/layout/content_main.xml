@@ -287,20 +287,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:layout="@layout/fragment_return" android:visibility="gone"/>
-
-            <fragment
-                android:id="@+id/userData"
-                class="com.driver.hp.komegaroodriver.Fragment.UserFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                tools:layout="@layout/fragment_user" />
-            <fragment
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/fragmentPago"
-                class="com.driver.hp.komegaroodriver.Fragment.PagoFragment"
-                tools:layout="@layout/fragment_pago" android:visibility="gone"/>
         </RelativeLayout>
     </LinearLayout>
 

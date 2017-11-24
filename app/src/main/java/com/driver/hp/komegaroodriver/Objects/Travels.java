@@ -6,30 +6,32 @@ package com.driver.hp.komegaroodriver.Objects;
 
 public class Travels {
     String calification;
-    String code;
+    String certificatedNumber;
     String comments;
     String customerUid;
     String date;
+    String driverUid;
     String endHour;
     String from;
-    String startHour;
     String status;
+    String startHour;
     String to;
     Integer tripPrice;
 
     public Travels() {
     }
 
-    public Travels(String calification, String code, String comments, String customerUid, String date, String endHour, String from, String startHour, String status, String to, Integer tripPrice) {
+    public Travels(String calification, String certificatedNumber, String comments, String customerUid, String date, String driverUid, String endHour, String from, String status, String startHour, String to, Integer tripPrice) {
         this.calification = calification;
-        this.code = code;
+        this.certificatedNumber = certificatedNumber;
         this.comments = comments;
         this.customerUid = customerUid;
         this.date = date;
+        this.driverUid = driverUid;
         this.endHour = endHour;
         this.from = from;
-        this.startHour = startHour;
         this.status = status;
+        this.startHour = startHour;
         this.to = to;
         this.tripPrice = tripPrice;
     }
@@ -42,12 +44,12 @@ public class Travels {
         this.calification = calification;
     }
 
-    public String getCode() {
-        return code;
+    public String getCertificatedNumber() {
+        return certificatedNumber;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCertificatedNumber(String certificatedNumber) {
+        this.certificatedNumber = certificatedNumber;
     }
 
     public String getComments() {
@@ -74,6 +76,14 @@ public class Travels {
         this.date = date;
     }
 
+    public String getDriverUid() {
+        return driverUid;
+    }
+
+    public void setDriverUid(String driverUid) {
+        this.driverUid = driverUid;
+    }
+
     public String getEndHour() {
         return endHour;
     }
@@ -90,20 +100,20 @@ public class Travels {
         this.from = from;
     }
 
-    public String getStartHour() {
-        return startHour;
-    }
-
-    public void setStartHour(String startHour) {
-        this.startHour = startHour;
-    }
-
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getStartHour() {
+        return startHour;
+    }
+
+    public void setStartHour(String startHour) {
+        this.startHour = startHour;
     }
 
     public String getTo() {

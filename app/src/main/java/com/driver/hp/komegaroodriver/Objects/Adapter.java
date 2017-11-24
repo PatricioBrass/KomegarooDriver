@@ -60,11 +60,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.TravelsViewHolder>{
         DecimalFormat form = new DecimalFormat("###,###", simb);
         String precio = "CLP $"+form.format(travels.getTripPrice());
         holder.precio.setText(precio);
+        if(travels.getCertificatedNumber()!=null&&!travels.getCertificatedNumber().isEmpty()){
+            holder.certificado.setText("Envio Certificado");
+        }
 
         try {
 
             new DirectionFinder(holder, travels.getFrom(), travels.getTo()).execute();
-
 
         } catch (UnsupportedEncodingException e) {
 
@@ -84,7 +86,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.TravelsViewHolder>{
 
     public static class TravelsViewHolder extends RecyclerView.ViewHolder implements DirectionFinderListener, View.OnClickListener, OnMapReadyCallback {
 
-        TextView fecha, hora, precio;
+        TextView fecha, hora, precio, certificado;
         GoogleMap mMap;
         MapView mapView;
         private List<Marker> originMarkers = new ArrayList<>();
@@ -96,20 +98,19 @@ public class Adapter extends RecyclerView.Adapter<Adapter.TravelsViewHolder>{
         private LatLngBounds bounds;
 
         public TravelsViewHolder(final View itemView) {
-
             super(itemView);
             context = itemView.getContext();
             itemView.setOnClickListener(this);
             fecha = (TextView) itemView.findViewById(R.id.textFecha);
             hora = (TextView) itemView.findViewById(R.id.textHora);
             precio = (TextView) itemView.findViewById(R.id.textPrecioT);
+            certificado = (TextView) itemView.findViewById(R.id.txtCertificado);
             mapView = (MapView)itemView.findViewById(R.id.mapHistorial);
             mapView.setClickable(false);
             mapView.getMapAsync(this);
             mapView.onCreate(null);
             mapView.onResume();
             builder = new LatLngBounds.Builder();
-
         }
 
         @Override

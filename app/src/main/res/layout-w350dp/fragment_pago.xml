@@ -5,27 +5,35 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@android:drawable/screen_background_dark_transparent"
-    android:clickable="false"
-    android:focusable="auto"
+    android:clickable="true"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context="com.driver.hp.komegaroodriver.Fragment.PagoFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="30dp"
         android:background="@drawable/border3"
         android:gravity="top|center"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:paddingTop="5dp">
+
+        <ImageButton
+            android:id="@+id/btn_closePago"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="start"
+            android:background="@mipmap/close"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/imageDriverPago"
-            android:layout_width="wrap_content"
-            android:layout_height="70dp"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="5dp"
             android:contentDescription="@string/app_name"
             app:srcCompat="@drawable/default_img" />
 
@@ -180,8 +188,9 @@
 
         <Button
             android:id="@+id/buttonGuardar"
-            android:layout_width="match_parent"
+            android:layout_width="125dp"
             android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginLeft="70dp"
             android:layout_marginRight="70dp"
             android:layout_marginTop="5dp"

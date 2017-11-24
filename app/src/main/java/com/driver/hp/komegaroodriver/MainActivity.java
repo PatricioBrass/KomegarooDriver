@@ -1,6 +1,8 @@
 package com.driver.hp.komegaroodriver;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.driver.hp.komegaroodriver.Fragment.MapsFragment;
+import com.driver.hp.komegaroodriver.Fragment.PagoFragment;
 import com.driver.hp.komegaroodriver.MenuLaterales.HistorialActivity;
 import com.driver.hp.komegaroodriver.MenuLaterales.NosotrosActivity;
 import com.driver.hp.komegaroodriver.MenuLaterales.PagoActivity;
@@ -31,6 +34,11 @@ import com.driver.hp.komegaroodriver.Notification.GCMRegistrationIntentService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.Map;
@@ -47,11 +55,15 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private DatabaseReference pagoDriver;
+    private String uidDriver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        pagoDriver = FirebaseDatabase.getInstance().getReference().child("driverPayments");
+        uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -135,8 +147,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.content_main, new MapsFragment()).commit();*/
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().add(R.id.linear_main, new MapsFragment()).commit();
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -169,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
             Intent itent = new Intent(this, GCMRegistrationIntentService.class);
             startService(itent);
         }
+        pagoExiste();
     }
     @Override
     public void onBackPressed() {
@@ -271,6 +284,30 @@ public class MainActivity extends AppCompatActivity {
         Call call = client.newCall(request);
         call.enqueue(callback);
         return call;
+    }
+
+
+    public void callPagoFragment() {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment fragment = PagoFragment.newInstance("pagoFragment");
+        fragmentTransaction.add(R.id.drawer_layout, fragment);
+        fragmentTransaction.commit();
+    }
+
+    public void pagoExiste() {
+        pagoDriver.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChild(uidDriver)) {
+                    callPagoFragment();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError firebaseError) {
+            }
+        });
     }
 
 }

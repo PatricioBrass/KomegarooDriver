@@ -1,6 +1,7 @@
 package com.driver.hp.komegaroodriver.Fragment;
 
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.CountDownTimer;
@@ -153,6 +154,8 @@ public class ReturnFragment extends Fragment {
     }
 
     public void getReturnValidation(){
+        FragmentManager fm = getFragmentManager();
+        final MapsFragment fragm = (MapsFragment)fm.findFragmentById(R.id.userData);
         validation.child(uidClient).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -163,14 +166,14 @@ public class ReturnFragment extends Fragment {
                         case "no":
                             timer.onFinish();
                             timer.cancel();
-                            ((MapsFragment) getActivity().getFragmentManager().findFragmentById(R.id.content_main)).validationReturn();
+                            fragm.validationReturn();
                             break;
                         case "yes":
                             timer.cancel();
                             chrono.setVisibility(View.GONE);
                             vista.setVisibility(View.GONE);
                             layout.setVisibility(View.VISIBLE);
-                            ((MapsFragment) getActivity().getFragmentManager().findFragmentById(R.id.content_main)).validationReturn();
+                            fragm.validationReturn();
                             break;
                     }
                 }

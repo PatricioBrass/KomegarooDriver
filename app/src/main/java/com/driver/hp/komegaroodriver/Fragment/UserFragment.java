@@ -2,10 +2,12 @@ package com.driver.hp.komegaroodriver.Fragment;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +29,11 @@ import java.util.Map;
  */
 public class UserFragment extends Fragment {
     private View userView;
-    private DatabaseReference tRef, customer, stateDriver, validation;
+    private DatabaseReference tRef, customer, stateDriver, validation, rDriverStatus, tripState;
     private TextView name, direccion, num, comentarios, telefono, phoneE, phoneR, nomE, recep;
     private Button cancelar, contactar, exit, emer;
     private String uidDriver, uidClient, nom, phone, contac, nomR, dTo, dFr;
-    private AlertDialog alertDialog, alertReceptor;
+    private AlertDialog alertDialog, alertReceptor, cancelDriver;
     private View one, two, btns, emisor, receptor;
     private String estado;
 
@@ -46,11 +48,12 @@ public class UserFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_user, container, false);
         stateDriver = FirebaseDatabase.getInstance().getReference().child("driverState");
         tRef = FirebaseDatabase.getInstance().getReference().child("requestedTravels").child("Santiago");
+        rDriverStatus = FirebaseDatabase.getInstance().getReference().child("driverStatus").child("driverCoordenates").child("Santiago");
         customer = FirebaseDatabase.getInstance().getReference().child("customers");
+        tripState = FirebaseDatabase.getInstance().getReference().child("tripState");
         validation = FirebaseDatabase.getInstance().getReference().child("customerValidation");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         userView = v.findViewById(R.id.userData);
-        userView.setVisibility(View.GONE);
         name = (TextView)v.findViewById(R.id.txtNombreData);
         phoneE = (TextView)v.findViewById(R.id.txtPhoneEmisor);
         phoneR = (TextView)v.findViewById(R.id.txtPhoneReceptor);
@@ -72,7 +75,8 @@ public class UserFragment extends Fragment {
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userView.setVisibility(View.GONE);
+                FragmentManager fm = getFragmentManager();
+                fm.beginTransaction().remove(UserFragment.this).commit();
             }
         });
         emisor = v.findViewById(R.id.emisorCall);
@@ -96,42 +100,81 @@ public class UserFragment extends Fragment {
                 callReceptor();
             }
         });
+        cancelDriver = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle).create();
+        cancelDriver.setTitle("Cancelar viaje");
+        cancelDriver.setMessage("¿Quieres cancelar el viaje?");
+        cancelDriver.setCancelable(false);
+        cancelDriver.setButton(AlertDialog.BUTTON_NEUTRAL, "Aceptar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        rDriverStatus.child(uidDriver).removeValue();
+                        tripState.child(uidClient).child("state").setValue("canceledByDriver");
+                        cancelDriver.dismiss();
+                        FragmentManager fm = getFragmentManager();
+                        fm.beginTransaction().remove(UserFragment.this).commit();
+                    }
+                });
+        cancelDriver.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        cancelDriver.dismiss();
+                    }
+                });
         canceledDriver();
+        getUidClient();
         return v;
+    }
+
+    public void getUidClient(){
+        rDriverStatus.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
+                    uidClient = mapS.get("customerUid");
+                    statusDriver();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void statusDriver(){
         stateDriver.child(uidDriver).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    uidClient = ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).uidClient;
-                    Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
-                    estado = mapS.get("state");
-                    switch (estado){
-                        case "onWay":
-                            cancelar.setVisibility(View.VISIBLE);
-                            showDataonWay();
-                            showDataCustomer();
-                            break;
-                        case "onTrip":
-                            cancelar.setVisibility(View.GONE);
-                            showDataCustomer();
-                            showDataonTrip();
-                            break;
-                        case "onReturn":
-                            cancelar.setVisibility(View.GONE);
-                            showDataCustomer();
-                            showDataonTrip();
-                            break;
-                        case "onTripReturn":
-                            cancelar.setVisibility(View.GONE);
-                            showDataCustomer();
-                            showDataonTrip();
-                            changeData();
-                            break;
+                if(dataSnapshot.exists()) {
+
+                        Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
+                        estado = mapS.get("state");
+                        switch (estado) {
+                            case "onWay":
+                                cancelar.setVisibility(View.VISIBLE);
+                                showDataonWay();
+                                showDataCustomer();
+                                break;
+                            case "onTrip":
+                                cancelar.setVisibility(View.GONE);
+                                showDataCustomer();
+                                showDataonTrip();
+                                break;
+                            case "onReturn":
+                                cancelar.setVisibility(View.GONE);
+                                showDataCustomer();
+                                showDataonTrip();
+                                break;
+                            case "onTripReturn":
+                                cancelar.setVisibility(View.GONE);
+                                showDataCustomer();
+                                showDataonTrip();
+                                changeData();
+                                break;
+                        }
                     }
-                }
             }
             @Override
             public void onCancelled(DatabaseError firebaseError) {
@@ -283,8 +326,7 @@ public class UserFragment extends Fragment {
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userView.setVisibility(View.GONE);
-                ((MapsFragment)getActivity().getFragmentManager().findFragmentById(R.id.content_main)).cancelDriver.show();
+                cancelDriver.show();
             }
         });
     }
@@ -317,5 +359,13 @@ public class UserFragment extends Fragment {
                 }
             });
         }
+    }
+
+    public static UserFragment newInstance(String text) {
+        UserFragment f = new UserFragment();
+        Bundle b = new Bundle();
+        b.putString("msg", text);
+        f.setArguments(b);
+        return f;
     }
 }

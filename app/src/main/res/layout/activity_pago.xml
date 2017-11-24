@@ -175,11 +175,6 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-        <fragment
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/pagoFrag" class="com.driver.hp.komegaroodriver.Fragment.PagoFragment"
-            tools:layout="@layout/fragment_pago" android:visibility="gone"/>
     </RelativeLayout>
 
 

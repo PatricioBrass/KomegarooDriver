@@ -3,6 +3,10 @@ package com.driver.hp.komegaroodriver.MenuLaterales;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.driver.hp.komegaroodriver.Fragment.PagoFragment;
 import com.driver.hp.komegaroodriver.R;
 import com.driver.hp.komegaroodriver.RoundedTransformation;
 import com.google.firebase.database.DataSnapshot;
@@ -28,16 +33,17 @@ public class PagoActivity extends AppCompatActivity {
     private TextView cuentas, bancos, rut, nCuentas, nombre, editar;
     private ImageView photo;
     private Button close;
-    View frPago;
     private String uidDriver;
     private DatabaseReference driver, payment;
     private View mProgressView;
     private View mPerfilFormView;
+    public static Activity fa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pago);
+        fa = this;
         driver = FirebaseDatabase.getInstance().getReference().child("drivers");
         payment = FirebaseDatabase.getInstance().getReference().child("driverPayments");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -48,7 +54,6 @@ public class PagoActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        frPago = findViewById(R.id.pagoFrag);
         photo = (ImageView)findViewById(R.id.imageRider);
         cuentas = (TextView)findViewById(R.id.txtCuenta);
         bancos = (TextView)findViewById(R.id.txtBanco);
@@ -61,7 +66,7 @@ public class PagoActivity extends AppCompatActivity {
         editar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                frPago.setVisibility(View.VISIBLE);
+                callPagoFragment();
             }
         });
         showProgress(true);
@@ -147,5 +152,13 @@ public class PagoActivity extends AppCompatActivity {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mPerfilFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+    }
+
+    public void callPagoFragment() {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment fragment = PagoFragment.newInstance("pagoFragment");
+        fragmentTransaction.add(R.id.formPago, fragment);
+        fragmentTransaction.commit();
     }
 }

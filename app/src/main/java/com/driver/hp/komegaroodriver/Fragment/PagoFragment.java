@@ -1,6 +1,7 @@
 package com.driver.hp.komegaroodriver.Fragment;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -11,10 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.driver.hp.komegaroodriver.MainActivity;
 import com.driver.hp.komegaroodriver.MenuLaterales.PagoActivity;
 import com.driver.hp.komegaroodriver.R;
 import com.driver.hp.komegaroodriver.RoundedTransformation;
@@ -40,13 +44,13 @@ public class PagoFragment extends Fragment {
             "Banco BBVA", "Banco BCI", "Banco BICE", "Banco COOPEUCH", "Banco CorpBanca",
             "HSBC BANK", "Banco Scotiabank"};
     String[] datosCuenta = {"Cuenta de ahorro","Cuenta Corriente","Cuenta Vista"};
-    private View close;
     private EditText nCuenta, id;
     private String uidDriver;
     private TextView nombre;
     private ImageView photo;
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabaseD;
+    private ImageButton close;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +68,14 @@ public class PagoFragment extends Fragment {
         Log.v("Uid", uidDriver);
         Log.v("data", database.toString());
         showData();
-        close = v.findViewById(R.id.pagoFragment);
-        close.setVisibility(View.GONE);
+        close = (ImageButton) v.findViewById(R.id.btn_closePago);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getFragmentManager();
+                fm.beginTransaction().remove(PagoFragment.this).commit();
+            }
+        });
         guardar = (Button) v.findViewById(R.id.buttonGuardar);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +83,11 @@ public class PagoFragment extends Fragment {
                 if (!checkEmpty())
                     return;
                 sendData();
-                close.setVisibility(View.GONE);
+                FragmentManager fm = getFragmentManager();
+                fm.beginTransaction().remove(PagoFragment.this).commit();
+                if(PagoActivity.fa != null){
+                    ((PagoActivity) getActivity()).showDataPago();
+                }
             }
         });
         cuentas = (Spinner)v.findViewById(R.id.spinnerCuentasFr);
@@ -86,6 +100,7 @@ public class PagoFragment extends Fragment {
         id = (EditText)v.findViewById(R.id.rutFr);
         nombre = (TextView) v.findViewById(R.id.nameDriverPago);
         photo = (ImageView)v.findViewById(R.id.imageDriverPago);
+        detectPagoActivity();
         return v;
     }
 
@@ -94,7 +109,6 @@ public class PagoFragment extends Fragment {
         mDatabase.child(uidDriver).child("accountNumber").setValue(nCuenta.getText().toString());
         mDatabase.child(uidDriver).child("bank").setValue(bancos.getSelectedItem().toString());
         mDatabase.child(uidDriver).child("dni").setValue(id.getText().toString());
-        ((PagoActivity) getActivity()).showDataPago();
     }
 
     private boolean checkEmpty(){
@@ -170,6 +184,19 @@ public class PagoFragment extends Fragment {
         });
     }
 
+    public static PagoFragment newInstance(String text) {
+        PagoFragment f = new PagoFragment();
+        Bundle b = new Bundle();
+        b.putString("pagoFragment", text);
+        f.setArguments(b);
+        return f;
+    }
+
+    public void detectPagoActivity(){
+        if(PagoActivity.fa != null){
+            close.setVisibility(View.VISIBLE);
+        }
+    }
 
 
 }
