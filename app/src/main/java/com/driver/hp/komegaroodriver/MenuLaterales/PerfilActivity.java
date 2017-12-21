@@ -44,15 +44,13 @@ public class PerfilActivity extends AppCompatActivity {
 
     public static final String MESSAGE_KEY="com.driver.hp.komegaroodriver.message_key";
     private Button close, sClose;
-    private DatabaseReference mRef, travel;
+    private DatabaseReference mRef;
     private TextView nom, ape, num, trip, driverSaldo, dat, saldo, telT, envT, calT;
     private ImageView pho;
     private RatingBar stars;
-    private String uidDriver, key;
+    private String uidDriver;
     private View mProgressView;
     private View mPerfilFormView;
-    private ArrayList<String> arrayKey = new ArrayList<>();
-    private ArrayList<String> arrayCalif = new ArrayList<>();
     private Integer trips;
     private Double califi;
     private AlertDialog alertDialog;
@@ -63,7 +61,6 @@ public class PerfilActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
         mRef = FirebaseDatabase.getInstance().getReference().child("drivers");
-        travel = FirebaseDatabase.getInstance().getReference().child("driverTravels");
         uidDriver = FirebaseAuth.getInstance().getCurrentUser().getUid();
         close = (Button) findViewById(R.id.btnPerfil);
         close.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +115,6 @@ public class PerfilActivity extends AppCompatActivity {
         envT.setTypeface(face1);
         calT = (TextView)findViewById(R.id.califT);
         calT.setTypeface(face1);
-        getTravels();
         showProgress(true);
         perfil();
         timer = new Timer();
@@ -160,12 +156,11 @@ public class PerfilActivity extends AppCompatActivity {
                     nom.setText(nombre);
                     ape.setText(apellido);
                     num.setText(phones);
-                    trip.setText(trips.toString());
                     Picasso.with(PerfilActivity.this).load(photos).transform(new RoundedTransformation(9,1)).into(pho);
+                    stars.setRating(califi.floatValue());
+                    trip.setText(trips.toString());
                     timer.cancel();
-                    updateData();
-                    Log.v("DatosPerfil", califi.toString());
-                    Log.v("DatosPerfil", trips.toString());
+                    postGetSaldo();
                 }
             }
 
@@ -215,77 +210,6 @@ public class PerfilActivity extends AppCompatActivity {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mPerfilFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
-    }
-
-    public void getRating(){
-        travel.child(uidDriver).child(key).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Map<String, String> map = (Map<String, String>) dataSnapshot.getValue();
-                    String califica = map.get("calification");
-                    Integer t = arrayCalif.size();
-                    String viajes = "trips "+t+" - "+"ArrayTrips "+trips;
-                    Log.v("ViajesPerfil", viajes);
-                    if (!califica.equals("")&&trips<t){
-                        Double d = new Double((((t-1)*califi) + Integer.parseInt(califica)) / t);
-                        mRef.child(uidDriver).child("calification").setValue(d);
-                        stars.setRating(d.floatValue());
-                        mRef.child(uidDriver).child("trips").setValue(t);
-                        postGetSaldo();
-                    }else{
-                        stars.setRating(califi.floatValue());
-                        postGetSaldo();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError firebaseError) {
-
-            }
-        });
-
-    }
-
-    public void updateData(){
-        travel.child(uidDriver).orderByKey().limitToLast(1)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()){
-                            Map<String, String> mapS = (Map<String, String>) dataSnapshot.getValue();
-                            key = mapS.keySet().toString().replace("[","").replace("]","");
-                            getRating();
-                        }else{
-                            showProgress(false);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError firebaseError) {
-                    }
-                });
-    }
-
-    public void getTravels(){
-        travel.child(uidDriver).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    arrayCalif.clear();
-                    for (DataSnapshot infoSnapshot : dataSnapshot.getChildren()) {
-                        String calif = infoSnapshot.getKey();
-                        arrayCalif.add(calif);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError firebaseError) {
-
-            }
-        });
     }
 
     OkHttpClient client = new OkHttpClient();

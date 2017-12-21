@@ -1,8 +1,10 @@
 package com.driver.hp.komegaroodriver;
 
+import android.app.AlarmManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -41,6 +43,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Map;
 
 import okhttp3.Call;
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private DatabaseReference pagoDriver;
     private String uidDriver;
+    protected AlarmManager alarmManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

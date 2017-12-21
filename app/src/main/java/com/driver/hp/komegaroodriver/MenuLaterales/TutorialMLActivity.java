@@ -22,6 +22,7 @@ import com.driver.hp.komegaroodriver.TutorialesFragment.GifThreeFragment;
 import com.driver.hp.komegaroodriver.TutorialesFragment.GifTwoFragment;
 import com.driver.hp.komegaroodriver.TutorialesFragment.ImgFinal2Fragment;
 import com.driver.hp.komegaroodriver.TutorialesFragment.ImgOneFragment;
+import com.driver.hp.komegaroodriver.TutorialesFragment.ImgStartFragment;
 import com.driver.hp.komegaroodriver.TutorialesFragment.ImgTwoFragment;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -56,19 +57,20 @@ public class TutorialMLActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int pos) {
             switch(pos) {
-                case 1: return ImgTwoFragment.newInstance("ImgTwoFragment, Instance 2");
-                case 2: return GifOneFragment.newInstance("GifOneFragment, Instance 3");
-                case 3: return GifTwoFragment.newInstance("GifTwoFragment, Instance 4");
-                case 4: return GifThreeFragment.newInstance("GifThreeFragment, Instance 4");
-                case 5: return GifFourFragment.newInstance("GifFourFragment, Instance 4");
-                case 6: return GifFiveFragment.newInstance("GifFiveFragment, Instance 4");
-                case 7: return GifSixFragment.newInstance("GifSixFragment, Instance 4");
-                case 8: return GifSevenFragment.newInstance("GifSevenFragment, Instance 4");
-                case 9: return GifEightFragment.newInstance("GifEightFragment, Instance 4");
-                case 10: return GifNineFragment.newInstance("GifNineFragment, Instance 4");
-                case 11: return GifTenFragment.newInstance("ImgFinalFragment, Instance 4");
-                case 12: return ImgFinal2Fragment.newInstance("ImgFinalFragment, Instance 4");
-                default: return ImgOneFragment.newInstance("ImgOneFragment, Instance 1");
+                case 1: return ImgOneFragment.newInstance("ImgOneFragment, Instance 1");
+                case 2: return ImgTwoFragment.newInstance("ImgTwoFragment, Instance 2");
+                case 3: return GifOneFragment.newInstance("GifOneFragment, Instance 3");
+                case 4: return GifTwoFragment.newInstance("GifTwoFragment, Instance 4");
+                case 5: return GifThreeFragment.newInstance("GifThreeFragment, Instance 4");
+                case 6: return GifFourFragment.newInstance("GifFourFragment, Instance 4");
+                case 7: return GifFiveFragment.newInstance("GifFiveFragment, Instance 4");
+                case 8: return GifSixFragment.newInstance("GifSixFragment, Instance 4");
+                case 9: return GifSevenFragment.newInstance("GifSevenFragment, Instance 4");
+                case 10: return GifEightFragment.newInstance("GifEightFragment, Instance 4");
+                case 11: return GifNineFragment.newInstance("GifNineFragment, Instance 4");
+                case 12: return GifTenFragment.newInstance("ImgFinalFragment, Instance 4");
+                case 13: return ImgFinal2Fragment.newInstance("ImgFinalFragment, Instance 4");
+                default: return ImgStartFragment.newInstance("ImgStartFragment, Instance 1");
             }
         }
 

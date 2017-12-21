@@ -274,19 +274,7 @@
                     android:textColor="@color/white"
                     android:textSize="18sp" />
             </LinearLayout>
-            <fragment
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                class="com.driver.hp.komegaroodriver.Fragment.ValorizarFragment"
-                android:id="@+id/valorizar"
-                tools:layout="@layout/fragment_valorizar" android:visibility="gone"/>
 
-            <fragment
-                android:id="@+id/fragmentRetorno"
-                class="com.driver.hp.komegaroodriver.Fragment.ReturnFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:layout="@layout/fragment_return" android:visibility="gone"/>
         </RelativeLayout>
     </LinearLayout>
 

@@ -46,7 +46,7 @@ public class DirectionFinder {
     private String createUrl() throws UnsupportedEncodingException {
         String urlOrigin = URLEncoder.encode(origin, "utf-8");
         String urlDestination = URLEncoder.encode(destination, "utf-8");
-
+        Log.v("Direcciones",urlOrigin+" - "+urlDestination);
         return DIRECTION_URL_API + "origin=" + urlOrigin + "&destination=" +   urlDestination + "&avoid=" + avoid +"&mode="+mode+"&key=" + GOOGLE_API_KEY;
     }
 
@@ -89,7 +89,6 @@ public class DirectionFinder {
     private void parseJSon(String data) throws JSONException {
         if (data == null )
             return;
-        Log.v("Mapa", data);
         List<Route> routes = new ArrayList<Route>();
         JSONObject jsonData = new JSONObject(data);
         JSONArray jsonRoutes = jsonData.getJSONArray("routes");
